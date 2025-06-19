@@ -8,6 +8,97 @@
         <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/"/>
     </url>
     <url>
+        <loc>https://localhost:8000/DATASHEET/datasheet/</loc>
+        <lastmod>2025-06-18</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/DATASHEET/datasheet/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/DATASHEET/datasheet/"/>
+    </url>
+    <url>
+        <loc>https://localhost:8000/HARDWARE/hardware/</loc>
+        <lastmod>2025-06-18</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/HARDWARE/hardware/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/HARDWARE/hardware/"/>
+    </url>
+    <url>
+        <loc>https://localhost:8000/HARDWARE/ACCELERATION/acceleration/</loc>
+        <lastmod>2025-06-18</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/HARDWARE/ACCELERATION/acceleration/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/HARDWARE/ACCELERATION/acceleration/"/>
+    </url>
+    <url>
+        <loc>https://localhost:8000/HARDWARE/MCU/mcu/</loc>
+        <lastmod>2025-06-18</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/HARDWARE/MCU/mcu/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/HARDWARE/MCU/mcu/"/>
+    </url>
+    <url>
+        <loc>https://localhost:8000/HARDWARE/POWER/power/</loc>
+        <lastmod>2025-06-18</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/HARDWARE/POWER/power/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/HARDWARE/POWER/power/"/>
+    </url>
+    <url>
+        <loc>https://localhost:8000/HARDWARE/RADIO-FREQUENCY/rf/</loc>
+        <lastmod>2025-06-18</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/HARDWARE/RADIO-FREQUENCY/rf/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/HARDWARE/RADIO-FREQUENCY/rf/"/>
+    </url>
+    <url>
+        <loc>https://localhost:8000/HARDWARE/RGB-LED/rgbled/</loc>
+        <lastmod>2025-06-18</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/HARDWARE/RGB-LED/rgbled/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/HARDWARE/RGB-LED/rgbled/"/>
+    </url>
+    <url>
+        <loc>https://localhost:8000/HARDWARE/SDCARD/sdcard/</loc>
+        <lastmod>2025-06-18</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/HARDWARE/SDCARD/sdcard/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/HARDWARE/SDCARD/sdcard/"/>
+    </url>
+    <url>
+        <loc>https://localhost:8000/HARDWARE/SHIELD/shield/</loc>
+        <lastmod>2025-06-18</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/HARDWARE/SHIELD/shield/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/HARDWARE/SHIELD/shield/"/>
+    </url>
+    <url>
+        <loc>https://localhost:8000/HARDWARE/TOUCH-SENSOR/touchsensor/</loc>
+        <lastmod>2025-06-18</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/HARDWARE/TOUCH-SENSOR/touchsensor/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/HARDWARE/TOUCH-SENSOR/touchsensor/"/>
+    </url>
+    <url>
+        <loc>https://localhost:8000/SOFTWARE/software/</loc>
+        <lastmod>2025-06-18</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/SOFTWARE/software/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/SOFTWARE/software/"/>
+    </url>
+    <url>
+        <loc>https://localhost:8000/SOFTWARE/IDE/ide/</loc>
+        <lastmod>2025-06-18</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/SOFTWARE/IDE/ide/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/SOFTWARE/IDE/ide/"/>
+    </url>
+    <url>
+        <loc>https://localhost:8000/SOFTWARE/SENSING/sensing/</loc>
+        <lastmod>2025-06-18</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/SOFTWARE/SENSING/sensing/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/SOFTWARE/SENSING/sensing/"/>
+    </url>
+    <url>
         <loc>https://localhost:8000/blog/</loc>
         <lastmod>2025-06-18</lastmod>
         <changefreq>daily</changefreq>
@@ -20,6 +111,97 @@
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/"/>
+    </url>
+    <url>
+        <loc>https://localhost:8000/zh/DATASHEET/datasheet/</loc>
+        <lastmod>2025-06-18</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/DATASHEET/datasheet/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/DATASHEET/datasheet/"/>
+    </url>
+    <url>
+        <loc>https://localhost:8000/zh/HARDWARE/hardware/</loc>
+        <lastmod>2025-06-18</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/HARDWARE/hardware/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/HARDWARE/hardware/"/>
+    </url>
+    <url>
+        <loc>https://localhost:8000/zh/HARDWARE/ACCELERATION/acceleration/</loc>
+        <lastmod>2025-06-18</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/HARDWARE/ACCELERATION/acceleration/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/HARDWARE/ACCELERATION/acceleration/"/>
+    </url>
+    <url>
+        <loc>https://localhost:8000/zh/HARDWARE/MCU/mcu/</loc>
+        <lastmod>2025-06-18</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/HARDWARE/MCU/mcu/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/HARDWARE/MCU/mcu/"/>
+    </url>
+    <url>
+        <loc>https://localhost:8000/zh/HARDWARE/POWER/power/</loc>
+        <lastmod>2025-06-18</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/HARDWARE/POWER/power/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/HARDWARE/POWER/power/"/>
+    </url>
+    <url>
+        <loc>https://localhost:8000/zh/HARDWARE/RADIO-FREQUENCY/rf/</loc>
+        <lastmod>2025-06-18</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/HARDWARE/RADIO-FREQUENCY/rf/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/HARDWARE/RADIO-FREQUENCY/rf/"/>
+    </url>
+    <url>
+        <loc>https://localhost:8000/zh/HARDWARE/RGB-LED/rgbled/</loc>
+        <lastmod>2025-06-18</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/HARDWARE/RGB-LED/rgbled/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/HARDWARE/RGB-LED/rgbled/"/>
+    </url>
+    <url>
+        <loc>https://localhost:8000/zh/HARDWARE/SDCARD/sdcard/</loc>
+        <lastmod>2025-06-18</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/HARDWARE/SDCARD/sdcard/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/HARDWARE/SDCARD/sdcard/"/>
+    </url>
+    <url>
+        <loc>https://localhost:8000/zh/HARDWARE/SHIELD/shield/</loc>
+        <lastmod>2025-06-18</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/HARDWARE/SHIELD/shield/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/HARDWARE/SHIELD/shield/"/>
+    </url>
+    <url>
+        <loc>https://localhost:8000/zh/HARDWARE/TOUCH-SENSOR/touchsensor/</loc>
+        <lastmod>2025-06-18</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/HARDWARE/TOUCH-SENSOR/touchsensor/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/HARDWARE/TOUCH-SENSOR/touchsensor/"/>
+    </url>
+    <url>
+        <loc>https://localhost:8000/zh/SOFTWARE/software/</loc>
+        <lastmod>2025-06-18</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/SOFTWARE/software/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/SOFTWARE/software/"/>
+    </url>
+    <url>
+        <loc>https://localhost:8000/zh/SOFTWARE/IDE/ide/</loc>
+        <lastmod>2025-06-18</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/SOFTWARE/IDE/ide/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/SOFTWARE/IDE/ide/"/>
+    </url>
+    <url>
+        <loc>https://localhost:8000/zh/SOFTWARE/SENSING/sensing/</loc>
+        <lastmod>2025-06-18</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/SOFTWARE/SENSING/sensing/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/SOFTWARE/SENSING/sensing/"/>
     </url>
     <url>
         <loc>https://localhost:8000/zh/blog/</loc>
