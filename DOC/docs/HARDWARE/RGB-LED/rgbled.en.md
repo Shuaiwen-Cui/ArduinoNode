@@ -1,7 +1,7 @@
 # RGB LED
 
 !!! info "RGB LED"
-    RGB LED 是一种可以显示多种颜色的 LED 灯。它通常由三个独立的 LED 组成，分别发出红色、绿色和蓝色光。通过调节这三种颜色的亮度，可以混合出各种颜色。
+    RGB LED is a type of LED that can display multiple colors. It typically consists of three independent LEDs that emit red, green, and blue light. By adjusting the brightness of these three colors, various colors can be mixed.
 
 ![](rgbled.jpg)
 
