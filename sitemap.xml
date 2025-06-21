@@ -50,6 +50,13 @@
         <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/HARDWARE/RADIO-FREQUENCY/rf/"/>
     </url>
     <url>
+        <loc>https://localhost:8000/HARDWARE/RADIOFREQUENCY/radiofrequency/</loc>
+        <lastmod>2025-06-21</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/HARDWARE/RADIOFREQUENCY/radiofrequency/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/HARDWARE/RADIOFREQUENCY/radiofrequency/"/>
+    </url>
+    <url>
         <loc>https://localhost:8000/HARDWARE/RGB-LED/rgbled/</loc>
         <lastmod>2025-06-21</lastmod>
         <changefreq>daily</changefreq>
@@ -167,6 +174,13 @@
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/HARDWARE/RADIO-FREQUENCY/rf/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/HARDWARE/RADIO-FREQUENCY/rf/"/>
+    </url>
+    <url>
+        <loc>https://localhost:8000/zh/HARDWARE/RADIOFREQUENCY/radiofrequency/</loc>
+        <lastmod>2025-06-21</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/HARDWARE/RADIOFREQUENCY/radiofrequency/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/HARDWARE/RADIOFREQUENCY/radiofrequency/"/>
     </url>
     <url>
         <loc>https://localhost:8000/zh/HARDWARE/RGB-LED/rgbled/</loc>
