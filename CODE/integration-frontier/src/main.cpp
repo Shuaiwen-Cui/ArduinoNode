@@ -5,6 +5,7 @@
 #include "time.hpp"
 #include "sensing.hpp"
 #include "sdcard.hpp"
+#include "rgbled.hpp"
 
 unsigned long last_mqtt_time = 0;
 const unsigned long mqtt_interval = 100;
@@ -14,6 +15,9 @@ void setup()
   delay(3000);
   Serial.begin(115200);
   while (!Serial);
+
+  rgbled_init();
+  rgbled_set_all(CRGB::Yellow);
 
   connect_to_wifi();
   time_init();
@@ -34,6 +38,7 @@ void setup()
     while (1);
   }
 
+  rgbled_set_all(CRGB::Green);
   Serial.println("[Main] Node initialization finished.");
 }
 

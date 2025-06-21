@@ -279,8 +279,9 @@ void sensing_flush()
             float az = sample_data[base + 3] / 16384.0f;
 
             char line[64];
-            snprintf(line, sizeof(line), "%u,%.4f,%.4f,%.4f", t_ms, ax, ay, az);
+            snprintf(line, sizeof(line), "%05u,%8.6f,%8.6f,%8.6f", t_ms, ax, ay, az);
             file.println(line);
+            Serial.println(line);  // Debug output to Serial
         }
 
         file.close();

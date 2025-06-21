@@ -121,6 +121,7 @@ plugins:
             SHIELD: 扩展板
             ACCELERATION: 加速度计
             SDCARD: SD卡
+            RADIO-FREQUENCY: 射频
             RGB-LED: RGB-LED
             TOUCH-SENSOR: 触摸传感器
             POWER: 电源供应
@@ -264,6 +265,7 @@ nav:
       - SHIELD: "HARDWARE/SHIELD/shield.md"
       - ACCELERATION: "HARDWARE/ACCELERATION/acceleration.md"
       - SDCARD: "HARDWARE/SDCARD/sdcard.md"
+      - RADIO-FREQUENCY: "HARDWARE/RADIOFREQUENCY/radiofrequency.md"
       - RGB-LED: "HARDWARE/RGB-LED/rgbled.md"
       - TOUCH-SENSOR: "HARDWARE/TOUCH-SENSOR/touchsensor.md"
       - POWER: "HARDWARE/POWER/power.md"
