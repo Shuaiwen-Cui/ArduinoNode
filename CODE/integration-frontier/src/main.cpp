@@ -6,15 +6,32 @@
 #include "sensing.hpp"
 #include "sdcard.hpp"
 #include "rgbled.hpp"
+#include "radiofrequency.hpp"
 
 unsigned long last_mqtt_time = 0;
 const unsigned long mqtt_interval = 100;
+
+// === Shared packet structure ===
+struct SimplePacket
+{
+    uint16_t node_id;
+    uint32_t counter;
+};
+
+// === Shared state ===
+uint32_t counter = 0;
+
+#ifdef GATEWAY
+uint16_t current_node = 1;
+const uint16_t total_nodes = 4;
+#endif
 
 void setup()
 {
   delay(3000);
   Serial.begin(115200);
-  while (!Serial);
+  while (!Serial)
+    ;
 
   rgbled_init();
   rgbled_set_all(CRGB::Yellow);
@@ -35,8 +52,20 @@ void setup()
   if (!sdcard_init(10))
   {
     Serial.println("[Main] SD card setup failed.");
-    while (1);
+    while (1)
+      ;
   }
+
+  Serial.println("=== Starting RF Node ===");
+#ifdef GATEWAY
+  Serial.println("[Role] GATEWAY");
+#else
+  Serial.print("[Role] LEAFNODE ID = ");
+  Serial.println(NODE_ID);
+#endif
+
+  rf_init();
+  Serial.println("[RF] Radio frequency module initialized.");
 
   rgbled_set_all(CRGB::Green);
   Serial.println("[Main] Node initialization finished.");
@@ -44,6 +73,7 @@ void setup()
 
 void loop()
 {
+
   unsigned long now = millis();
   if (now - last_mqtt_time >= mqtt_interval)
   {
@@ -164,3 +194,41 @@ void loop()
     sensing_flush();
   }
 }
+
+// void loop()
+// {
+// #ifdef GATEWAY
+//     rf_set_peer_address(current_node);
+//     delay(10);  // allow pipe switch
+
+//     Serial.print("[GATEWAY] Polling node ");
+//     Serial.println(current_node);
+
+//     SimplePacket pkt;
+//     if (rf_receive(&pkt, sizeof(pkt)))
+//     {
+//         Serial.print("[GATEWAY] Received from Node ");
+//         Serial.print(pkt.node_id);
+//         Serial.print(" | Counter = ");
+//         Serial.println(pkt.counter);
+//     }
+//     else
+//     {
+//         Serial.println("[GATEWAY] No response.");
+//     }
+
+//     current_node++;
+//     if (current_node > total_nodes)
+//         current_node = 1;
+
+//     delay(1000);
+
+// #else
+//     SimplePacket pkt;
+//     pkt.node_id = NODE_ID;
+//     pkt.counter = counter++;
+
+//     rf_send(&pkt, sizeof(pkt));
+//     delay(2000);
+// #endif
+// }

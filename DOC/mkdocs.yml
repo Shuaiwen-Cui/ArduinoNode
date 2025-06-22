@@ -267,7 +267,7 @@ nav:
       - SDCARD: "HARDWARE/SDCARD/sdcard.md"
       - RADIO-FREQUENCY: "HARDWARE/RADIOFREQUENCY/radiofrequency.md"
       - RGB-LED: "HARDWARE/RGB-LED/rgbled.md"
-      - TOUCH-SENSOR: "HARDWARE/TOUCH-SENSOR/touchsensor.md"
+      # - TOUCH-SENSOR: "HARDWARE/TOUCH-SENSOR/touchsensor.md"
       - POWER: "HARDWARE/POWER/power.md"
   - SOFTWARE:
       - "SOFTWARE/software.md"

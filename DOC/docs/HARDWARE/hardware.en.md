@@ -11,9 +11,9 @@ Item List:
 | MPU6050 | An acceleration sensor that measures motion and orientation. |
 | SD Module & Card | Used for data storage, allowing the node to log sensor data. |
 | RGB LED | Provides visual feedback, indicating the status of the node. |
-| Touch Sensor | Allows user interaction, enabling control of the node. |
 | NRF24L01 Module & Antenna | Enables local wireless communication between nodes. |
 | BMS & Battery | Provides power to the entire node, making it portable. |
+<!-- | Touch Sensor | Allows user interaction, enabling control of the node. | -->
 
 !!! note
 
