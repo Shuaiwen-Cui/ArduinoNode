@@ -107,20 +107,35 @@ void loop()
 {
   if (node_status.get_state() == NodeState::IDLE)
   {
-    // routine operation
+    // === Routine MQTT maintenance ===
     if (should_run_mqtt_loop())
     {
-      mqtt_loop(); // this is important to keep MQTT alive
-      mqtt_publish_test();
+      mqtt_loop();         // Keep MQTT alive
+      // mqtt_publish_test(); // Optional test message
     }
 
-    // check state change
-    now_unix_ms = Time.estimate_time_ms();
-    if (node_status.node_flags.sensing_scheduled && now_unix_ms >= sensing_scheduled_start_ms - SENSING_PREPARING_DUR_MS)
+    // === Optional: Slow debug output (once per second) ===
+    static uint32_t last_debug_print = 0;
+    uint32_t now_ms = millis();
+    if (now_ms - last_debug_print >= 1000)
     {
-      // Switch to PREPARING state
+      last_debug_print = now_ms;
+      Serial.print("[DEBUG][IDLE] now_unix_ms: ");
+      Serial.print(Time.estimate_time_ms());
+      Serial.print(" | start: ");
+      Serial.print(sensing_scheduled_start_ms);
+      Serial.print(" | prewindow: ");
+      Serial.println(sensing_scheduled_start_ms - SENSING_PREPARING_DUR_MS);
+    }
+
+    // === Check for sensing schedule ===
+    now_unix_ms = Time.estimate_time_ms();
+    if (node_status.node_flags.sensing_scheduled &&
+        now_unix_ms >= sensing_scheduled_start_ms - SENSING_PREPARING_DUR_MS)
+    {
       node_status.set_state(NodeState::PREPARING);
-      rgbled_set_all(CRGB::Orange); // Set LED to orange during preparing
+      rgbled_set_all(CRGB::Orange);
+      Serial.println("[STATUS] Switching to PREPARING state.");
     }
   }
   else if (node_status.get_state() == NodeState::COMMUNICATING)

@@ -19,7 +19,7 @@ bool should_run_mqtt_loop()
 {
   static unsigned long last = 0;
   unsigned long now = millis();
-  if (now - last >= 5000)
+  if (now - last >= 500)
   {
     last = now;
     return true;
