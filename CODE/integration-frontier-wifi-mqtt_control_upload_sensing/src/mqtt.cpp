@@ -8,7 +8,7 @@ bool mqtt_enabled = true;
 // === Command Flags ===
 bool cmd_flg_ntp = false;
 bool cmd_flg_scheduled_sensing = false;
-bool cmd_flg_retrieval = false;  // 添加文件检索标志
+bool cmd_flg_retrieval = false;
 
 // === Parsed Command Variables ===
 char cmd_sensing_raw[128];
@@ -17,7 +17,7 @@ uint16_t parsed_freq = 0;
 uint16_t parsed_duration = 0;
 
 // === Retrieval Filename
-char retrieval_filename[32] = {0};  // 初始化为空字符串
+char retrieval_filename[32] = {0};
 
 // === MQTT Setup ===
 WiFiClient wifi_client;
