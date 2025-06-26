@@ -11,6 +11,7 @@ Completed items:
 - [x] Networking/clock synchronization/collection
 
 To-do items:
+
 - [ ] Remote reboot
 - [ ] Performance test
 - [ ] Data quality
