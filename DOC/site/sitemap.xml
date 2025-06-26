@@ -15,6 +15,13 @@
         <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/DATASHEET/datasheet/"/>
     </url>
     <url>
+        <loc>https://localhost:8000/DEMO/demo/</loc>
+        <lastmod>2025-06-26</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/DEMO/demo/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/DEMO/demo/"/>
+    </url>
+    <url>
         <loc>https://localhost:8000/HARDWARE/hardware/</loc>
         <lastmod>2025-06-26</lastmod>
         <changefreq>daily</changefreq>
@@ -27,6 +34,13 @@
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/HARDWARE/ACCELERATION/acceleration/"/>
         <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/HARDWARE/ACCELERATION/acceleration/"/>
+    </url>
+    <url>
+        <loc>https://localhost:8000/HARDWARE/ENCLOSURE/enclosure/</loc>
+        <lastmod>2025-06-26</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/HARDWARE/ENCLOSURE/enclosure/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/HARDWARE/ENCLOSURE/enclosure/"/>
     </url>
     <url>
         <loc>https://localhost:8000/HARDWARE/MCU/mcu/</loc>
@@ -92,6 +106,55 @@
         <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/SOFTWARE/software/"/>
     </url>
     <url>
+        <loc>https://localhost:8000/SOFTWARE/ARCHITECTURE/architecture/</loc>
+        <lastmod>2025-06-26</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/SOFTWARE/ARCHITECTURE/architecture/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/SOFTWARE/ARCHITECTURE/architecture/"/>
+    </url>
+    <url>
+        <loc>https://localhost:8000/SOFTWARE/COMMAND-FEEDBACK/command/</loc>
+        <lastmod>2025-06-26</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/SOFTWARE/COMMAND-FEEDBACK/command/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/SOFTWARE/COMMAND-FEEDBACK/command/"/>
+    </url>
+    <url>
+        <loc>https://localhost:8000/SOFTWARE/COMMAND-FEEDBACK/feedback/</loc>
+        <lastmod>2025-06-26</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/SOFTWARE/COMMAND-FEEDBACK/feedback/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/SOFTWARE/COMMAND-FEEDBACK/feedback/"/>
+    </url>
+    <url>
+        <loc>https://localhost:8000/SOFTWARE/COMMUNICATION/mqtt/</loc>
+        <lastmod>2025-06-26</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/SOFTWARE/COMMUNICATION/mqtt/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/SOFTWARE/COMMUNICATION/mqtt/"/>
+    </url>
+    <url>
+        <loc>https://localhost:8000/SOFTWARE/COMMUNICATION/rf/</loc>
+        <lastmod>2025-06-26</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/SOFTWARE/COMMUNICATION/rf/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/SOFTWARE/COMMUNICATION/rf/"/>
+    </url>
+    <url>
+        <loc>https://localhost:8000/SOFTWARE/COMMUNICATION/wifi/</loc>
+        <lastmod>2025-06-26</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/SOFTWARE/COMMUNICATION/wifi/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/SOFTWARE/COMMUNICATION/wifi/"/>
+    </url>
+    <url>
+        <loc>https://localhost:8000/SOFTWARE/CONFIGURATION/configuration/</loc>
+        <lastmod>2025-06-26</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/SOFTWARE/CONFIGURATION/configuration/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/SOFTWARE/CONFIGURATION/configuration/"/>
+    </url>
+    <url>
         <loc>https://localhost:8000/SOFTWARE/FRAMEWORK/framework/</loc>
         <lastmod>2025-06-26</lastmod>
         <changefreq>daily</changefreq>
@@ -113,11 +176,46 @@
         <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/SOFTWARE/PROGRAMMING/programming/"/>
     </url>
     <url>
-        <loc>https://localhost:8000/SOFTWARE/SENSING/sensing/</loc>
+        <loc>https://localhost:8000/SOFTWARE/SENSING-STORAGE/sensing/</loc>
         <lastmod>2025-06-26</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/SOFTWARE/SENSING/sensing/"/>
-        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/SOFTWARE/SENSING/sensing/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/SOFTWARE/SENSING-STORAGE/sensing/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/SOFTWARE/SENSING-STORAGE/sensing/"/>
+    </url>
+    <url>
+        <loc>https://localhost:8000/SOFTWARE/SENSING-STORAGE/storage/</loc>
+        <lastmod>2025-06-26</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/SOFTWARE/SENSING-STORAGE/storage/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/SOFTWARE/SENSING-STORAGE/storage/"/>
+    </url>
+    <url>
+        <loc>https://localhost:8000/SOFTWARE/SENSING-STORAGE/uploading/</loc>
+        <lastmod>2025-06-26</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/SOFTWARE/SENSING-STORAGE/uploading/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/SOFTWARE/SENSING-STORAGE/uploading/"/>
+    </url>
+    <url>
+        <loc>https://localhost:8000/SOFTWARE/STATEMACHINE/statemachine/</loc>
+        <lastmod>2025-06-26</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/SOFTWARE/STATEMACHINE/statemachine/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/SOFTWARE/STATEMACHINE/statemachine/"/>
+    </url>
+    <url>
+        <loc>https://localhost:8000/SOFTWARE/TIME-MANAGEMENT/time/</loc>
+        <lastmod>2025-06-26</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/SOFTWARE/TIME-MANAGEMENT/time/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/SOFTWARE/TIME-MANAGEMENT/time/"/>
+    </url>
+    <url>
+        <loc>https://localhost:8000/SOFTWARE/TIME-MANAGEMENT/timesync/</loc>
+        <lastmod>2025-06-26</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/SOFTWARE/TIME-MANAGEMENT/timesync/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/SOFTWARE/TIME-MANAGEMENT/timesync/"/>
     </url>
     <url>
         <loc>https://localhost:8000/blog/</loc>
@@ -141,6 +239,13 @@
         <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/DATASHEET/datasheet/"/>
     </url>
     <url>
+        <loc>https://localhost:8000/zh/DEMO/demo/</loc>
+        <lastmod>2025-06-26</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/DEMO/demo/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/DEMO/demo/"/>
+    </url>
+    <url>
         <loc>https://localhost:8000/zh/HARDWARE/hardware/</loc>
         <lastmod>2025-06-26</lastmod>
         <changefreq>daily</changefreq>
@@ -153,6 +258,13 @@
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/HARDWARE/ACCELERATION/acceleration/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/HARDWARE/ACCELERATION/acceleration/"/>
+    </url>
+    <url>
+        <loc>https://localhost:8000/zh/HARDWARE/ENCLOSURE/enclosure/</loc>
+        <lastmod>2025-06-26</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/HARDWARE/ENCLOSURE/enclosure/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/HARDWARE/ENCLOSURE/enclosure/"/>
     </url>
     <url>
         <loc>https://localhost:8000/zh/HARDWARE/MCU/mcu/</loc>
@@ -218,6 +330,55 @@
         <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/SOFTWARE/software/"/>
     </url>
     <url>
+        <loc>https://localhost:8000/zh/SOFTWARE/ARCHITECTURE/architecture/</loc>
+        <lastmod>2025-06-26</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/SOFTWARE/ARCHITECTURE/architecture/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/SOFTWARE/ARCHITECTURE/architecture/"/>
+    </url>
+    <url>
+        <loc>https://localhost:8000/zh/SOFTWARE/COMMAND-FEEDBACK/command/</loc>
+        <lastmod>2025-06-26</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/SOFTWARE/COMMAND-FEEDBACK/command/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/SOFTWARE/COMMAND-FEEDBACK/command/"/>
+    </url>
+    <url>
+        <loc>https://localhost:8000/zh/SOFTWARE/COMMAND-FEEDBACK/feedback/</loc>
+        <lastmod>2025-06-26</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/SOFTWARE/COMMAND-FEEDBACK/feedback/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/SOFTWARE/COMMAND-FEEDBACK/feedback/"/>
+    </url>
+    <url>
+        <loc>https://localhost:8000/zh/SOFTWARE/COMMUNICATION/mqtt/</loc>
+        <lastmod>2025-06-26</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/SOFTWARE/COMMUNICATION/mqtt/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/SOFTWARE/COMMUNICATION/mqtt/"/>
+    </url>
+    <url>
+        <loc>https://localhost:8000/zh/SOFTWARE/COMMUNICATION/rf/</loc>
+        <lastmod>2025-06-26</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/SOFTWARE/COMMUNICATION/rf/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/SOFTWARE/COMMUNICATION/rf/"/>
+    </url>
+    <url>
+        <loc>https://localhost:8000/zh/SOFTWARE/COMMUNICATION/wifi/</loc>
+        <lastmod>2025-06-26</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/SOFTWARE/COMMUNICATION/wifi/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/SOFTWARE/COMMUNICATION/wifi/"/>
+    </url>
+    <url>
+        <loc>https://localhost:8000/zh/SOFTWARE/CONFIGURATION/configuration/</loc>
+        <lastmod>2025-06-26</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/SOFTWARE/CONFIGURATION/configuration/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/SOFTWARE/CONFIGURATION/configuration/"/>
+    </url>
+    <url>
         <loc>https://localhost:8000/zh/SOFTWARE/FRAMEWORK/framework/</loc>
         <lastmod>2025-06-26</lastmod>
         <changefreq>daily</changefreq>
@@ -239,11 +400,46 @@
         <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/SOFTWARE/PROGRAMMING/programming/"/>
     </url>
     <url>
-        <loc>https://localhost:8000/zh/SOFTWARE/SENSING/sensing/</loc>
+        <loc>https://localhost:8000/zh/SOFTWARE/SENSING-STORAGE/sensing/</loc>
         <lastmod>2025-06-26</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/SOFTWARE/SENSING/sensing/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/SOFTWARE/SENSING/sensing/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/SOFTWARE/SENSING-STORAGE/sensing/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/SOFTWARE/SENSING-STORAGE/sensing/"/>
+    </url>
+    <url>
+        <loc>https://localhost:8000/zh/SOFTWARE/SENSING-STORAGE/storage/</loc>
+        <lastmod>2025-06-26</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/SOFTWARE/SENSING-STORAGE/storage/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/SOFTWARE/SENSING-STORAGE/storage/"/>
+    </url>
+    <url>
+        <loc>https://localhost:8000/zh/SOFTWARE/SENSING-STORAGE/uploading/</loc>
+        <lastmod>2025-06-26</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/SOFTWARE/SENSING-STORAGE/uploading/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/SOFTWARE/SENSING-STORAGE/uploading/"/>
+    </url>
+    <url>
+        <loc>https://localhost:8000/zh/SOFTWARE/STATEMACHINE/statemachine/</loc>
+        <lastmod>2025-06-26</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/SOFTWARE/STATEMACHINE/statemachine/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/SOFTWARE/STATEMACHINE/statemachine/"/>
+    </url>
+    <url>
+        <loc>https://localhost:8000/zh/SOFTWARE/TIME-MANAGEMENT/time/</loc>
+        <lastmod>2025-06-26</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/SOFTWARE/TIME-MANAGEMENT/time/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/SOFTWARE/TIME-MANAGEMENT/time/"/>
+    </url>
+    <url>
+        <loc>https://localhost:8000/zh/SOFTWARE/TIME-MANAGEMENT/timesync/</loc>
+        <lastmod>2025-06-26</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/SOFTWARE/TIME-MANAGEMENT/timesync/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/SOFTWARE/TIME-MANAGEMENT/timesync/"/>
     </url>
     <url>
         <loc>https://localhost:8000/zh/blog/</loc>
