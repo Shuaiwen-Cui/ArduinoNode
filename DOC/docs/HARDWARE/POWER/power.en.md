@@ -11,4 +11,4 @@ As shown in the figure, this project uses two 18650 lithium batteries for power 
 
 ## Battery Holder
 
-To facilitate the installation and replacement of batteries, this project uses a 18650 battery holder. The battery holder can accommodate two 18650 lithium batteries and provides the necessary connection interface. It is usually equipped with a switch and indicator light, allowing users to easily control the power supply and check the battery status.
+To facilitate the installation and replacement of batteries, this project uses a 18650 battery holder. The battery holder can accommodate two 18650 lithium batteries and provides the necessary connection interface. It is usually equipped with an indicator light, allowing users to easily check the battery status.

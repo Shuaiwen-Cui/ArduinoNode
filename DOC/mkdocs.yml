@@ -125,11 +125,29 @@ plugins:
             RGB-LED: RGB-LED
             TOUCH-SENSOR: 触摸传感器
             POWER: 电源供应
+            ENCLOSURE: 外壳
             SOFTWARE: 软件
             IDE: 集成开发环境
             PROGRAMMING: 编程
             FRAMEWORK: 框架
-            
+            ARCHITECTURE: 架构
+            CONFIGURATION: 配置
+            STATEMACHINE: 状态机
+            COMMUNICATION: 通信
+            WIFI: WIFI
+            MQTT: MQTT协议
+            RADIOFREQUENCY: 射频通信
+            TIME-MANAGEMENT: 时间管理
+            TIME: 时间
+            TIMESYNC: 时间同步
+            COMMAND-FEEDBACK: 命令反馈
+            COMMAND: 命令
+            FEEDBACK: 反馈
+            SENSING-STORAGE: 传感与存储
+            SENSING: 传感
+            STORAGE: 存储
+            UPLOADING: 上传
+            DEMO: 演示
 
 # # Hooks
 # hooks:
@@ -269,12 +287,31 @@ nav:
       - RGB-LED: "HARDWARE/RGB-LED/rgbled.md"
       # - TOUCH-SENSOR: "HARDWARE/TOUCH-SENSOR/touchsensor.md"
       - POWER: "HARDWARE/POWER/power.md"
+      - ENCLOSURE: "HARDWARE/ENCLOSURE/enclosure.md"
   - SOFTWARE:
       - "SOFTWARE/software.md"
       - IDE: "SOFTWARE/IDE/ide.md"
       - PROGRAMMING: "SOFTWARE/PROGRAMMING/programming.md"
       - FRAMEWORK: "SOFTWARE/FRAMEWORK/framework.md"
-
+      - ARCHITECTURE: "SOFTWARE/ARCHITECTURE/architecture.md"
+      - CONFIGURATION: "SOFTWARE/CONFIGURATION/configuration.md"
+      - STATEMACHINE: "SOFTWARE/STATEMACHINE/statemachine.md"
+      - COMMUNICATION:
+          - WIFI: "SOFTWARE/COMMUNICATION/wifi.md"
+          - MQTT: "SOFTWARE/COMMUNICATION/mqtt.md"
+          - RADIOFREQUENCY: "SOFTWARE/COMMUNICATION/rf.md"
+      - TIME-MANAGEMENT:
+          - TIME: "SOFTWARE/TIME-MANAGEMENT/time.md"
+          - TIMESYNC: "SOFTWARE/TIME-MANAGEMENT/timesync.md"
+      - COMMAND-FEEDBACK:
+          - COMMAND: "SOFTWARE/COMMAND-FEEDBACK/command.md"
+          - FEEDBACK: "SOFTWARE/COMMAND-FEEDBACK/feedback.md"
+      - SENSING-STORAGE:
+          - SENSING: "SOFTWARE/SENSING-STORAGE/sensing.md"
+          - STORAGE: "SOFTWARE/SENSING-STORAGE/storage.md"
+          - UPLOADING: "SOFTWARE/SENSING-STORAGE/uploading.md"
+  - DEMO: 
+      - "DEMO/demo.md"
     
 # if there are sub nodes under a node, then there should not be a link right after the node. All the stuff should be placed under the node.
 
