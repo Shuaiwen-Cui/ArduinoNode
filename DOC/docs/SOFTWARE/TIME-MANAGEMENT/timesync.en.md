@@ -458,3 +458,10 @@ This completes synchronization, and the node's time is now aligned with the gate
 | RF Local Sync        | Uses RF communication + RTT calculation | High precision (milliseconds), network independent | Requires communication logic and node coordination |
 
 To balance precision and practicality, this project first uses NTP for initial time setup, followed by RF-based synchronization for high-precision alignment among nodes.
+
+
+## Serial Printout Example
+
+Below is a typical startup process serial output example for the gateway node, showing key steps for time synchronization:
+
+![](printout.png)
