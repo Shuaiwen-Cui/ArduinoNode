@@ -18,4 +18,7 @@ To-do items:
 - [ ] Communication distance
 - [ ] Modal analysis
 - [ ] Shell production
-- [ ] Acrylic processing - 180 rmb
+- [ ] Acrylic processing - 180 rmb (excluding shipping)
+
+To-discuss:
+- [ ] component purchasing
