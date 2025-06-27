@@ -21,4 +21,5 @@ To-do items:
 - [ ] Acrylic processing - 180 rmb (excluding shipping)
 
 To-discuss:
+
 - [ ] component purchasing
