@@ -12,13 +12,13 @@ Completed items:
 
 To-do items:
 
-- [ ] Remote reboot
-- [ ] Performance test
-- [ ] Data quality
-- [ ] Communication distance
-- [ ] Modal analysis
-- [ ] Shell production
-- [ ] Acrylic processing - 180 rmb (excluding shipping)
+- [x] Remote reboot
+- [x] Performance test
+- [x] Data quality
+- [x] Communication distance
+- [x] Modal analysis
+- [x] Shell production
+- [x] Acrylic processing - 180 rmb (excluding shipping)
 
 To-discuss:
 
