@@ -20,6 +20,9 @@
 #define WIFI_SSID "Shaun's Iphone"
 #define WIFI_PASSWORD "cshw0918"
 
+// #define WIFI_SSID "7's iPhone"
+// #define WIFI_PASSWORD "zhangqi123"
+
 /* MQTT Configurations */
 // #define MQTT_CLIENT_ID      "GATEWAY"
 // #define MQTT_CLIENT_ID      "LEAFNODE1"
