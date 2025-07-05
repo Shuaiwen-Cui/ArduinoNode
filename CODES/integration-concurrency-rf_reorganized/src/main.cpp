@@ -125,9 +125,15 @@ void loop()
     {
         // === Check for Reboot ===
 #ifdef GATEWAY
+        if (node_status.node_flags.reboot_required_leafnode)
+        {
+            Serial.println("[GATEWAY] Reboot command received for leafnodes.");
+            send_command_with_retry("CMD_REBOOT"); // Send reboot command to all leafnodes
+        }
         if (node_status.node_flags.reboot_required_gateway)
         {
             Serial.println("[GATEWAY] Reboot command received for gateway.");
+            delay(3000); // Wait for 1 second before rebooting
             node_status.set_state(NodeState::BOOT);
         }
 #endif
@@ -136,6 +142,18 @@ void loop()
         {
             Serial.println("[LEAFNODE] Reboot command received for leaf node.");
             node_status.set_state(NodeState::BOOT);
+        }
+#endif
+
+#ifdef GATEWAY
+        // === Check for RF Sync Request from MQTT ===
+        if (node_status.node_flags.time_rf_required)
+        {
+            Serial.println("[GATEWAY] RF time sync requested via MQTT.");
+            send_command_with_retry("CMD_RF_SYNC"); // Send RF sync command
+            delay(2000); // Wait for 1 second to allow RF sync to complete
+            node_status.set_state(NodeState::RF_COMMUNICATING);
+            rgbled_set_by_state(NodeState::RF_COMMUNICATING);
         }
 #endif
 
@@ -214,7 +232,6 @@ void loop()
         //     Serial.println("[STATUS] Switching to PREPARING state.");
         // }
 
-        
         now_unix_ms = Time.estimate_time_ms();
 
         if (node_status.node_flags.sensing_scheduled)
@@ -239,6 +256,53 @@ void loop()
             }
         }
     }
+    else if (node_status.get_state() == NodeState::WIFI_COMMUNICATING)
+    {
+        // check whether to do NTP sync
+        if (node_status.node_flags.gateway_ntp_required || node_status.node_flags.leafnode_ntp_required)
+        {
+            if (!wifi_client.connected())
+            {
+                Serial.println("[COMMUNICATION] <NTP> Gateway/Leafnode NTP sync required, but WiFi not connected. Reconnecting...");
+                connect_to_wifi();
+                node_status.node_flags.wifi_connected = true;
+            }
+            while (!sync_time_ntp())
+            {
+                Serial.println("[COMMUNICATION] <NTP> time sync failed. Retrying in 2 seconds...");
+                delay(2000);
+            }
+            node_status.node_flags.gateway_ntp_required = false;
+            node_status.node_flags.leafnode_ntp_required = false;
+        }
+
+        // check whether need to upload data
+        if (node_status.node_flags.data_retrieval_requested)
+        {
+            Serial.print("[COMMUNICATION] <RETRIEVAL> Data retrieval requested. Filename: ");
+            Serial.println(retrieval_filename);
+
+            sensing_retrieve_file();
+        }
+
+        // switch to IDLE state after handling WiFi communication
+        node_status.set_state(NodeState::IDLE);
+        rgbled_set_by_state(NodeState::IDLE);
+    }
+    else if (node_status.get_state() == NodeState::RF_COMMUNICATING)
+    {
+        // check whether to do RF time sync
+        if (node_status.node_flags.time_rf_required)
+        {
+            Serial.println("[COMMUNICATION] <SYNC> RF time sync required.");
+            sync_check_rf_online();
+            rf_time_sync();
+            node_status.node_flags.time_rf_required = false;
+
+            node_status.set_state(NodeState::IDLE);
+            rgbled_set_by_state(NodeState::IDLE);
+        }
+    }
     else if (node_status.get_state() == NodeState::PREPARING)
     {
         // preparing operation
@@ -252,6 +316,7 @@ void loop()
             rgbled_set_by_state(NodeState::SAMPLING);
         }
     }
+
     else if (node_status.get_state() == NodeState::SAMPLING)
     {
         if (!node_status.node_flags.sensing_active)

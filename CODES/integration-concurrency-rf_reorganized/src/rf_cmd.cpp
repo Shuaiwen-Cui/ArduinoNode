@@ -29,6 +29,15 @@ void rf_command(const char *cmd)
     }
 }
 
+void send_command_with_retry(const char *cmd)
+{
+    for (int attempt = 0; attempt < RF_CMD_RETRY; ++attempt)
+    {
+        rf_command(cmd);  
+        delay(RF_CMD_WAIT_MS); 
+    }
+}
+
 void rf_handle()
 {
     RFMessage msg;

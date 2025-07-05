@@ -55,7 +55,7 @@ void mqtt_callback(char *topic, byte *payload, unsigned int length)
 
     // switch to COMMUNICATING state
     node_status.set_state(NodeState::WIFI_COMMUNICATING);
-    rgbled_set_all(CRGB::Blue); // Set LED to blue during NTP sync
+    rgbled_set_by_state(NodeState::WIFI_COMMUNICATING); // Set LED to blue during NTP sync
   }
   else if (msg_str == "CMD_GATEWAY_NTP")
   {
@@ -74,6 +74,11 @@ void mqtt_callback(char *topic, byte *payload, unsigned int length)
     // switch to COMMUNICATING state
     node_status.set_state(NodeState::WIFI_COMMUNICATING);
     rgbled_set_all(CRGB::Blue); // Set LED to blue during NTP sync
+  }
+  else if (msg_str == "CMD_RF_SYNC")
+  {
+    node_status.node_flags.time_rf_required = true;
+    Serial.println("[COMMUNICATION] <CMD> CMD_RF_SYNC received.");
   }
   else if (msg_str.startsWith("CMD_SENSING_"))
   {
