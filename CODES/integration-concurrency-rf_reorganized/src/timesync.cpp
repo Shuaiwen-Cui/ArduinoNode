@@ -15,27 +15,58 @@ bool node_online[NUM_NODES + 1] = {false};
 bool sync_time_ntp()
 {
     timeClient.begin();
-    if (!timeClient.update())
+    const uint64_t MIN_VALID_EPOCH = 1735689600; // 2025-01-01 00:00:00 UTC
+    bool success = false;
+
+    for (int attempt = 1; attempt <= 5; ++attempt)
     {
-        Serial.println("[COMMUNICATION] <NTP> Failed to get NTP time.");
-        return false;
+        if (!timeClient.update())
+        {
+            Serial.print("[COMMUNICATION] <NTP> Attempt ");
+            Serial.print(attempt);
+            Serial.println(": Failed to get NTP time.");
+            delay(1000);
+            continue;
+        }
+
+        uint64_t epoch = timeClient.getEpochTime();
+        if (epoch < MIN_VALID_EPOCH)
+        {
+            Serial.print("[COMMUNICATION] <NTP> Attempt ");
+            Serial.print(attempt);
+            Serial.print(": Invalid epoch = ");
+            Serial.println(epoch);
+            delay(1000);
+            continue;
+        }
+
+        // === Valid time received, set local time ===
+        uint16_t current_millis = millis();
+
+        Time.set_time_epoch(epoch);
+        Time.last_update_epoch = epoch;
+        Time.last_update_ms = current_millis % 1000 + (epoch * 1000); // Convert to ms, keeping current millis
+        Time.mcu_base_ms = current_millis;
+        Time.mcu_time_ms = current_millis;
+        Time.delta_ms = 0;
+        Serial.print("[COMMUNICATION] <NTP> Calendar time set to: ");
+        Time.print(); // Print the time to Serial for debugging
+
+        Serial.print("[COMMUNICATION] <NTP> Synchronized UNIX epoch: ");
+        Serial.println(epoch);
+        Serial.print("[COMMUNICATION] <NTP> Current time: ");
+        Time.print();
+
+        success = true;
+        break;
     }
 
-    uint64_t epoch = timeClient.getEpochTime();
-    uint16_t current_millis = millis();
+    if (!success)
+    {
+        Serial.println("[COMMUNICATION] <NTP> Final NTP sync failed after 5 attempts.");
+    }
 
-    Time.set_time_epoch(epoch);
-    Time.last_update_epoch = epoch;
-    Time.last_update_ms = current_millis % 1000 + (epoch * 1000); // Convert to ms, keeping current millis for ms part
-    Time.mcu_base_ms = current_millis;
-    Time.mcu_time_ms = current_millis;
-    Time.delta_ms = 0;
-
-    Serial.print("[COMMUNICATION] <NTP> Synchronized UNIX epoch: ");
-    Serial.println(epoch);
-    Serial.print("[COMMUNICATION] <NTP> Current time: ");
-    Time.print();
-    return true;
+    return success;
 }
 
 bool sync_check_rf_online()
@@ -213,6 +244,121 @@ bool sync_check_rf_online()
 #endif
 }
 
+// bool rf_time_sync()
+// {
+// #ifdef GATEWAY
+//     Serial.println("[COMMUNICATION] <SYNC> Starting time sync broadcast to all nodes...");
+
+//     for (uint8_t id = 1; id <= NUM_NODES; ++id)
+//     {
+//         // Estimate master time just before sending to each node
+
+//         uint64_t unix_ms = Time.estimate_time_ms();
+//         Serial.print("[COMMUNICATION] <SYNC> Master time to send is ");
+//         Serial.println(unix_ms);
+
+//         RFMessage msg;
+//         msg.from_id = NODE_ID;
+//         msg.to_id = id;
+//         uint64_t adjusted_time = Time.estimate_time_ms() + node_rf_latency[id];
+//         snprintf(msg.payload, sizeof(msg.payload), "%s %llu", RF_TIME_SYNC_HEADER, adjusted_time);
+
+//         rf_stop_listening();
+//         bool sent = rf_send(id, msg, false);
+//         rf_start_listening();
+
+//         Serial.print("[COMMUNICATION] <SYNC> Sent time to Node ");
+//         Serial.print(id);
+//         Serial.print(": ");
+//         Serial.println(msg.payload);
+
+//         if (!sent)
+//         {
+//             Serial.print("[COMMUNICATION] <SYNC> Failed to send to Node ");
+//             Serial.println(id);
+//             continue;
+//         }
+
+//         RFMessage ack;
+//         bool received = rf_receive(ack, RF_RESPONSE_WAIT_MS);
+
+//         if (received &&
+//             ack.from_id == id &&
+//             ack.to_id == NODE_ID &&
+//             strncmp(ack.payload, RF_TIME_ACK_HEADER, strlen(RF_TIME_ACK_HEADER)) == 0)
+//         {
+//             uint32_t synced_time = 0;
+//             sscanf(ack.payload + strlen(RF_TIME_ACK_HEADER) + 1, "%lu", &synced_time);
+//             Serial.print("[COMMUNICATION] <SYNC> Node ");
+//             Serial.print(id);
+//             Serial.print(" ACK received. Synced time = ");
+//             Serial.println(synced_time);
+//         }
+//         else
+//         {
+//             Serial.print("[COMMUNICATION] <SYNC> No ACK from Node ");
+//             Serial.println(id);
+//         }
+
+//         delay(100); // avoid RF congestion
+//     }
+
+//     node_status.node_flags.time_rf_synced = true;
+//     return true;
+
+// #else // LEAF NODE
+//     Serial.println("[COMMUNICATION] <SYNC> Leaf waiting for TIME_SYNC...");
+
+//     uint32_t master_time = 0;
+//     int latency = 0;
+//     uint32_t adjusted_time = 0;
+
+//     while (true)
+//     {
+//         RFMessage msg;
+//         bool received = rf_receive(msg, 1000);
+
+//         if (!received)
+//             continue;
+
+//         if (msg.to_id != NODE_ID || strncmp(msg.payload, RF_TIME_SYNC_HEADER, strlen(RF_TIME_SYNC_HEADER)) != 0)
+//             continue;
+
+//         // Parse time and latency from payload
+//         uint64_t adjusted_time = 0;
+//         int parsed = sscanf(msg.payload + strlen(RF_TIME_SYNC_HEADER) + 1, "%llu", &adjusted_time);
+
+//         // Update local time
+//         Time.set_time_ms(adjusted_time);
+//         Time.last_update_ms = adjusted_time;
+//         Time.last_update_epoch = adjusted_time / 1000; // Convert to seconds
+//         Time.mcu_base_ms = millis();
+
+//         Serial.print("[COMMUNICATION] <SYNC> Unix Time (ms) adjusted to ");
+//         Serial.println(adjusted_time);
+
+//         Serial.print("[COMMUNICATION] <SYNC> DataTime adjusted to ");
+//         Time.print();
+
+//         // Send ACK with adjusted time
+//         RFMessage ack;
+//         ack.from_id = NODE_ID;
+//         ack.to_id = msg.from_id;
+//         snprintf(ack.payload, sizeof(ack.payload), "%s %lu", RF_TIME_ACK_HEADER, adjusted_time);
+
+//         rf_stop_listening();
+//         rf_send(msg.from_id, ack, false);
+//         rf_start_listening();
+
+//         Serial.println("[COMMUNICATION] <SYNC> Time sync ACK sent.");
+//         break;
+//     }
+
+//     node_status.node_flags.time_rf_synced = (adjusted_time > 0);
+//     return node_status.node_flags.time_rf_synced;
+// #endif
+// }
+
 bool rf_time_sync()
 {
 #ifdef GATEWAY
@@ -220,13 +366,14 @@ bool rf_time_sync()
 
     for (uint8_t id = 1; id <= NUM_NODES; ++id)
     {
-        // Estimate master time just before sending to each node
-        uint32_t master_time = static_cast<uint32_t>(Time.estimate_time_ms());
 
         RFMessage msg;
         msg.from_id = NODE_ID;
         msg.to_id = id;
-        snprintf(msg.payload, sizeof(msg.payload), "%s %lu %d", RF_TIME_SYNC_HEADER, master_time, node_rf_latency[id]);
+        uint64_t adjusted_time = Time.estimate_time_ms() + node_rf_latency[id];
+        uint32_t high = adjusted_time >> 32;
+        uint32_t low = adjusted_time & 0xFFFFFFFF;
+        snprintf(msg.payload, sizeof(msg.payload), "%s %lu %lu", RF_TIME_SYNC_HEADER, high, low);
 
         Serial.print("[COMMUNICATION] <SYNC> Sending time to Node ");
         Serial.print(id);
@@ -252,12 +399,9 @@ bool rf_time_sync()
             ack.to_id == NODE_ID &&
             strncmp(ack.payload, RF_TIME_ACK_HEADER, strlen(RF_TIME_ACK_HEADER)) == 0)
         {
-            uint32_t synced_time = 0;
-            sscanf(ack.payload + strlen(RF_TIME_ACK_HEADER) + 1, "%lu", &synced_time);
             Serial.print("[COMMUNICATION] <SYNC> Node ");
             Serial.print(id);
-            Serial.print(" ACK received. Synced time = ");
-            Serial.println(synced_time);
+            Serial.println(" ACK received.");
         }
         else
         {
@@ -274,9 +418,7 @@ bool rf_time_sync()
 #else // LEAF NODE
     Serial.println("[COMMUNICATION] <SYNC> Leaf waiting for TIME_SYNC...");
 
-    uint32_t master_time = 0;
-    int latency = 0;
-    uint32_t adjusted_time = 0;
+    uint64_t adjusted_time = 0;
 
     while (true)
     {
@@ -289,21 +431,31 @@ bool rf_time_sync()
         if (msg.to_id != NODE_ID || strncmp(msg.payload, RF_TIME_SYNC_HEADER, strlen(RF_TIME_SYNC_HEADER)) != 0)
             continue;
 
-        // Parse time and latency from payload
-        sscanf(msg.payload + strlen(RF_TIME_SYNC_HEADER) + 1, "%lu %d", &master_time, &latency);
-        adjusted_time = master_time + latency;
+        Serial.print("[SYNC] Received payload: ");
+        Serial.println(msg.payload);
 
-        // Update local time
+        uint32_t high = 0, low = 0;
+        int parsed = sscanf(msg.payload + strlen(RF_TIME_SYNC_HEADER) + 1, "%lu %lu", &high, &low);
+        if (parsed != 2)
+        {
+            Serial.println("[SYNC] Failed to parse adjusted_time from payload.");
+            continue;
+        }
+        uint64_t adjusted_time = ((uint64_t)high << 32) | low;
+
         Time.set_time_ms(adjusted_time);
+        Time.last_update_ms = adjusted_time;
+        Time.last_update_epoch = adjusted_time / 1000;
+        Time.mcu_base_ms = millis();
+        node_status.node_flags.time_rf_synced = true;
 
-        Serial.print("[COMMUNICATION] <SYNC> Time adjusted to ");
-        Serial.println(adjusted_time);
+        Serial.print("[SYNC] Local time updated to ");
+        Time.print();
 
-        // Send ACK with adjusted time
         RFMessage ack;
         ack.from_id = NODE_ID;
         ack.to_id = msg.from_id;
-        snprintf(ack.payload, sizeof(ack.payload), "%s %lu", RF_TIME_ACK_HEADER, adjusted_time);
+        snprintf(ack.payload, sizeof(ack.payload), "%s", RF_TIME_ACK_HEADER);
 
         rf_stop_listening();
         rf_send(msg.from_id, ack, false);
@@ -313,7 +465,6 @@ bool rf_time_sync()
         break;
     }
 
-    node_status.node_flags.time_rf_synced = (adjusted_time > 0);
-    return node_status.node_flags.time_rf_synced;
+    return true;
 #endif
 }

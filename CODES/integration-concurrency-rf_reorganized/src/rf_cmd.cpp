@@ -16,7 +16,15 @@ void rf_command(const char *cmd)
         Serial.println(msg.payload);
 
         rf_stop_listening();
-        rf_send(msg.to_id, msg);
+        bool success = rf_send(msg.to_id, msg);
+        if (success)
+        {
+            Serial.println("[GATEWAY] Command sent successfully.");
+        }
+        else
+        {
+            Serial.println("[GATEWAY] Failed to send command.");
+        }
         rf_start_listening();
     }
 }
@@ -105,6 +113,8 @@ void rf_handle()
 
                 sensing_scheduled_start_ms = SensingSchedule.compute_ms_from_calendar();
                 sensing_scheduled_end_ms = sensing_scheduled_start_ms + dur * 1000;
+
+                node_status.node_flags.sensing_scheduled = true; // very important!
 
                 // Debug print
                 Serial.print("[LEAFNODE] Parsed Time: ");

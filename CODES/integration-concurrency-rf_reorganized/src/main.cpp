@@ -114,102 +114,72 @@ void setup()
 
 /*========== LOOP ==========*/
 
-// void loop()
-// {
-//     now_unix_ms = Time.estimate_time_ms();
-
-// #if defined(GATEWAY)
-
-//     // === GATEWAY: Periodically send RF command to all leaf nodes ===
-//     static unsigned long last_send_time = 0;
-//     const unsigned long send_interval = 5000;
-
-//     if (millis() - last_send_time >= send_interval)
-//     {
-//         last_send_time = millis();
-
-//         // Construct RF command message
-//         RFMessage msg;
-//         msg.from_id = NODE_ID;
-
-//         static int counter = 0;
-//         counter++;
-
-//         // Alternate command for test
-//         if (counter % 2 == 0)
-//             strncpy(msg.payload, "CMD1", sizeof(msg.payload));
-//         else
-//             strncpy(msg.payload, "CMD2", sizeof(msg.payload));
-
-//         // Send to all leaf nodes
-//         for (uint8_t target_id = 1; target_id <= NUM_NODES; ++target_id)
-//         {
-//             msg.to_id = target_id;
-
-//             Serial.print("[GATEWAY] Sending command to Node ");
-//             Serial.print(target_id);
-//             Serial.print(": ");
-//             Serial.println(msg.payload);
-
-//             node_status.set_state(NodeState::RF_COMMUNICATING);
-//             rgbled_set_by_state(NodeState::RF_COMMUNICATING);
-
-//             rf_stop_listening();
-//             rf_send(msg.to_id, msg);
-//             rf_start_listening();
-//         }
-
-//         node_status.set_state(NodeState::IDLE);
-//         rgbled_set_by_state(NodeState::IDLE);
-//     }
-
-// #elif defined(LEAFNODE)
-
-//     // === LEAFNODE: Handle incoming RF command ===
-//     rf_handle();
-
-// #endif
-// }
-
 void loop()
 {
-    now_unix_ms = Time.estimate_time_ms();
-
-    static NodeState prev_state = NodeState::BOOT;
-    NodeState current_state = node_status.get_state();
-
-    static unsigned long idle_start_time = 0;
-
-    // === Update idle_start_time only when entering IDLE state ===
-    if (current_state == NodeState::IDLE && prev_state != NodeState::IDLE)
-    {
-        idle_start_time = millis();
-        Serial.println("[SYSTEM] Entered IDLE state.");
-    }
-
-    prev_state = current_state; // update for next loop
-
-    if (current_state == NodeState::BOOT)
+    if (node_status.get_state() == NodeState::BOOT)
     {
         delay(3000);        // Wait for 3 seconds in BOOT state
         NVIC_SystemReset(); // Reset the system
     }
-    else if (current_state == NodeState::IDLE)
+    else if (node_status.get_state() == NodeState::IDLE)
     {
+        // === Check for Reboot ===
 #ifdef GATEWAY
-    static bool sensing_cmd_sent = false;
-    static unsigned long idle_start_time = 0;
+        if (node_status.node_flags.reboot_required_gateway)
+        {
+            Serial.println("[GATEWAY] Reboot command received for gateway.");
+            node_status.set_state(NodeState::BOOT);
+        }
+#endif
+#ifdef LEAFNODE
+        if (node_status.node_flags.reboot_required_leafnode)
+        {
+            Serial.println("[LEAFNODE] Reboot command received for leaf node.");
+            node_status.set_state(NodeState::BOOT);
+        }
+#endif
 
-    if (idle_start_time == 0)
-        idle_start_time = millis();
+#ifdef GATEWAY
+        // === Routine MQTT maintenance ===
+        if (should_run_mqtt_loop())
+        {
+            // Check WiFi connection, reconnect if disconnected
+            if (WiFi.status() != WL_CONNECTED)
+            {
+                Serial.println("[MQTT] WiFi disconnected. Reconnecting...");
+                connect_to_wifi(); // Reconnect to WiFi
+            }
 
-    if (!sensing_cmd_sent && millis() - idle_start_time > 10000)
-    {
-        sensing_cmd_sent = true;
+            mqtt_loop(); // Keep MQTT connection alive
+            // mqtt_publish_test(); // Optional test message
+        }
+#endif
 
-        const char *sensing_cmd = "S_251105123000_100_10"; // YYMMDDHHMMSS + rate + duration
-        rf_command(sensing_cmd);
-    }
+#ifdef GATEWAY
+        // === Check for sensing request from MQTT ===
+        if (node_status.node_flags.sensing_requested)
+        {
+            node_status.node_flags.sensing_requested = false;
+            node_status.node_flags.sensing_scheduled = true;
+
+            // Construct sensing command string: S_YYMMDDHHMMSS_<RATE>_<DUR>
+            char command_buf[32];
+            snprintf(command_buf, sizeof(command_buf),
+                     "S_%02d%02d%02d%02d%02d%02d_%d_%d",
+                     SensingSchedule.year % 100, // YY
+                     SensingSchedule.month,
+                     SensingSchedule.day,
+                     SensingSchedule.hour,
+                     SensingSchedule.minute,
+                     SensingSchedule.second,
+                     parsed_freq,
+                     parsed_duration);
+
+            Serial.print("[GATEWAY] Sending sensing command via RF: ");
+            Serial.println(command_buf);
+
+            rf_command(command_buf);
+        }
 #endif
 
 #ifdef LEAFNODE
@@ -233,8 +203,86 @@ void loop()
             rgbled_set_by_state(NodeState::IDLE);
         }
 #endif
+
+        // === Check for sensing schedule ===
+        // now_unix_ms = Time.estimate_time_ms();
+        // if (node_status.node_flags.sensing_scheduled &&
+        //     now_unix_ms >= sensing_scheduled_start_ms - SENSING_PREPARING_DUR_MS)
+        // {
+        //     node_status.set_state(NodeState::PREPARING);
+        //     rgbled_set_by_state(NodeState::PREPARING);
+        //     Serial.println("[STATUS] Switching to PREPARING state.");
+        // }
+
+        
+        now_unix_ms = Time.estimate_time_ms();
+
+        if (node_status.node_flags.sensing_scheduled)
+        {
+            static uint32_t last_debug = 0;
+            if (millis() - last_debug > 1000)
+            {
+                last_debug = millis();
+                Serial.print("[DEBUG] sensing_scheduled = true | now_unix_ms = ");
+                Serial.print(now_unix_ms);
+                Serial.print(", scheduled_start_ms = ");
+                Serial.print(sensing_scheduled_start_ms);
+                Serial.print(", diff = ");
+                Serial.println(sensing_scheduled_start_ms - now_unix_ms);
+            }
+
+            if (now_unix_ms >= sensing_scheduled_start_ms - SENSING_PREPARING_DUR_MS)
+            {
+                Serial.println("[DEBUG] Condition met: switching to PREPARING.");
+                node_status.set_state(NodeState::PREPARING);
+                rgbled_set_by_state(NodeState::PREPARING);
+            }
+        }
     }
-    else if (current_state == NodeState::ERROR)
+    else if (node_status.get_state() == NodeState::PREPARING)
+    {
+        // preparing operation
+
+        // check state change
+        now_unix_ms = Time.estimate_time_ms();
+        if (now_unix_ms >= sensing_scheduled_start_ms)
+        {
+            // Switch to SAMPLING state
+            node_status.set_state(NodeState::SAMPLING);
+            rgbled_set_by_state(NodeState::SAMPLING);
+        }
+    }
+    else if (node_status.get_state() == NodeState::SAMPLING)
+    {
+        if (!node_status.node_flags.sensing_active)
+        {
+            if (sensing_start())
+            {
+                node_status.node_flags.sensing_active = true;
+            }
+            else
+            {
+                Serial.println("[ERROR] Sensing start failed.");
+                node_status.set_state(NodeState::ERROR);
+            }
+        }
+
+        sensing_sample_once();
+
+        now_unix_ms = Time.estimate_time_ms();
+        if (now_unix_ms > sensing_scheduled_end_ms)
+        {
+            sensing_stop();
+            node_status.node_flags.sensing_active = false;
+            node_status.node_flags.sensing_requested = false;
+            node_status.node_flags.sensing_scheduled = false;
+
+            node_status.set_state(NodeState::IDLE);
+            rgbled_set_by_state(NodeState::IDLE);
+            Serial.println("[STATUS] Sampling completed, switching to IDLE state.");
+        }
+    }
+    else if (node_status.get_state() == NodeState::ERROR)
     {
         rgbled_set_by_state(NodeState::ERROR);
         delay(3000);

@@ -114,7 +114,6 @@ uint64_t MCUTime::estimate_time_ms()
     // Calculate delta since last update
     mcu_time_ms = millis();
     delta_ms = mcu_time_ms - mcu_base_ms;
-
     estimated_unix_ms = last_update_ms + delta_ms;
     estimated_unix_epoch = last_update_epoch + (delta_ms / 1000);
 

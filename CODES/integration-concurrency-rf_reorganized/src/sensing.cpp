@@ -95,6 +95,7 @@ void sensing_stop()
         save_log_number();
     }
 
+#ifdef DATA_PRINTOUT
     // Reopen and print file content
     File f = SD.open(filename, FILE_READ);
     if (f)
@@ -110,6 +111,7 @@ void sensing_stop()
     {
         Serial.println("[SD] Failed to reopen file for reading.");
     }
+#endif
 
     sample_count = 0;
 }

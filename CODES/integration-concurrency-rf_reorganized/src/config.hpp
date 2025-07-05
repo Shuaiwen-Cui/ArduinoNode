@@ -2,11 +2,11 @@
 #include <Arduino.h>
 
 /* Node Information */
-// #define GATEWAY          // for main node
-#define LEAFNODE        // for sensor node
+#define GATEWAY          // for main node
+// #define LEAFNODE        // for sensor node
 
-// #define NODE_ID 100      // GATEWAY should be 100
-#define NODE_ID 1 // for LEAFNODE: 1, 2, 3, 4
+#define NODE_ID 100      // GATEWAY should be 100
+// #define NODE_ID 1 // for LEAFNODE: 1, 2, 3, 4
 // #define NODE_ID 2
 // #define NODE_ID 3
 // #define NODE_ID 4
@@ -24,8 +24,8 @@
 // #define WIFI_PASSWORD "zhangqi123"
 
 /* MQTT Configurations */
-// #define MQTT_CLIENT_ID      "GATEWAY"
-#define MQTT_CLIENT_ID      "LEAFNODE1"
+#define MQTT_CLIENT_ID      "GATEWAY"
+// #define MQTT_CLIENT_ID      "LEAFNODE1"
 // #define MQTT_CLIENT_ID      "LEAFNODE2"
 // #define MQTT_CLIENT_ID      "LEAFNODE3"
 // #define MQTT_CLIENT_ID      "LEAFNODE4"
@@ -45,6 +45,9 @@ extern uint32_t sensing_duration_s;         // Sensing duration in seconds
 
 extern uint16_t parsed_freq;                // Parsed frequency from command
 extern uint16_t parsed_duration;            // Parsed duration from command
+
+/* Serial Configurations */
+// #define DATA_PRINTOUT // Enable data printout to Serial
 
 // === Function Declaration ===
 void print_node_config();
