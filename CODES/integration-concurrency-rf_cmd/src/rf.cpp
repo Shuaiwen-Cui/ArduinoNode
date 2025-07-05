@@ -2,7 +2,7 @@
 #include "config.hpp"
 #include <SPI.h>
 
-RF24 radio(9, 8);
+RF24 radio(RF_CE_PIN, RF_CSN_PIN);
 
 String rf_format_address(uint16_t node_id)
 {
@@ -20,11 +20,19 @@ void rf_set_rx_address(uint8_t id)
 
 bool rf_init()
 {
+    Serial.println("[INIT] <RF> Attempting to initialize RF module...");
+
+    pinMode(RF_CSN_PIN, OUTPUT);
+    digitalWrite(RF_CSN_PIN, HIGH); 
+    delay(10);
+
     if (!radio.begin())
     {
-        Serial.println("[INIT] <RF> Initialization failed.");
+        Serial.println("[INIT] <RF> radio.begin() failed. Check power and wiring.");
         return false;
     }
+
+    Serial.println("[INIT] <RF> radio.begin() succeeded.");
 
     radio.setPALevel(RF24_PA_HIGH);
     radio.setDataRate(RF24_250KBPS);
@@ -36,10 +44,12 @@ bool rf_init()
     rf_set_rx_address(NODE_ID);
     radio.startListening();
 
-    Serial.print("[INIT] <RF> Initialized. Listening on ");
+    Serial.print("[INIT] <RF> Initialized. Listening on address: ");
     Serial.println(rf_format_address(NODE_ID));
+
     return true;
 }
+
 
 void rf_stop_listening() { radio.stopListening(); }
 void rf_start_listening() { radio.startListening(); }
@@ -75,7 +85,7 @@ bool rf_send_then_receive(const RFMessage &msg, uint8_t to_id, unsigned long tim
 
         if (!sent)
         {
-            Serial.print("[RF] Send failed (attempt ");
+            Serial.print("[INIT] <RF> Send failed (attempt ");
             Serial.print(attempt + 1);
             Serial.println(")");
             continue;
@@ -85,7 +95,7 @@ bool rf_send_then_receive(const RFMessage &msg, uint8_t to_id, unsigned long tim
         if (rf_receive(response, timeout_ms) && response.to_id == NODE_ID)
             return true;
 
-        Serial.print("[RF] No response received (attempt ");
+        Serial.print("[INIT] <RF> No response received (attempt ");
         Serial.print(attempt + 1);
         Serial.println(")");
     }
