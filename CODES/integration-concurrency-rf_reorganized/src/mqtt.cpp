@@ -106,23 +106,43 @@ void mqtt_callback(char *topic, byte *payload, unsigned int length)
       parsed_freq = (uint16_t)rate;
       parsed_duration = (uint16_t)dur;
 
-      sensing_scheduled_start_ms = parsed_start_time.compute_ms_from_calendar();
-      SensingSchedule.unix_ms = sensing_scheduled_start_ms;
-      SensingSchedule.unix_epoch = sensing_scheduled_start_ms / 1000;
-      SensingSchedule.set_calendar(); // Update calendar fields based on scheduled start time
-      sensing_scheduled_end_ms = sensing_scheduled_start_ms + (parsed_duration * 1000); // ms
+      uint64_t now_unix_ms = Time.estimate_time_ms();
+      if (now_unix_ms < parsed_start_time.compute_ms_from_calendar())
+      {
+        Serial.println("[MQTT] Sensing start time is in the future, scheduling sensing.");
+        sensing_scheduled_start_ms = parsed_start_time.compute_ms_from_calendar();
+        SensingSchedule.unix_ms = sensing_scheduled_start_ms;
+        SensingSchedule.unix_epoch = sensing_scheduled_start_ms / 1000;
+        SensingSchedule.set_calendar();                                                   // Update calendar fields based on scheduled start time
+        sensing_scheduled_end_ms = sensing_scheduled_start_ms + (parsed_duration * 1000); // ms
 
-      sensing_rate_hz = parsed_freq;
-      sensing_duration_s = parsed_duration;
+        sensing_rate_hz = parsed_freq;
+        sensing_duration_s = parsed_duration;
 
-      node_status.node_flags.sensing_scheduled = true;
+        node_status.node_flags.sensing_scheduled = true;
 
-      char buf[128];
-      snprintf(buf, sizeof(buf), "[MQTT] Sensing scheduled, sampling at %d Hz for %d seconds, starting at %04d-%02d-%02d %02d:%02d:%02d",
-               parsed_freq, parsed_duration,
-               parsed_start_time.year, parsed_start_time.month, parsed_start_time.day,
-               parsed_start_time.hour, parsed_start_time.minute, parsed_start_time.second);
-      Serial.println(buf);
+        char buf[128];
+        snprintf(buf, sizeof(buf), "[MQTT] Sensing scheduled, sampling at %d Hz for %d seconds, starting at %04d-%02d-%02d %02d:%02d:%02d",
+                 parsed_freq, parsed_duration,
+                 parsed_start_time.year, parsed_start_time.month, parsed_start_time.day,
+                 parsed_start_time.hour, parsed_start_time.minute, parsed_start_time.second);
+        Serial.println(buf);
+      }
+      else
+      {
+        Serial.println("[MQTT] Sensing start time is in the past, ignoring command.");
+        node_status.node_flags.sensing_requested = false;
+
+        // feedback to the mqtt broker
+        mqtt_client.publish(MQTT_TOPIC_PUB, "Sensing command ignored: start time is in the past!");
+
+        rgbled_set_all(CRGB::Red); // Set LED to red to indicate error
+        delay(3000); // Wait for 2 seconds to indicate error
+        if (node_status.get_state() == NodeState::IDLE)
+        {
+          rgbled_set_by_state(NodeState::IDLE); // Reset LED to IDLE state
+        }
+      }
     }
     else
     {

@@ -14,11 +14,11 @@
 #define NUM_NODES 4 // Total number of nodes in the network
 
 /* WiFi Credentials */
-#define WIFI_SSID "CSW@CEE"
-#define WIFI_PASSWORD "88888888"
+// #define WIFI_SSID "CSW@CEE"
+// #define WIFI_PASSWORD "88888888"
 
-// #define WIFI_SSID "Shaun's Iphone"
-// #define WIFI_PASSWORD "cshw0918"
+#define WIFI_SSID "Shaun's Iphone"
+#define WIFI_PASSWORD "cshw0918"
 
 // #define WIFI_SSID "7's iPhone"
 // #define WIFI_PASSWORD "zhangqi123"

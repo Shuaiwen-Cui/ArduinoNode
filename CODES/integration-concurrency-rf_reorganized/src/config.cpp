@@ -13,10 +13,9 @@ void print_node_config()
 
 #ifdef GATEWAY
   Serial.println("Node Type     : GATEWAY");
-#elif defined(LEAFNODE)
+#endif
+#ifdef LEAFNODE
   Serial.println("Node Type     : LEAFNODE");
-#else
-  Serial.println("Node Type     : UNKNOWN");
 #endif
 
   Serial.print("Node ID       : ");

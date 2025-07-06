@@ -113,6 +113,13 @@ void sensing_stop()
     }
 #endif
 
+    if (mqtt_client.connected())
+    {
+        // Publish the file name to MQTT broker
+        String msg = "Node" + String(NODE_ID) + " completed sensing. File: " + String(filename);
+        mqtt_client.publish(MQTT_TOPIC_PUB, msg.c_str());
+    }
+
     sample_count = 0;
 }
 
