@@ -2,6 +2,9 @@
 
 Since it is an Internet project, we can upload data to the server through the Internet. Since we have introduced the MQTT protocol, we can upload data to the server through the MQTT protocol. However, please note that due to the limitations of the MQTT protocol, we cannot directly upload the entire file, but need to divide the file into multiple small blocks for uploading. In addition, the current data upload is based on server-side requests, that is, the node will listen to the server-side request, and when the server-side requests data, the node will upload the data to the server. The core code is in sensing.cpp.
 
+!!! warning "Note"
+    If each node is connected to the Internet, then the sampling file can be uploaded to the server in the manner described above. However, it has been found that mobile hotspots often cannot cover all nodes in actual deployment, so currently data is only stored on the SD card. The data from the main node can be directly uploaded to the server because it is connected to the MQTT server. The data from other nodes needs to be forwarded through the main node, but this involves complex communication programming development, and the transmission process takes much longer than the sampling time, which is not implemented in this project for now.
+
 ```cpp
 
 void sensing_retrieve_file()

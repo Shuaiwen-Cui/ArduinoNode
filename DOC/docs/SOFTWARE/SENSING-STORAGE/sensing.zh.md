@@ -1,6 +1,6 @@
 # 加速度传感
 
-采样可以说是本项目最重要的功能之一。它允许我们收集和存储来自传感器的数据，以便后续分析和处理。由于Arduino性能非常有限，本项目采用一边采样一边存储的方式来实现数据采集。由于没有引入实时操作系统，存储的过程会对采样造成一定的影响，所以无法实现很高的采样频率，但是由于本项目的展示和教学性质，采样频率不需要很高。经过测试100Hz的采样频率完全可以实现，而且由于是一边采样一边存储，所以数据上限基本上等同于SD卡的容量。
+采样可以说是本项目最重要的功能之一。它允许我们收集和存储来自传感器的数据，以便后续分析和处理。由于Arduino性能非常有限，本项目采用一边采样一边存储的方式来实现数据采集。由于没有引入实时操作系统，存储的过程会对采样造成一定的影响，所以无法实现很高的采样频率，但是由于本项目的展示和教学性质，采样频率不需要很高。经过测试200Hz的采样频率完全可以实现，而且由于是一边采样一边存储，所以数据上限基本上等同于SD卡的容量。
 
 **sensing.hpp**
 
@@ -10,11 +10,6 @@
 #include <stdint.h>
 
 #define SENSING_PREPARING_DUR_MS 5000  // Duration for preparing sensing in milliseconds
-
-extern uint64_t sensing_scheduled_start_ms; // Scheduled sensing start time (Unix ms)
-extern uint64_t sensing_scheduled_end_ms;   // Scheduled sensing end time (Unix ms)
-extern uint32_t sensing_rate_hz;            // Sensing rate in Hz
-extern uint32_t sensing_duration_s;         // Sensing duration in seconds
 
 typedef struct {
     uint16_t elapsed_ms;  // Elapsed time since sensing started (ms)
@@ -28,6 +23,7 @@ void sensing_sample_once();                 // Called repeatedly during SAMPLING
 void sensing_stop();                        // Called once at the end of SAMPLING state
 
 void sensing_retrieve_file();               // Retrieve file from SD card
+
 
 ```
 
@@ -44,11 +40,6 @@ void sensing_retrieve_file();               // Retrieve file from SD card
 #include "mqtt.hpp"
 #include "sdcard.hpp"
 #include "logging.hpp"
-
-uint64_t sensing_scheduled_start_ms = 0;
-uint64_t sensing_scheduled_end_ms = 0;
-uint32_t sensing_rate_hz = 0;
-uint32_t sensing_duration_s = 0;
 
 static File data_file;
 static uint32_t last_sample_time = 0;
@@ -105,13 +96,15 @@ void sensing_sample_once()
         int16_t ax, ay, az;
         imu_get_acceleration(ax, ay, az);
 
-        uint16_t elapsed = (uint16_t)(now_ms - t_start_ms);
+        uint32_t elapsed = now_ms - t_start_ms;
+
         float ax_g = ax / 16384.0f;
         float ay_g = ay / 16384.0f;
         float az_g = az / 16384.0f;
 
         char line[64];
-        snprintf(line, sizeof(line), "%u,%.6f,%.6f,%.6f", elapsed, ax_g, ay_g, az_g);
+
+        snprintf(line, sizeof(line), "%8lu,%.6f,%.6f,%.6f", elapsed, ax_g, ay_g, az_g);
         data_file.println(line);
 
         sample_count++;
@@ -134,6 +127,7 @@ void sensing_stop()
         save_log_number();
     }
 
+#ifdef DATA_PRINTOUT
     // Reopen and print file content
     File f = SD.open(filename, FILE_READ);
     if (f)
@@ -148,6 +142,14 @@ void sensing_stop()
     else
     {
         Serial.println("[SD] Failed to reopen file for reading.");
+    }
+#endif
+
+    if (mqtt_client.connected())
+    {
+        // Publish the file name to MQTT broker
+        String msg = "Node" + String(NODE_ID) + " completed sensing. File: " + String(filename);
+        mqtt_client.publish(MQTT_TOPIC_PUB, msg.c_str());
     }
 
     sample_count = 0;
@@ -222,6 +224,7 @@ void sensing_retrieve_file()
 }
 
 
+
 ```
 
 如上面代码所示，采样过程分为几个阶段：
@@ -235,4 +238,4 @@ void sensing_retrieve_file()
 4. calling `sensing_stop()`：在采样状态结束时调用，关闭SD卡文件并打印采样结果。这个函数会打印采样的总数，并将文件内容重新打开以便打印到串口。
 
 !!! info
-    本项目中，由于串口输出速度很慢，会拖累采样和存储，所以在采样过程中，我们只做存储而不做串口输出。采样完成后会重新打开文件并打印内容到串口。
+    本项目中，由于串口输出速度很慢，会拖累采样和存储，所以在采样过程中，我们只做存储而不做串口输出。采样完成后可以重新打开文件并打印内容到串口。

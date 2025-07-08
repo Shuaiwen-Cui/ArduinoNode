@@ -1,6 +1,6 @@
 # ACCELERATION SENSING
 
-Sampling can be said to be one of the most important functions of this project. It allows us to collect and store data from sensors for subsequent analysis and processing. Since Arduino performance is very limited, this project uses a method of sampling and storing at the same time to achieve data collection. Since there is no real-time operating system, the storage process will have a certain impact on sampling, so a high sampling frequency cannot be achieved, but due to the demonstration and teaching nature of this project, the sampling frequency does not need to be very high. After testing, a sampling frequency of 100Hz can be fully achieved, and since it is sampling and storing at the same time, the data limit is basically equivalent to the capacity of the SD card.
+Sampling can be said to be one of the most important functions of this project. It allows us to collect and store data from sensors for subsequent analysis and processing. Since Arduino performance is very limited, this project uses a method of sampling and storing at the same time to achieve data collection. Since there is no real-time operating system, the storage process will have a certain impact on sampling, so a high sampling frequency cannot be achieved, but due to the demonstration and teaching nature of this project, the sampling frequency does not need to be very high. After testing, a sampling frequency of 200Hz can be fully achieved, and since it is sampling and storing at the same time, the data limit is basically equivalent to the capacity of the SD card.
 
 **sensing.hpp**
 
@@ -10,11 +10,6 @@ Sampling can be said to be one of the most important functions of this project. 
 #include <stdint.h>
 
 #define SENSING_PREPARING_DUR_MS 5000  // Duration for preparing sensing in milliseconds
-
-extern uint64_t sensing_scheduled_start_ms; // Scheduled sensing start time (Unix ms)
-extern uint64_t sensing_scheduled_end_ms;   // Scheduled sensing end time (Unix ms)
-extern uint32_t sensing_rate_hz;            // Sensing rate in Hz
-extern uint32_t sensing_duration_s;         // Sensing duration in seconds
 
 typedef struct {
     uint16_t elapsed_ms;  // Elapsed time since sensing started (ms)
@@ -28,6 +23,7 @@ void sensing_sample_once();                 // Called repeatedly during SAMPLING
 void sensing_stop();                        // Called once at the end of SAMPLING state
 
 void sensing_retrieve_file();               // Retrieve file from SD card
+
 
 ```
 
@@ -44,11 +40,6 @@ void sensing_retrieve_file();               // Retrieve file from SD card
 #include "mqtt.hpp"
 #include "sdcard.hpp"
 #include "logging.hpp"
-
-uint64_t sensing_scheduled_start_ms = 0;
-uint64_t sensing_scheduled_end_ms = 0;
-uint32_t sensing_rate_hz = 0;
-uint32_t sensing_duration_s = 0;
 
 static File data_file;
 static uint32_t last_sample_time = 0;
@@ -105,13 +96,15 @@ void sensing_sample_once()
         int16_t ax, ay, az;
         imu_get_acceleration(ax, ay, az);
 
-        uint16_t elapsed = (uint16_t)(now_ms - t_start_ms);
+        uint32_t elapsed = now_ms - t_start_ms;
+
         float ax_g = ax / 16384.0f;
         float ay_g = ay / 16384.0f;
         float az_g = az / 16384.0f;
 
         char line[64];
-        snprintf(line, sizeof(line), "%u,%.6f,%.6f,%.6f", elapsed, ax_g, ay_g, az_g);
+
+        snprintf(line, sizeof(line), "%8lu,%.6f,%.6f,%.6f", elapsed, ax_g, ay_g, az_g);
         data_file.println(line);
 
         sample_count++;
@@ -134,6 +127,7 @@ void sensing_stop()
         save_log_number();
     }
 
+#ifdef DATA_PRINTOUT
     // Reopen and print file content
     File f = SD.open(filename, FILE_READ);
     if (f)
@@ -148,6 +142,14 @@ void sensing_stop()
     else
     {
         Serial.println("[SD] Failed to reopen file for reading.");
+    }
+#endif
+
+    if (mqtt_client.connected())
+    {
+        // Publish the file name to MQTT broker
+        String msg = "Node" + String(NODE_ID) + " completed sensing. File: " + String(filename);
+        mqtt_client.publish(MQTT_TOPIC_PUB, msg.c_str());
     }
 
     sample_count = 0;
@@ -222,6 +224,7 @@ void sensing_retrieve_file()
 }
 
 
+
 ```
 
 As shown in the code above, the sampling process is divided into several stages:
@@ -235,4 +238,4 @@ As shown in the code above, the sampling process is divided into several stages:
 4. calling `sensing_stop()`: Called at the end of the sampling state, closes the SD card file and prints the sampling results. This function prints the total number of samples and reopens the file content for printing to the serial port.
 
 !!! info
-    In this project, since the serial port output speed is very slow, it will drag down the sampling and storage, so during the sampling process, we only do storage without serial port output. After the sampling is completed, the file will be reopened and the content will be printed to the serial port.
+    In this project, since the serial port output speed is very slow, it will drag down the sampling and storage, so during the sampling process, we only do storage without serial port output. After the sampling is completed, the file can be reopened and the content can be printed to the serial port.
