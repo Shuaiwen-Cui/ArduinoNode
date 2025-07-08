@@ -6,32 +6,36 @@
 ```mermaid
 graph LR
 
-%% 模块定义
-config["config.hpp"]
-nodestate["nodestate.cpp/.hpp"]
-time["time.cpp/.hpp"]
-mpu["mpu6050.cpp"]
-sd["sdcard.cpp"]
-rgb["rgbled.cpp"]
-log["logging.cpp"]
-mqtt["mqtt.cpp"]
-sensing["sensing.cpp"]
-sync["timesync.cpp"]
-wifi["wifi.cpp"]
-rf["rf.cpp"]
+%% === Module Definitions ===
+config["config.hpp/.cpp"]
+nodestate["nodestate.hpp/.cpp"]
+time["time.hpp/.cpp"]
+mpu["mpu6050.hpp/.cpp"]
+sd["sdcard.hpp/.cpp"]
+rgb["rgbled.hpp/.cpp"]
+log["logging.hpp/.cpp"]
+mqtt["mqtt.hpp/.cpp"]
+sensing["sensing.hpp/.cpp"]
+sync["timesync.hpp/.cpp"]
+wifi["wifi.hpp/.cpp"]
+rf["rf.hpp/.cpp"]
+rf_cmd["rf_cmd.hpp/.cpp"]
 main["main.cpp"]
 
-%% 汇聚方向：模块 → main.cpp（箭头从左往右）
+%% === Module Relationships ===
 config --> mqtt
 config --> sensing
-config --> sync
 config --> rf
+config --> rf_cmd
+config --> sync
 config --> main
 
 nodestate --> mqtt
+nodestate --> sensing
+nodestate --> rf_cmd
+nodestate --> sync
 nodestate --> main
 
-time --> mqtt
 time --> sensing
 time --> sync
 time --> main
@@ -45,6 +49,7 @@ sd --> main
 
 rgb --> mqtt
 rgb --> sensing
+rgb --> rf_cmd
 rgb --> main
 
 log --> sensing
@@ -58,8 +63,11 @@ sync --> main
 
 wifi --> main
 
+rf --> rf_cmd
 rf --> sync
 rf --> main
+
+rf_cmd --> main
 
 
 ```

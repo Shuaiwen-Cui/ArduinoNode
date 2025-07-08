@@ -2,18 +2,21 @@
 
 为了方便对单片机进行配置，我们专门设置了一个配置文件`config.hpp`,其中集成了大多数可以配置的参数。
 
+!!! tip
+    值得注意的是，为了方便采样控制，我们把一些采样相关的全局变量也放在了配置文件中。这样可以方便地在其他文件中引用和修改这些变量。
+
 主节点示例
 
 ```cpp
 #pragma once
+#include <Arduino.h>
 
 /* Node Information */
 #define GATEWAY          // for main node
 // #define LEAFNODE        // for sensor node
 
 #define NODE_ID 100      // GATEWAY should be 100
-// for LEAFNODE: 1, 2, 3, 4
-// #define NODE_ID 1
+// #define NODE_ID 1 // for LEAFNODE: 1, 2, 3, 4
 // #define NODE_ID 2
 // #define NODE_ID 3
 // #define NODE_ID 4
@@ -21,8 +24,9 @@
 #define NUM_NODES 4 // Total number of nodes in the network
 
 /* WiFi Credentials */
-#define WIFI_SSID "CSW@CEE"
-#define WIFI_PASSWORD "88888888"
+
+#define WIFI_SSID "Shaun's Iphone"
+#define WIFI_PASSWORD "cshw0918"
 
 /* MQTT Configurations */
 #define MQTT_CLIENT_ID      "GATEWAY"
@@ -38,20 +42,35 @@
 #define MQTT_TOPIC_PUB      "ArduinoNode/node"
 #define MQTT_TOPIC_SUB      "ArduinoNode/server"
 
+// Sensing Variables 
+extern uint64_t sensing_scheduled_start_ms; // Scheduled sensing start time (Unix ms)
+extern uint64_t sensing_scheduled_end_ms;   // Scheduled sensing end time (Unix ms)
+extern uint32_t sensing_rate_hz;            // Sensing rate in Hz
+extern uint32_t sensing_duration_s;         // Sensing duration in seconds
+
+extern uint16_t parsed_freq;                // Parsed frequency from command
+extern uint16_t parsed_duration;            // Parsed duration from command
+
+/* Serial Configurations */
+// #define DATA_PRINTOUT // Enable data printout to Serial
+
+// === Function Declaration ===
+void print_node_config();
+
 ```
 
 子节点示例
 
 ```cpp
 #pragma once
+#include <Arduino.h>
 
 /* Node Information */
 // #define GATEWAY          // for main node
 #define LEAFNODE        // for sensor node
 
 // #define NODE_ID 100      // GATEWAY should be 100
-// for LEAFNODE: 1, 2, 3, 4
-#define NODE_ID 1
+#define NODE_ID 1 // for LEAFNODE: 1, 2, 3, 4
 // #define NODE_ID 2
 // #define NODE_ID 3
 // #define NODE_ID 4
@@ -59,8 +78,9 @@
 #define NUM_NODES 4 // Total number of nodes in the network
 
 /* WiFi Credentials */
-#define WIFI_SSID "CSW@CEE"
-#define WIFI_PASSWORD "88888888"
+
+#define WIFI_SSID "Shaun's Iphone"
+#define WIFI_PASSWORD "cshw0918"
 
 /* MQTT Configurations */
 // #define MQTT_CLIENT_ID      "GATEWAY"
@@ -76,9 +96,81 @@
 #define MQTT_TOPIC_PUB      "ArduinoNode/node"
 #define MQTT_TOPIC_SUB      "ArduinoNode/server"
 
+// Sensing Variables 
+extern uint64_t sensing_scheduled_start_ms; // Scheduled sensing start time (Unix ms)
+extern uint64_t sensing_scheduled_end_ms;   // Scheduled sensing end time (Unix ms)
+extern uint32_t sensing_rate_hz;            // Sensing rate in Hz
+extern uint32_t sensing_duration_s;         // Sensing duration in seconds
+
+extern uint16_t parsed_freq;                // Parsed frequency from command
+extern uint16_t parsed_duration;            // Parsed duration from command
+
+/* Serial Configurations */
+// #define DATA_PRINTOUT // Enable data printout to Serial
+
+// === Function Declaration ===
+void print_node_config();
+
+
 ```
 
 如上面代码所示，配置文件中包含了节点信息、WiFi凭据和MQTT配置等。
+
+除去配置信息以外，配置文件还定义了打印信息的函数`print_node_config()`，用于在串口输出当前节点的配置信息，具体定义在`config.cpp`文件中。
+
+```cpp
+#include "config.hpp"
+
+uint64_t sensing_scheduled_start_ms = 0;
+uint64_t sensing_scheduled_end_ms = 0;
+uint32_t sensing_rate_hz = 0;
+uint32_t sensing_duration_s = 0;
+uint16_t parsed_freq = 0;
+uint16_t parsed_duration = 0;
+
+void print_node_config()
+{
+  Serial.println("=== Node Configuration Info ===");
+
+#ifdef GATEWAY
+  Serial.println("Node Type     : GATEWAY");
+#endif
+#ifdef LEAFNODE
+  Serial.println("Node Type     : LEAFNODE");
+#endif
+
+  Serial.print("Node ID       : ");
+  Serial.println(NODE_ID);
+
+  Serial.print("Total Nodes   : ");
+  Serial.println(NUM_NODES);
+
+  Serial.println("------ WiFi ------");
+  Serial.print("SSID          : ");
+  Serial.println(WIFI_SSID);
+  Serial.print("Password      : ");
+  Serial.println(WIFI_PASSWORD);
+
+  Serial.println("------ MQTT ------");
+  Serial.print("Client ID     : ");
+  Serial.println(MQTT_CLIENT_ID);
+  Serial.print("Broker Addr   : ");
+  Serial.println(MQTT_BROKER_ADDRESS);
+  Serial.print("Broker Port   : ");
+  Serial.println(MQTT_BROKER_PORT);
+  Serial.print("Username      : ");
+  Serial.println(MQTT_USERNAME);
+  Serial.print("Password      : ");
+  Serial.println(MQTT_PASSWORD);
+  Serial.print("Pub Topic     : ");
+  Serial.println(MQTT_TOPIC_PUB);
+  Serial.print("Sub Topic     : ");
+  Serial.println(MQTT_TOPIC_SUB);
+
+  Serial.println("===============================");
+}
+```
+
 
 ## 节点模式
 

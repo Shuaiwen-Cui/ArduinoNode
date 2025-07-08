@@ -13,7 +13,7 @@ Item List:
 | RGB LED | Provides visual feedback, indicating the status of the node. |
 | NRF24L01 Module & Antenna | Enables local wireless communication between nodes. |
 | BMS & Battery | Provides power to the entire node, making it portable. |
-<!-- | Touch Sensor | Allows user interaction, enabling control of the node. | -->
+| Enclosure | Protects internal electronic components and provides a pretty appearance. |
 
 !!! note
 

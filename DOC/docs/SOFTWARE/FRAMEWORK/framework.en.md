@@ -33,21 +33,23 @@ Below is a typical startup process serial output example for the gateway node:
 
 ![](printout.png)
 
+!!! tip
+    Though each node can be connected to the Internet through Wifi, we only use the gateway node to connect to the Internet in this project for practical considerations. 
+
 ## Part II Loop Part
 
-The loop part is the core of the program, responsible for continuously executing tasks such as sensing, processing, and communication. In this project, the loop part mainly manages different states through a state machine by monitoring a series of flags. It primarily switches between sensing and communication states, with storage operations included in the sensing operations for simplicity.
+The loop part is the core of the program, responsible for continuously executing tasks such as sensing, processing, and communication. In this project, the loop part mainly manages different states through a state machine by monitoring a series of flags. In the loop part, the leaf nodes continuously listen for messages from the gateway node in the IDLE state, parse the received messages, and execute corresponding operations.
 
 ```txt
 +===============================================================================================+
 |                                     LOOP START                                                |
 |                                                                                               |
-|  +---------------+ +---------------+ +---------------+ +---------------+ +---------------+    |
-|  |     IDLE      | | COMMUNICATING | |   PREPARING   | |   SAMPLING    | |     ERROR     |    |
-|  +---------------+ +---------------+ +---------------+ +---------------+ +---------------+    |
+|  +------+------+-----------+----------+------------------+--------------------+-------+       |
+|  | BOOT | IDLE | PREPARING | SAMPLING | RF_COMMUNICATING | WIFI_COMMUNICATING | ERROR |       |
+|  +------+------+-----------+----------+------------------+--------------------+-------+       |
 |                                                                                               |
 |  → Check current state → Execute logic → Repeat                                               |
 +===============================================================================================+
-
 
 ```
 
@@ -69,7 +71,7 @@ The background callbacks refer to functions that are automatically triggered whe
 |  loop():                   |                           |                            |
 |  - Check node state        | <--------- flags -------- |  - Set flags / schedule    |
 |  - Execute logic           | --------> state change -> |  - Modify state machine    |
-|  - Maintain MQTT           |                           |                            |
+|  - Maintain MQTT (only GW) |                           |                            |
 |  - Transition states       |                           |                            |
 |                            |                           |                            |
 +============================+                           +============================+

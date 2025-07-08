@@ -2,18 +2,21 @@
 
 To facilitate the configuration of the software, we provide a configuration file that can be easily modified. This file is located in the `config` directory of the software installation.
 
+!!! tip
+    Note that we also place some global variables related to sensing control in the configuration file for easy reference and modification in other files.
+
 GATEWAY NODE EXAMPLE
 
 ```cpp
 #pragma once
+#include <Arduino.h>
 
 /* Node Information */
 #define GATEWAY          // for main node
 // #define LEAFNODE        // for sensor node
 
 #define NODE_ID 100      // GATEWAY should be 100
-// for LEAFNODE: 1, 2, 3, 4
-// #define NODE_ID 1
+// #define NODE_ID 1 // for LEAFNODE: 1, 2, 3, 4
 // #define NODE_ID 2
 // #define NODE_ID 3
 // #define NODE_ID 4
@@ -21,8 +24,9 @@ GATEWAY NODE EXAMPLE
 #define NUM_NODES 4 // Total number of nodes in the network
 
 /* WiFi Credentials */
-#define WIFI_SSID "CSW@CEE"
-#define WIFI_PASSWORD "88888888"
+
+#define WIFI_SSID "Shaun's Iphone"
+#define WIFI_PASSWORD "cshw0918"
 
 /* MQTT Configurations */
 #define MQTT_CLIENT_ID      "GATEWAY"
@@ -37,6 +41,21 @@ GATEWAY NODE EXAMPLE
 #define MQTT_PASSWORD       "Arduino123"
 #define MQTT_TOPIC_PUB      "ArduinoNode/node"
 #define MQTT_TOPIC_SUB      "ArduinoNode/server"
+
+// Sensing Variables 
+extern uint64_t sensing_scheduled_start_ms; // Scheduled sensing start time (Unix ms)
+extern uint64_t sensing_scheduled_end_ms;   // Scheduled sensing end time (Unix ms)
+extern uint32_t sensing_rate_hz;            // Sensing rate in Hz
+extern uint32_t sensing_duration_s;         // Sensing duration in seconds
+
+extern uint16_t parsed_freq;                // Parsed frequency from command
+extern uint16_t parsed_duration;            // Parsed duration from command
+
+/* Serial Configurations */
+// #define DATA_PRINTOUT // Enable data printout to Serial
+
+// === Function Declaration ===
+void print_node_config();
 
 ```
 
@@ -44,14 +63,14 @@ LEAFNODE EXAMPLE
 
 ```cpp
 #pragma once
+#include <Arduino.h>
 
 /* Node Information */
-#define GATEWAY          // for main node
-// #define LEAFNODE        // for sensor node
+// #define GATEWAY          // for main node
+#define LEAFNODE        // for sensor node
 
-#define NODE_ID 100      // GATEWAY should be 100
-// for LEAFNODE: 1, 2, 3, 4
-// #define NODE_ID 1
+// #define NODE_ID 100      // GATEWAY should be 100
+#define NODE_ID 1 // for LEAFNODE: 1, 2, 3, 4
 // #define NODE_ID 2
 // #define NODE_ID 3
 // #define NODE_ID 4
@@ -59,12 +78,13 @@ LEAFNODE EXAMPLE
 #define NUM_NODES 4 // Total number of nodes in the network
 
 /* WiFi Credentials */
-#define WIFI_SSID "CSW@CEE"
-#define WIFI_PASSWORD "88888888"
+
+#define WIFI_SSID "Shaun's Iphone"
+#define WIFI_PASSWORD "cshw0918"
 
 /* MQTT Configurations */
-#define MQTT_CLIENT_ID      "GATEWAY"
-// #define MQTT_CLIENT_ID      "LEAFNODE1"
+// #define MQTT_CLIENT_ID      "GATEWAY"
+#define MQTT_CLIENT_ID      "LEAFNODE1"
 // #define MQTT_CLIENT_ID      "LEAFNODE2"
 // #define MQTT_CLIENT_ID      "LEAFNODE3"
 // #define MQTT_CLIENT_ID      "LEAFNODE4"
@@ -76,9 +96,79 @@ LEAFNODE EXAMPLE
 #define MQTT_TOPIC_PUB      "ArduinoNode/node"
 #define MQTT_TOPIC_SUB      "ArduinoNode/server"
 
+// Sensing Variables 
+extern uint64_t sensing_scheduled_start_ms; // Scheduled sensing start time (Unix ms)
+extern uint64_t sensing_scheduled_end_ms;   // Scheduled sensing end time (Unix ms)
+extern uint32_t sensing_rate_hz;            // Sensing rate in Hz
+extern uint32_t sensing_duration_s;         // Sensing duration in seconds
+
+extern uint16_t parsed_freq;                // Parsed frequency from command
+extern uint16_t parsed_duration;            // Parsed duration from command
+
+/* Serial Configurations */
+// #define DATA_PRINTOUT // Enable data printout to Serial
+
+// === Function Declaration ===
+void print_node_config();
+
 ```
 
 As shown in the code snippet above, the configuration file includes node information, WiFi credentials, and MQTT configurations.
+
+Apart from the configuration file, there is also a function `print_node_config()` that can be used to print the current node's configuration information to the serial console. It is defined in the `config.cpp` file, and you can call it in the `setup()` function to display the current node's configuration.
+
+```cpp
+#include "config.hpp"
+
+uint64_t sensing_scheduled_start_ms = 0;
+uint64_t sensing_scheduled_end_ms = 0;
+uint32_t sensing_rate_hz = 0;
+uint32_t sensing_duration_s = 0;
+uint16_t parsed_freq = 0;
+uint16_t parsed_duration = 0;
+
+void print_node_config()
+{
+  Serial.println("=== Node Configuration Info ===");
+
+#ifdef GATEWAY
+  Serial.println("Node Type     : GATEWAY");
+#endif
+#ifdef LEAFNODE
+  Serial.println("Node Type     : LEAFNODE");
+#endif
+
+  Serial.print("Node ID       : ");
+  Serial.println(NODE_ID);
+
+  Serial.print("Total Nodes   : ");
+  Serial.println(NUM_NODES);
+
+  Serial.println("------ WiFi ------");
+  Serial.print("SSID          : ");
+  Serial.println(WIFI_SSID);
+  Serial.print("Password      : ");
+  Serial.println(WIFI_PASSWORD);
+
+  Serial.println("------ MQTT ------");
+  Serial.print("Client ID     : ");
+  Serial.println(MQTT_CLIENT_ID);
+  Serial.print("Broker Addr   : ");
+  Serial.println(MQTT_BROKER_ADDRESS);
+  Serial.print("Broker Port   : ");
+  Serial.println(MQTT_BROKER_PORT);
+  Serial.print("Username      : ");
+  Serial.println(MQTT_USERNAME);
+  Serial.print("Password      : ");
+  Serial.println(MQTT_PASSWORD);
+  Serial.print("Pub Topic     : ");
+  Serial.println(MQTT_TOPIC_PUB);
+  Serial.print("Sub Topic     : ");
+  Serial.println(MQTT_TOPIC_SUB);
+
+  Serial.println("===============================");
+}
+```
 
 ## Node Modes
 

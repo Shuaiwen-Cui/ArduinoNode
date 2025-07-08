@@ -59,6 +59,8 @@ public:
     uint64_t compute_ms_from_calendar() const; // Compute Unix ms from calendar fields
     String to_string() const; // Return "YYYY-MM-DD HH:MM:SS.mmm"
     void print() const;       // Print formatted string to Serial
+    bool set_from_string_YYMMDDHHMMSS(const char *datetime12);
+
 
     /* === Comparison === */
     int8_t compare_to(const MCUTime &other) const;
@@ -66,7 +68,9 @@ public:
 
 // Add at the bottom of the header
 extern MCUTime Time;  // Global time variable
+extern MCUTime parsed_start_time; // Parsed start time for sensing commands
 extern MCUTime SensingSchedule; // Time synchronization variable
+
 ```
 
 **time.cpp**
@@ -188,7 +192,6 @@ uint64_t MCUTime::estimate_time_ms()
     // Calculate delta since last update
     mcu_time_ms = millis();
     delta_ms = mcu_time_ms - mcu_base_ms;
-
     estimated_unix_ms = last_update_ms + delta_ms;
     estimated_unix_epoch = last_update_epoch + (delta_ms / 1000);
 
@@ -260,6 +263,24 @@ void MCUTime::print() const
     Serial.println(to_string());
 }
 
+bool MCUTime::set_from_string_YYMMDDHHMMSS(const char *datetime12)
+{
+    if (strlen(datetime12) != 12)
+        return false;
+
+    char buf[3] = {0};
+
+    strncpy(buf, datetime12, 2); year   = 2000 + atoi(buf);  // YY → 20YY
+    strncpy(buf, datetime12 + 2, 2); month  = atoi(buf);
+    strncpy(buf, datetime12 + 4, 2); day    = atoi(buf);
+    strncpy(buf, datetime12 + 6, 2); hour   = atoi(buf);
+    strncpy(buf, datetime12 + 8, 2); minute = atoi(buf);
+    strncpy(buf, datetime12 + 10,2); second = atoi(buf);
+
+    ms = 0;
+    return true;
+}
+
 int8_t MCUTime::compare_to(const MCUTime &other) const
 {
     if (unix_ms < other.unix_ms)
@@ -273,8 +294,12 @@ int8_t MCUTime::compare_to(const MCUTime &other) const
 /* Global time variable */
 MCUTime Time;
 
+/* Command Parsing */
+MCUTime parsed_start_time;
+
 /* Sensing Config */
 MCUTime SensingSchedule;
+
 ```
 
 ## Time Representation
@@ -299,8 +324,10 @@ Runtime refers to the duration from system startup to the current moment, usuall
 
     To meet these requirements, we define a unified time structure called `MCUTime` in the `time` module. It includes fields for Unix time, natural time, and runtime, along with helper functions to support time conversion and calculation.
 
-To facilitate time management, we define two key time variables:
+To facilitate time management, we define three key time variables:
 
 - `Time`: A global time variable that represents the current system time.
+
+- `parsed_start_time`: A variable used to parse the start time from commands, allowing users to specify the start time for sampling in commands.
 
 - `SensingSchedule`: A configured sampling time variable used to record the scheduled sensing start time.

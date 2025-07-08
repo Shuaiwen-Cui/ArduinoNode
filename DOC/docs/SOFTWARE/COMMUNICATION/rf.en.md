@@ -2,6 +2,9 @@
 
 RF communication refers to the technology of transmitting information through radio waves. It is widely used in radio, television, mobile phones, satellite communications and other fields. The basic principle of RF communication is to modulate information onto RF signals and transmit and receive them through antennas. This project uses nRF24L01 wireless module for RF communication.
 
+!!! tip
+    Just like the MQTT command communication based on WiFi, we will introduce the specific details in the command and feedback section. Here, we will first introduce the basic communication functions of the nRF24L01 wireless module.
+
 The following is the relevant code implementation for the nRF24L01 wireless module:
 
 **rf.hpp**
@@ -18,7 +21,7 @@ struct RFMessage
 {
     uint8_t from_id;
     uint8_t to_id;
-    char payload[24];       
+    char payload[22];       
     uint64_t timestamp_ms; 
 };
 
@@ -32,6 +35,7 @@ void rf_stop_listening();
 void rf_start_listening();
 void rf_set_rx_address(uint8_t id);
 String rf_format_address(uint16_t node_id);
+
 
 ```
 
@@ -67,12 +71,13 @@ bool rf_init()
     }
 
     radio.setPALevel(RF24_PA_HIGH);
-    radio.setDataRate(RF24_250KBPS);
+    radio.setDataRate(RF24_250KBPS); // Use 250kbps for better range and reliability
     radio.setChannel(RF_CHANNEL);
     radio.setRetries(5, 15);
     radio.enableDynamicPayloads();
     radio.setCRCLength(RF24_CRC_16);
 
+    // Set RX address to this node's own ID so it can receive messages addressed to itself
     rf_set_rx_address(NODE_ID);
     radio.startListening();
 
@@ -132,6 +137,7 @@ bool rf_send_then_receive(const RFMessage &msg, uint8_t to_id, unsigned long tim
     return false;
 }
 
+
 ```
 
 ## Key Functions
@@ -155,7 +161,7 @@ The `RFMessage` structure defines the format of messages exchanged over RF commu
 
 - `from_id`: The sender's node ID.
 - `to_id`: The receiver's node ID.
-- `payload`: The actual data payload of the message (max 24 bytes).
+- `payload`: The actual data payload of the message (max 22 bytes).
 - `timestamp_ms`: The timestamp (in milliseconds) when the message is sent.
 
 ---

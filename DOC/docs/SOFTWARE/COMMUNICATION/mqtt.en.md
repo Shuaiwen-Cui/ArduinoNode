@@ -43,16 +43,12 @@ void mqtt_publish_test();
 ```cpp
 #include "mqtt.hpp"
 
-
 // Create a WiFi client and wrap it in PubSubClient
 WiFiClient wifi_client;
 PubSubClient mqtt_client(wifi_client);
 
 // Parsed Command Variables
 char cmd_sensing_raw[128];
-MCUTime parsed_start_time;
-uint16_t parsed_freq = 0;
-uint16_t parsed_duration = 0;
 
 // === Retrieval Filename
 char retrieval_filename[32] = {0}; // Initialize as empty string
@@ -101,8 +97,8 @@ void mqtt_callback(char *topic, byte *payload, unsigned int length)
     Serial.println("[COMMUNICATION] <CMD> CMD_NTP received.");
 
     // switch to COMMUNICATING state
-    node_status.set_state(NodeState::COMMUNICATING);
-    rgbled_set_all(CRGB::Blue); // Set LED to blue during NTP sync
+    node_status.set_state(NodeState::WIFI_COMMUNICATING);
+    rgbled_set_by_state(NodeState::WIFI_COMMUNICATING); // Set LED to blue during NTP sync
   }
   else if (msg_str == "CMD_GATEWAY_NTP")
   {
@@ -110,7 +106,7 @@ void mqtt_callback(char *topic, byte *payload, unsigned int length)
     Serial.println("[COMMUNICATION] <CMD> CMD_GATEWAY_NTP received.");
 
     // switch to COMMUNICATING state
-    node_status.set_state(NodeState::COMMUNICATING);
+    node_status.set_state(NodeState::WIFI_COMMUNICATING);
     rgbled_set_all(CRGB::Blue); // Set LED to blue during NTP sync
   }
   else if (msg_str == "CMD_LEAFNODE_NTP")
@@ -119,8 +115,13 @@ void mqtt_callback(char *topic, byte *payload, unsigned int length)
     Serial.println("[COMMUNICATION] <CMD> CMD_LEAFNODE_NTP received.");
 
     // switch to COMMUNICATING state
-    node_status.set_state(NodeState::COMMUNICATING);
+    node_status.set_state(NodeState::WIFI_COMMUNICATING);
     rgbled_set_all(CRGB::Blue); // Set LED to blue during NTP sync
+  }
+  else if (msg_str == "CMD_RF_SYNC")
+  {
+    node_status.node_flags.time_rf_required = true;
+    Serial.println("[COMMUNICATION] <CMD> CMD_RF_SYNC received.");
   }
   else if (msg_str.startsWith("CMD_SENSING_"))
   {
@@ -148,23 +149,43 @@ void mqtt_callback(char *topic, byte *payload, unsigned int length)
       parsed_freq = (uint16_t)rate;
       parsed_duration = (uint16_t)dur;
 
-      sensing_scheduled_start_ms = parsed_start_time.compute_ms_from_calendar();
-      SensingSchedule.unix_ms = sensing_scheduled_start_ms;
-      SensingSchedule.unix_epoch = sensing_scheduled_start_ms / 1000;
-      SensingSchedule.set_calendar(); // Update calendar fields based on scheduled start time
-      sensing_scheduled_end_ms = sensing_scheduled_start_ms + (parsed_duration * 1000); // ms
+      uint64_t now_unix_ms = Time.estimate_time_ms();
+      if (now_unix_ms < parsed_start_time.compute_ms_from_calendar())
+      {
+        Serial.println("[MQTT] Sensing start time is in the future, scheduling sensing.");
+        sensing_scheduled_start_ms = parsed_start_time.compute_ms_from_calendar();
+        SensingSchedule.unix_ms = sensing_scheduled_start_ms;
+        SensingSchedule.unix_epoch = sensing_scheduled_start_ms / 1000;
+        SensingSchedule.set_calendar();                                                   // Update calendar fields based on scheduled start time
+        sensing_scheduled_end_ms = sensing_scheduled_start_ms + (parsed_duration * 1000); // ms
 
-      sensing_rate_hz = parsed_freq;
-      sensing_duration_s = parsed_duration;
+        sensing_rate_hz = parsed_freq;
+        sensing_duration_s = parsed_duration;
 
-      node_status.node_flags.sensing_scheduled = true;
+        node_status.node_flags.sensing_scheduled = true;
 
-      char buf[128];
-      snprintf(buf, sizeof(buf), "[MQTT] Sensing scheduled, sampling at %d Hz for %d seconds, starting at %04d-%02d-%02d %02d:%02d:%02d",
-               parsed_freq, parsed_duration,
-               parsed_start_time.year, parsed_start_time.month, parsed_start_time.day,
-               parsed_start_time.hour, parsed_start_time.minute, parsed_start_time.second);
-      Serial.println(buf);
+        char buf[128];
+        snprintf(buf, sizeof(buf), "[MQTT] Sensing scheduled, sampling at %d Hz for %d seconds, starting at %04d-%02d-%02d %02d:%02d:%02d",
+                 parsed_freq, parsed_duration,
+                 parsed_start_time.year, parsed_start_time.month, parsed_start_time.day,
+                 parsed_start_time.hour, parsed_start_time.minute, parsed_start_time.second);
+        Serial.println(buf);
+      }
+      else
+      {
+        Serial.println("[MQTT] Sensing start time is in the past, ignoring command.");
+        node_status.node_flags.sensing_requested = false;
+
+        // feedback to the mqtt broker
+        mqtt_client.publish(MQTT_TOPIC_PUB, "Sensing command ignored: start time is in the past!");
+
+        rgbled_set_all(CRGB::Red); // Set LED to red to indicate error
+        delay(3000); // Wait for 2 seconds to indicate error
+        if (node_status.get_state() == NodeState::IDLE)
+        {
+          rgbled_set_by_state(NodeState::IDLE); // Reset LED to IDLE state
+        }
+      }
     }
     else
     {
@@ -183,8 +204,24 @@ void mqtt_callback(char *topic, byte *payload, unsigned int length)
     Serial.println(retrieval_filename);
 
     // switch to COMMUNICATING state
-    node_status.set_state(NodeState::COMMUNICATING);
+    node_status.set_state(NodeState::WIFI_COMMUNICATING);
     rgbled_set_all(CRGB::Blue); // Set LED to blue during data retrieval
+  }
+  else if (msg_str == "CMD_REBOOT")
+  {
+    node_status.node_flags.reboot_required_gateway = true;
+    node_status.node_flags.reboot_required_leafnode = true;
+    Serial.println("[COMMUNICATION] <CMD> CMD_REBOOT received.");
+  }
+  else if (msg_str == "CMD_GATEWAY_REBOOT")
+  {
+    node_status.node_flags.reboot_required_gateway = true;
+    Serial.println("[COMMUNICATION] <CMD> CMD_GATEWAY_REBOOT received.");
+  }
+  else if (msg_str == "CMD_LEAFNODE_REBOOT")
+  {
+    node_status.node_flags.reboot_required_leafnode = true;
+    Serial.println("[COMMUNICATION] <CMD> CMD_LEAFNODE_REBOOT received.");
   }
   else
   {
@@ -237,6 +274,7 @@ void mqtt_publish_test()
     Serial.println("[TEST] <MQTT> Test message published.");
   }
 }
+
 ```
 
 !!! note

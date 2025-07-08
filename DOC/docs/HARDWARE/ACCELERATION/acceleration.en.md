@@ -30,3 +30,6 @@ The wiring of the MPU6050 is straightforward. It typically uses the I2C protocol
 
 !!! tip "Note"
     The INT pin is optional and can be used for interrupt-driven applications. For basic applications, you can leave it unconnected. In this project, we will not use the INT pin.
+
+!!! danger "Caution"
+    Although the MPU6050 is inexpensive and easy to use, its accuracy and stability are relatively poor. Tests have shown that it is more suitable for laboratory environments with strong excitation applications, while in practical applications, it is recommended to use higher precision sensors.

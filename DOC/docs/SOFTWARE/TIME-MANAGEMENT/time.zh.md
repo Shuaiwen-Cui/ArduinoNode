@@ -59,6 +59,8 @@ public:
     uint64_t compute_ms_from_calendar() const; // Compute Unix ms from calendar fields
     String to_string() const; // Return "YYYY-MM-DD HH:MM:SS.mmm"
     void print() const;       // Print formatted string to Serial
+    bool set_from_string_YYMMDDHHMMSS(const char *datetime12);
+
 
     /* === Comparison === */
     int8_t compare_to(const MCUTime &other) const;
@@ -66,7 +68,9 @@ public:
 
 // Add at the bottom of the header
 extern MCUTime Time;  // Global time variable
+extern MCUTime parsed_start_time; // Parsed start time for sensing commands
 extern MCUTime SensingSchedule; // Time synchronization variable
+
 ```
 
 **time.cpp**
@@ -188,7 +192,6 @@ uint64_t MCUTime::estimate_time_ms()
     // Calculate delta since last update
     mcu_time_ms = millis();
     delta_ms = mcu_time_ms - mcu_base_ms;
-
     estimated_unix_ms = last_update_ms + delta_ms;
     estimated_unix_epoch = last_update_epoch + (delta_ms / 1000);
 
@@ -260,6 +263,24 @@ void MCUTime::print() const
     Serial.println(to_string());
 }
 
+bool MCUTime::set_from_string_YYMMDDHHMMSS(const char *datetime12)
+{
+    if (strlen(datetime12) != 12)
+        return false;
+
+    char buf[3] = {0};
+
+    strncpy(buf, datetime12, 2); year   = 2000 + atoi(buf);  // YY → 20YY
+    strncpy(buf, datetime12 + 2, 2); month  = atoi(buf);
+    strncpy(buf, datetime12 + 4, 2); day    = atoi(buf);
+    strncpy(buf, datetime12 + 6, 2); hour   = atoi(buf);
+    strncpy(buf, datetime12 + 8, 2); minute = atoi(buf);
+    strncpy(buf, datetime12 + 10,2); second = atoi(buf);
+
+    ms = 0;
+    return true;
+}
+
 int8_t MCUTime::compare_to(const MCUTime &other) const
 {
     if (unix_ms < other.unix_ms)
@@ -273,8 +294,12 @@ int8_t MCUTime::compare_to(const MCUTime &other) const
 /* Global time variable */
 MCUTime Time;
 
+/* Command Parsing */
+MCUTime parsed_start_time;
+
 /* Sensing Config */
 MCUTime SensingSchedule;
+
 ```
 
 ## 时间的表示
@@ -297,8 +322,10 @@ Unix时间是指自1970年1月1日00:00:00 UTC以来的秒数。它是一种标�
 !!! tip "总结"
     从时间的表示上我们可以看到，三中方式各有优缺点。自然记时易于人类理解，但计算机处理起来不够高效；Unix时间便于计算和比较，但不易于人类阅读；运行时间精度高，但是它是相对于系统启动时间的，对于无线传感器网络来说，通常需要与其他节点进行同步。为了满足这些需求，我们在time模块中定义了一个统一的时间结构`MCUTime`，它包含了Unix时间、自然记时和运行时间的相关字段，也包含了一些辅助函数来进行时间的转换和计算。
 
-为了方便计算，我们定义了两个时间变量：
+为了方便计算，我们定义了三个个时间变量：
 
 - `Time`：全局时间变量，用于表示当前系统时间。
+
+- `parsed_start_time`：用于解析命令中的开始时间，方便在命令中指定采样的起始时间。
 
 - `SensingSchedule`：设定采样时间变量，用于记录设定的采样时间。

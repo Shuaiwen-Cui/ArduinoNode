@@ -2,6 +2,9 @@
 
 射频通信是指通过无线电波进行信息传输的技术。它广泛应用于无线电、电视、手机、卫星通信等领域。射频通信的基本原理是将信息调制到射频信号上，通过天线发射和接收。本项目使用nRF24L01无线模块进行射频通信。
 
+!!! tip
+    正如基于WIFI的MQTT命令通信一样，具体细节我们在命令与反馈部分会详细介绍。这里我们先介绍nRF24L01无线模块的基本通信功能。
+
 以下是nRF24L01无线模块的相关代码实现：
 
 **rf.hpp**
@@ -18,7 +21,7 @@ struct RFMessage
 {
     uint8_t from_id;
     uint8_t to_id;
-    char payload[24];       
+    char payload[22];       
     uint64_t timestamp_ms; 
 };
 
@@ -32,6 +35,7 @@ void rf_stop_listening();
 void rf_start_listening();
 void rf_set_rx_address(uint8_t id);
 String rf_format_address(uint16_t node_id);
+
 
 ```
 
@@ -67,12 +71,13 @@ bool rf_init()
     }
 
     radio.setPALevel(RF24_PA_HIGH);
-    radio.setDataRate(RF24_250KBPS);
+    radio.setDataRate(RF24_250KBPS); // Use 250kbps for better range and reliability
     radio.setChannel(RF_CHANNEL);
     radio.setRetries(5, 15);
     radio.enableDynamicPayloads();
     radio.setCRCLength(RF24_CRC_16);
 
+    // Set RX address to this node's own ID so it can receive messages addressed to itself
     rf_set_rx_address(NODE_ID);
     radio.startListening();
 
@@ -132,6 +137,7 @@ bool rf_send_then_receive(const RFMessage &msg, uint8_t to_id, unsigned long tim
     return false;
 }
 
+
 ```
 
 ## 关键函数
@@ -155,7 +161,7 @@ bool rf_send_then_receive(const RFMessage &msg, uint8_t to_id, unsigned long tim
 
 - `from_id`：发送方节点 ID。
 - `to_id`：接收方节点 ID。
-- `payload`：消息的有效载荷，最大长度为 24 字节。
+- `payload`：消息的有效载荷，最大长度为 22 字节。
 - `timestamp_ms`：消息的发送时间戳，单位为毫秒。
 
 ---
