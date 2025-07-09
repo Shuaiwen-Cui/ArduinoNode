@@ -1,6 +1,6 @@
 # LABORATORY TESTS
 
-![](TEST-SETUP.jpg)
+![](setup.jpg)
 
 ## TEST GOALS
 
@@ -31,3 +31,13 @@
 - Issue commands to the PCB sensors to sample data at prescribed time, sampling rate, and duration. The duration should cover the time period of the Arduino Node sampling.  (100Hz sampling for 2 minutes)
 
 - Receive the data from the Arduino Nodes and PCB sensors.
+
+## RESULTS ANALYSIS
+
+### Time History
+
+![](free_vibration_hist_comparison.png)
+
+### Frequency Spectrum
+
+![](free_vibration_psd_comparison.png)

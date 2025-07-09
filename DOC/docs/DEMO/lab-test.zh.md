@@ -1,6 +1,6 @@
 # 实验室测试
 
-![](TEST-SETUP.jpg)
+![](setup.jpg)
 
 ## 测试目标
 
@@ -31,3 +31,13 @@
 - 向 PCB 传感器下发采样指令，指定采样时间、采样频率和持续时间。采样时间应覆盖 Arduino 节点采样期间。（以 100Hz 频率采样 2 分钟）
 
 - 接收来自 Arduino 节点与 PCB 传感器的采样数据。
+
+## 结果分析
+
+### 时程曲线
+
+![](free_vibration_hist_comparison.png)
+
+### 频谱分析
+
+![](free_vibration_psd_comparison.png)
