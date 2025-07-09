@@ -148,6 +148,7 @@ plugins:
             STORAGE: 存储
             UPLOADING: 上传
             DEMO: 演示
+            TIME SYNC TEST: 时间同步测试
             LAB TEST: 实验室测试
             FIELD TEST 1: 户外实验 1
             FIELD TEST 2: 户外实验 2
@@ -315,6 +316,7 @@ nav:
           - UPLOADING: "SOFTWARE/SENSING-STORAGE/uploading.md"
   - DEMO: 
       - "DEMO/demo.md"
+      - TIME SYNC TEST: "DEMO/timesynctest.md"
       - LAB TEST: "DEMO/lab-test.md"
       - FIELD TEST 1: "DEMO/field-test1.md"
       - FIELD TEST 2: "DEMO/field-test2.md"
