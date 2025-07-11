@@ -20,7 +20,7 @@
 #define RF_RESPONSE_WAIT_MS      300   // 300 ms wait per reply
 #define RF_RETRY_PER_CYCLE         5   // Retry 5 times per send
 
-#define PONG_REPETITIONS 2
+#define PONG_REPETITIONS 3
 #define PONG_INTERVAL_MS 3000
 #define RF_RESPONSE_WINDOW_MS (PONG_REPETITIONS * PONG_INTERVAL_MS + 500)
 

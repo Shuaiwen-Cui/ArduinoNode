@@ -77,46 +77,47 @@ bool sync_check_rf_online()
 
     for (uint8_t id = 1; id <= NUM_NODES; ++id)
     {
-        // === Step 1: Send PING ===
-        RFMessage msg;
-        msg.from_id = NODE_ID;
-        msg.to_id = id;
-        strncpy(msg.payload, RF_PING_PAYLOAD, sizeof(msg.payload) - 1);
-        msg.payload[sizeof(msg.payload) - 1] = '\0';
-
-        rf_stop_listening();
-        bool sent = rf_send(id, msg, false);
-        rf_start_listening();
-
-        if (!sent)
-        {
-            Serial.print(" - Node ");
-            Serial.print(id);
-            Serial.println(": SEND FAILED");
-            continue;
-        }
-
-        uint32_t t1 = millis();
-        Serial.print(" - Sent PING to Node ");
-        Serial.print(id);
-        Serial.print(" at ");
-        Serial.println(t1);
-
-        // === Step 2: Receive PONGs ===
         float sum_drift = 0.0f;
         int32_t sum_offset = 0;
         uint8_t count = 0;
 
-        uint32_t start_wait = millis();
-        while (millis() - start_wait < RF_RESPONSE_WINDOW_MS && count < PONG_REPETITIONS)
+        for (uint8_t i = 0; i < PONG_REPETITIONS; ++i)
         {
+            // === Step 1: Send PING ===
+            RFMessage msg;
+            msg.from_id = NODE_ID;
+            msg.to_id = id;
+            strncpy(msg.payload, RF_PING_PAYLOAD, sizeof(msg.payload) - 1);
+            msg.payload[sizeof(msg.payload) - 1] = '\0';
+
+            rf_stop_listening();
+            bool sent = rf_send(id, msg, false);
+            uint32_t t1 = millis();
+            rf_start_listening();
+
+            if (!sent)
+            {
+                Serial.print(" - Node ");
+                Serial.print(id);
+                Serial.println(": SEND FAILED (single attempt)");
+                continue;
+            }
+
+            Serial.print(" - Sent PING to Node ");
+            Serial.print(id);
+            Serial.print(" [Attempt ");
+            Serial.print(i + 1);
+            Serial.print("] at ");
+            Serial.println(t1);
+
+            // === Step 2: Wait for PONG ===
             RFMessage response;
-            bool received = rf_receive(response, 500);
+            bool received = rf_receive(response, RF_RESPONSE_WAIT_MS);
+
+            uint32_t t4 = millis(); // time when PONG is received
 
             if (!received)
                 continue;
-
-            uint32_t t4 = millis();
 
             if (response.from_id == id &&
                 response.to_id == NODE_ID &&
@@ -128,11 +129,15 @@ bool sync_check_rf_online()
                 if (parsed == 2 && t3 > t2)
                 {
                     uint32_t delta_master = t4 - t1;
-                    uint32_t delta_node = t3 - t2;
-                    float drift = (float)delta_master / (float)delta_node;
-                    int32_t offset = ((int32_t)t2 + (int32_t)t3 - (int32_t)t1 - (int32_t)t4) / 2;
+                    uint32_t delta_node   = t3 - t2;
 
-                    sum_drift += drift;
+                    if (delta_node == 0)
+                        continue;
+
+                    float drift  = (float)delta_master / (float)delta_node;
+                    int32_t offset = (int32_t)((delta_master - delta_node) / 2);
+
+                    sum_drift  += drift;
                     sum_offset += offset;
                     count++;
 
@@ -141,9 +146,17 @@ bool sync_check_rf_online()
                     Serial.print(": Drift = ");
                     Serial.print(drift, 8);
                     Serial.print(" | Offset = ");
-                    Serial.println(offset);
+                    Serial.print(offset);
+                    Serial.println(" ms");
+
+                    Serial.print("     t1 = "); Serial.println(t1);
+                    Serial.print("     t2 = "); Serial.println(t2);
+                    Serial.print("     t3 = "); Serial.println(t3);
+                    Serial.print("     t4 = "); Serial.println(t4);
                 }
             }
+
+            delay(PONG_INTERVAL_MS); // avoid congestion
         }
 
         if (count > 0)
@@ -170,9 +183,10 @@ bool sync_check_rf_online()
         delay(300);
     }
 
-    return std::any_of(node_online + 1, node_online + NUM_NODES + 1, [](bool online) { return online; });
+    return std::any_of(node_online + 1, node_online + NUM_NODES + 1, [](bool online)
+                       { return online; });
 
-#else
+#else // === LEAF NODE ===
     Serial.println("[COMMUNICATION] <SYNC> Leaf waiting for PING...");
 
     while (true)
@@ -184,31 +198,29 @@ bool sync_check_rf_online()
         if (msg.to_id != NODE_ID || strncmp(msg.payload, RF_PING_PAYLOAD, 4) != 0)
             continue;
 
+        uint32_t t2 = millis();  // time when PING is received
+
         Serial.print("[SYNC] Received PING from Node ");
         Serial.println(msg.from_id);
 
-        uint32_t t2 = millis();
+        // Slight delay to simulate processing, helps spread t3 values
+        delay(20);
 
-        for (uint8_t i = 0; i < PONG_REPETITIONS; ++i)
-        {
-            delay(PONG_INTERVAL_MS);
-            uint32_t t3 = millis();
+        uint32_t t3 = millis();  // time when PONG is sent
 
-            RFMessage response;
-            response.from_id = NODE_ID;
-            response.to_id = msg.from_id;
-            snprintf(response.payload, sizeof(response.payload), "%s %lu %lu", RF_PONG_PAYLOAD, t2, t3);
+        RFMessage response;
+        response.from_id = NODE_ID;
+        response.to_id = msg.from_id;
+        snprintf(response.payload, sizeof(response.payload), "%s %lu %lu", RF_PONG_PAYLOAD, t2, t3);
 
-            rf_stop_listening();
-            rf_send(msg.from_id, response, false);
-            rf_start_listening();
+        rf_stop_listening();
+        rf_send(msg.from_id, response, false);
+        rf_start_listening();
 
-            Serial.print("[SYNC] PONG ");
-            Serial.print(i + 1);
-            Serial.println(" sent.");
-        }
-
-        break;
+        Serial.print("[SYNC] PONG sent | t2 = ");
+        Serial.print(t2);
+        Serial.print(", t3 = ");
+        Serial.println(t3);
     }
 
     return true;
@@ -310,7 +322,8 @@ bool rf_time_sync()
     {
         RFMessage msg;
         bool received = rf_receive(msg, 1000);
-        if (!received) continue;
+        if (!received)
+            continue;
 
         if (msg.to_id != NODE_ID)
             continue;
