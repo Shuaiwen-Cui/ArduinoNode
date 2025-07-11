@@ -24,10 +24,17 @@
 #define PONG_INTERVAL_MS 3000
 #define RF_RESPONSE_WINDOW_MS (PONG_REPETITIONS * PONG_INTERVAL_MS + 500)
 
+#define DRIFT_SYNC_SAMPLES       5
+#define DRIFT_SYNC_INTERVAL_MS   5000
+#define DRIFT_SYNC_TAG           "TSYNC_DRIFT"
+#define RF_ACK_TIMEOUT_MS        200
+
+
 extern bool node_online[NUM_NODES + 1];
 extern int32_t node_rf_latency[NUM_NODES + 1];
 extern float node_drift_ratio[NUM_NODES + 1];
 
 bool sync_time_ntp();
-bool sync_check_rf_online();
+bool check_rf_online_and_latency();
+bool rf_sync_drift();
 bool rf_time_sync();

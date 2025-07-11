@@ -7,6 +7,10 @@ uint32_t sensing_duration_s = 0;
 uint16_t parsed_freq = 0;
 uint16_t parsed_duration = 0;
 
+float cali_scale_x = 1.0f; // Calibration scale for X-axis
+float cali_scale_y = 1.0f; // Calibration scale for Y-axis
+float cali_scale_z = 1.0f; // Calibration scale for Z-axis
+
 void print_node_config()
 {
   Serial.println("=== Node Configuration Info ===");

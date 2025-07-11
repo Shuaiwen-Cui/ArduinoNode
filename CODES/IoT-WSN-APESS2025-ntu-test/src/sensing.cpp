@@ -66,9 +66,9 @@ void sensing_sample_once()
 
         uint32_t elapsed = now_ms - t_start_ms;
 
-        float ax_g = ax / 16384.0f;
-        float ay_g = ay / 16384.0f;
-        float az_g = az / 16384.0f;
+        float ax_g = ax * cali_scale_x / 16384.0f;
+        float ay_g = ay * cali_scale_y / 16384.0f;
+        float az_g = az * cali_scale_z / 16384.0f;
 
         char line[64];
 

@@ -1,6 +1,9 @@
 #pragma once
 #include <Arduino.h>
 
+/* Drift Ratio */
+extern float drift_ratio; // Default drift ratio, can be adjusted based on calibration
+
 /*
  * MCUTime - Unified time structure for embedded systems.
  * Provides both UNIX timestamp and human-readable calendar format.

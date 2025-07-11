@@ -95,7 +95,9 @@ void setup()
     node_status.set_state(NodeState::RF_COMMUNICATING);
     rgbled_set_by_state(NodeState::RF_COMMUNICATING);
 
-    sync_check_rf_online();
+    check_rf_online_and_latency();
+
+    rf_sync_drift();
 
     if (!rf_time_sync() || !node_status.node_flags.time_rf_synced)
     {
@@ -213,7 +215,8 @@ void loop()
         if (node_status.node_flags.time_rf_required)
         {
             Serial.println("[LEAFNODE] Performing RF sync...");
-            sync_check_rf_online();
+            check_rf_online_and_latency();
+            rf_sync_drift();
             rf_time_sync();
             node_status.node_flags.time_rf_required = false;
 
@@ -295,7 +298,8 @@ void loop()
         if (node_status.node_flags.time_rf_required)
         {
             Serial.println("[COMMUNICATION] <SYNC> RF time sync required.");
-            sync_check_rf_online();
+            check_rf_online_and_latency();
+            rf_sync_drift();
             rf_time_sync();
             node_status.node_flags.time_rf_required = false;
 

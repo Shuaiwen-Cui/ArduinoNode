@@ -1,4 +1,6 @@
 #include "time.hpp"
+/* Definition of clock parameter */
+float drift_ratio = 1.0f; // Default drift ratio, can be adjusted based on calibration
 
 /* Definition of the operator functions in the MCUTime class */
 MCUTime::MCUTime()
@@ -112,25 +114,36 @@ void MCUTime::set_time_epoch(uint64_t epoch)
 uint64_t MCUTime::estimate_time_ms()
 {
     // Calculate delta since last update
+    // Current MCU time in milliseconds (since boot)
     mcu_time_ms = millis();
+
+    // Time elapsed since the last synchronization point
     delta_ms = mcu_time_ms - mcu_base_ms;
-    estimated_unix_ms = last_update_ms + delta_ms;
-    estimated_unix_epoch = last_update_epoch + (delta_ms / 1000);
+
+    // Estimate the current Unix time in milliseconds
+    // drift_ratio is a float (e.g., 1.00005 means 50 ppm faster)
+    estimated_unix_ms = last_update_ms + (uint64_t)(drift_ratio * (float)delta_ms);
+
+    // Estimate the current Unix time in seconds (with decimal fraction)
+    // Keep as double for sub-second precision
+    estimated_unix_epoch = last_update_epoch + drift_ratio * ((float)delta_ms / 1000.0);
 
     return estimated_unix_ms;
 }
 
 uint64_t MCUTime::estimate_time_epoch()
 {
-    // Calculate delta since last update
+    // Update local MCU time
     mcu_time_ms = millis();
     delta_ms = mcu_time_ms - mcu_base_ms;
 
-    estimated_unix_ms = last_update_ms + delta_ms;
-    estimated_unix_epoch = last_update_epoch + (delta_ms / 1000);
+    // Apply drift compensation using drift_ratio (float)
+    estimated_unix_ms = last_update_ms + (uint64_t)(drift_ratio * (float)delta_ms);
+    estimated_unix_epoch = last_update_epoch + (uint64_t)(drift_ratio * ((float)delta_ms / 1000.0));
 
     return estimated_unix_epoch;
 }
+
 
 uint64_t MCUTime::get_unix_ms() const
 {
@@ -166,11 +179,10 @@ uint64_t MCUTime::compute_ms_from_calendar() const
     days += (day - 1);
 
     uint64_t ret_ms = (days * 86400ULL + hour * 3600 + minute * 60 + second) * 1000;
-    ret_ms += ms;  // Include milliseconds
+    ret_ms += ms; // Include milliseconds
 
     return ret_ms;
 }
-
 
 String MCUTime::to_string() const
 {
@@ -192,12 +204,18 @@ bool MCUTime::set_from_string_YYMMDDHHMMSS(const char *datetime12)
 
     char buf[3] = {0};
 
-    strncpy(buf, datetime12, 2); year   = 2000 + atoi(buf);  // YY → 20YY
-    strncpy(buf, datetime12 + 2, 2); month  = atoi(buf);
-    strncpy(buf, datetime12 + 4, 2); day    = atoi(buf);
-    strncpy(buf, datetime12 + 6, 2); hour   = atoi(buf);
-    strncpy(buf, datetime12 + 8, 2); minute = atoi(buf);
-    strncpy(buf, datetime12 + 10,2); second = atoi(buf);
+    strncpy(buf, datetime12, 2);
+    year = 2000 + atoi(buf); // YY → 20YY
+    strncpy(buf, datetime12 + 2, 2);
+    month = atoi(buf);
+    strncpy(buf, datetime12 + 4, 2);
+    day = atoi(buf);
+    strncpy(buf, datetime12 + 6, 2);
+    hour = atoi(buf);
+    strncpy(buf, datetime12 + 8, 2);
+    minute = atoi(buf);
+    strncpy(buf, datetime12 + 10, 2);
+    second = atoi(buf);
 
     ms = 0;
     return true;
@@ -221,4 +239,3 @@ MCUTime parsed_start_time;
 
 /* Sensing Config */
 MCUTime SensingSchedule;
-
