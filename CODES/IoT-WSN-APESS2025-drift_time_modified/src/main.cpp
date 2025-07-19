@@ -240,9 +240,9 @@ void loop()
         if (node_status.node_flags.sensing_scheduled)
         {
             static uint32_t last_debug = 0;
-            if (millis() - last_debug > 1000)
+            if (now_unix_ms - last_debug > 1000)
             {
-                last_debug = millis();
+                last_debug = now_unix_ms;
                 Serial.print("[DEBUG] sensing_scheduled = true | now_unix_ms = ");
                 Serial.print(now_unix_ms);
                 Serial.print(", scheduled_start_ms = ");
@@ -313,6 +313,7 @@ void loop()
 
         // check state change
         now_unix_ms = Time.estimate_time_ms();
+
         if (now_unix_ms >= sensing_scheduled_start_ms)
         {
             // Switch to SAMPLING state
@@ -320,9 +321,9 @@ void loop()
             rgbled_set_by_state(NodeState::SAMPLING);
         }
     }
-
     else if (node_status.get_state() == NodeState::SAMPLING)
     {
+
         if (!node_status.node_flags.sensing_active)
         {
             if (sensing_start())

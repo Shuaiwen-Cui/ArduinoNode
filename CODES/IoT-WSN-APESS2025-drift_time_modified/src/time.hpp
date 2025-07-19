@@ -55,7 +55,6 @@ public:
     void print() const;       // Print formatted string to Serial
     bool set_from_string_YYMMDDHHMMSS(const char *datetime12);
 
-
     /* === Comparison === */
     int8_t compare_to(const MCUTime &other) const;
 };
