@@ -96,6 +96,14 @@ void setup()
     rf_check_node_status();  
     Serial.println("[INIT] <RF> Node status checked.");
 
+    if (!rf_time_sync())
+    {
+        Serial.println("[ERROR] Time sync failed.");
+        while (1);
+    }
+    Serial.println("[INIT] <RF> Time sync successful.");
+    
+
     node_status.set_state(NodeState::IDLE);
     node_status.print_state();
     rgbled_set_by_state(NodeState::IDLE);
@@ -108,7 +116,7 @@ void loop()
     uint32_t now = millis();
 
     // Print once every 1000 ms
-    if (now - last_print_time >= 1000)
+    if (now - last_print_time >= 5000)
     {
         last_print_time = now;
         Time.show_time();  // Use your defined global instance
