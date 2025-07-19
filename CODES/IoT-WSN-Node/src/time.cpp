@@ -1,6 +1,5 @@
 #include "time.hpp"
 
-
 /* === Helper Functions === */
 CalendarTime calendar_from_unix_seconds(uint64_t unix_seconds)
 {
@@ -12,7 +11,7 @@ CalendarTime calendar_from_unix_seconds(uint64_t unix_seconds)
     cal.minute = seconds % 60;
     seconds /= 60;
     cal.hour = seconds % 24;
-    seconds /= 24;  // Total days since epoch
+    seconds /= 24; // Total days since epoch
 
     int year = 1970;
     while (true)
@@ -33,8 +32,7 @@ CalendarTime calendar_from_unix_seconds(uint64_t unix_seconds)
 
     static const uint8_t days_in_month[12] = {
         31, 28, 31, 30, 31, 30,
-        31, 31, 30, 31, 30, 31
-    };
+        31, 31, 30, 31, 30, 31};
 
     int month = 0;
     while (month < 12)
@@ -79,8 +77,7 @@ uint64_t unix_from_calendar_seconds(const CalendarTime &cal)
 
     static const uint8_t days_in_month[12] = {
         31, 28, 31, 30, 31, 30,
-        31, 31, 30, 31, 30, 31
-    };
+        31, 31, 30, 31, 30, 31};
 
     for (int m = 0; m < cal.month - 1; ++m)
     {
@@ -106,7 +103,7 @@ NodeTime::NodeTime()
     running_time = 0;
     last_sync_running_time = 0;
     drift_ratio = 1.0f; // Default drift ratio (no drift)
-    time_offset = 0; // Default time offset
+    time_offset = 0;    // Default time offset
     unified_time = 0;
     calendar_time = {0, 0, 0, 0, 0, 0, 0}; // Initialize calendar time to zero
 }
@@ -116,16 +113,26 @@ void NodeTime::record_sync_time()
     last_sync_running_time = millis(); // Record the current running time
 }
 
+// uint64_t NodeTime::get_time()
+// {
+//     running_time = millis(); // Get the current running time in milliseconds
+//     unified_time = static_cast<uint64_t>((drift_ratio * (running_time - last_sync_running_time)) + time_offset);
+//     return unified_time;
+// }
+
+
 uint64_t NodeTime::get_time()
 {
-    running_time = millis(); // Get the current running time in milliseconds
-    unified_time = static_cast<uint64_t>((drift_ratio * (running_time - last_sync_running_time)) + time_offset);
-    return unified_time;
+    running_time = millis();
+
+    // Use double to preserve precision during multiplication
+    double delta = static_cast<double>(running_time - last_sync_running_time);
+    return static_cast<uint64_t>(delta * drift_ratio + static_cast<double>(time_offset));
 }
 
 CalendarTime NodeTime::get_calendar()
 {
-    uint64_t current_time = get_time();  // Milliseconds since 1970-01-01 00:00:00 UTC
+    uint64_t current_time = get_time(); // Milliseconds since 1970-01-01 00:00:00 UTC
     uint64_t ms_total = current_time;
 
     calendar_time.ms = ms_total % 1000;
@@ -137,7 +144,7 @@ CalendarTime NodeTime::get_calendar()
     calendar_time.minute = seconds % 60;
     seconds /= 60;
     calendar_time.hour = seconds % 24;
-    seconds /= 24;  // Now we have total days since epoch
+    seconds /= 24; // Now we have total days since epoch
 
     // === Extract date ===
     int year = 1970;
@@ -159,8 +166,7 @@ CalendarTime NodeTime::get_calendar()
 
     static const uint8_t days_in_month[12] = {
         31, 28, 31, 30, 31, 30,
-        31, 31, 30, 31, 30, 31
-    };
+        31, 31, 30, 31, 30, 31};
 
     int month = 0;
     while (month < 12)
@@ -181,8 +187,8 @@ CalendarTime NodeTime::get_calendar()
             break;
         }
     }
-    calendar_time.month = month + 1;  // [1-12]
-    calendar_time.day = seconds + 1;  // [1-31]
+    calendar_time.month = month + 1; // [1-12]
+    calendar_time.day = seconds + 1; // [1-31]
 
     return calendar_time;
 }
@@ -207,24 +213,36 @@ void NodeTime::show_time()
     Serial.println(" ms");
 
     Serial.print("Calendar Time     : ");
-    Serial.print(cal.year); Serial.print("-");
-    if (cal.month < 10) Serial.print("0");
-    Serial.print(cal.month); Serial.print("-");
-    if (cal.day < 10) Serial.print("0");
-    Serial.print(cal.day); Serial.print(" ");
+    Serial.print(cal.year);
+    Serial.print("-");
+    if (cal.month < 10)
+        Serial.print("0");
+    Serial.print(cal.month);
+    Serial.print("-");
+    if (cal.day < 10)
+        Serial.print("0");
+    Serial.print(cal.day);
+    Serial.print(" ");
 
-    if (cal.hour < 10) Serial.print("0");
-    Serial.print(cal.hour); Serial.print(":");
-    if (cal.minute < 10) Serial.print("0");
-    Serial.print(cal.minute); Serial.print(":");
-    if (cal.second < 10) Serial.print("0");
-    Serial.print(cal.second); Serial.print(".");
-    if (cal.ms < 100) Serial.print("0");
-    if (cal.ms < 10) Serial.print("0");
+    if (cal.hour < 10)
+        Serial.print("0");
+    Serial.print(cal.hour);
+    Serial.print(":");
+    if (cal.minute < 10)
+        Serial.print("0");
+    Serial.print(cal.minute);
+    Serial.print(":");
+    if (cal.second < 10)
+        Serial.print("0");
+    Serial.print(cal.second);
+    Serial.print(".");
+    if (cal.ms < 100)
+        Serial.print("0");
+    if (cal.ms < 10)
+        Serial.print("0");
     Serial.println(cal.ms);
 
     Serial.println("======================");
 }
-
 
 NodeTime Time;

@@ -19,6 +19,7 @@
 #include "rf.hpp"        // RF Communication Functions
 #include "wifi.hpp"      // WiFi Connection Functions
 #include "time.hpp"      // Time Synchronization Functions
+#include "timesync.hpp"  // Time Synchronization Logic
 #include "mqtt.hpp"      // MQTT Communication Functions
 
 
@@ -74,58 +75,42 @@ void setup()
     connect_to_wifi();
     node_status.node_flags.wifi_connected = true;
 
+    // Synchronize time via NTP
+    while (!sync_time_ntp())
+    {
+        Serial.println("[INIT] <NTP> time sync failed. Retrying in 2 seconds...");
+        delay(2000);
+    }
+    Serial.println("[INIT] <NTP> time sync successful.");
+    node_status.node_flags.time_ntp_synced = true;
+
     // Initialize MQTT
     mqtt_setup();
     node_status.node_flags.mqtt_connected = true;
 #endif
 
+    // RF communication
+    // Switch to RF_COMMUNICATING state
+    node_status.set_state(NodeState::RF_COMMUNICATING);
+    rgbled_set_by_state(NodeState::RF_COMMUNICATING);
+    rf_check_node_status();  
+    Serial.println("[INIT] <RF> Node status checked.");
+
     node_status.set_state(NodeState::IDLE);
     node_status.print_state();
     rgbled_set_by_state(NodeState::IDLE);
 
-    // === 1. Record sync point ===
-    Time.record_sync_time();  // Use global instance
-    delay(1234);              // Simulate some elapsed time
-
-    // === 2. Get current unified time ===
-    uint64_t unix_ms = Time.get_time();
-    Serial.print("Unified Time (ms): ");
-    Serial.println(unix_ms);
-
-    // === 3. Convert to calendar ===
-    CalendarTime cal = calendar_from_unix_milliseconds(unix_ms);
-
-    // === 4. Print formatted calendar time ===
-    Serial.print("Calendar Time     : ");
-    Serial.print(cal.year); Serial.print("-");
-    if (cal.month < 10) Serial.print("0");
-    Serial.print(cal.month); Serial.print("-");
-    if (cal.day < 10) Serial.print("0");
-    Serial.print(cal.day); Serial.print(" ");
-    if (cal.hour < 10) Serial.print("0");
-    Serial.print(cal.hour); Serial.print(":");
-    if (cal.minute < 10) Serial.print("0");
-    Serial.print(cal.minute); Serial.print(":");
-    if (cal.second < 10) Serial.print("0");
-    Serial.print(cal.second); Serial.print(".");
-    if (cal.ms < 100) Serial.print("0");
-    if (cal.ms < 10) Serial.print("0");
-    Serial.println(cal.ms);
-
-    // === 5. Backward conversion ===
-    uint64_t back_sec = unix_from_calendar_seconds(cal);
-    uint64_t back_ms = unix_from_calendar_milliseconds(cal);
-
-    Serial.print("Back to Unix Time (s): ");
-    Serial.println(back_sec);
-
-    Serial.print("Back to Unix Time (ms): ");
-    Serial.println(back_ms);
-
-    // === 6. Show all (encapsulated) ===
-    Time.show_time();
 }
 
 void loop()
 {
+    static uint32_t last_print_time = 0;
+    uint32_t now = millis();
+
+    // Print once every 1000 ms
+    if (now - last_print_time >= 1000)
+    {
+        last_print_time = now;
+        Time.show_time();  // Use your defined global instance
+    }
 }

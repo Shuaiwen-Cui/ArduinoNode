@@ -1,8 +1,9 @@
 #include "rf.hpp"
-#include "config.hpp"
 #include <SPI.h>
 
 RF24 radio(9, 8);
+
+bool node_online[NUM_NODES + 1] = {false}; // Default all to offline
 
 String rf_format_address(uint16_t node_id)
 {
@@ -91,4 +92,70 @@ bool rf_send_then_receive(const RFMessage &msg, uint8_t to_id, unsigned long tim
         Serial.println(")");
     }
     return false;
+}
+
+void rf_check_node_status()
+{
+#ifdef GATEWAY
+    Serial.println("[RF] Checking node status as GATEWAY...");
+
+    const char *ping_payload = "PING";
+    const unsigned long timeout_ms = 200;
+
+    for (uint8_t node_id = 1; node_id <= NUM_NODES; ++node_id)
+    {
+        if (node_id == NODE_ID)
+            continue;
+
+        RFMessage ping_msg;
+        ping_msg.from_id = NODE_ID;
+        ping_msg.to_id = node_id;
+        strncpy(ping_msg.payload, ping_payload, sizeof(ping_msg.payload));
+        ping_msg.timestamp_ms = millis();
+
+        bool online = rf_send_then_receive(ping_msg, node_id, timeout_ms, 1);
+        node_online[node_id] = online;
+    }
+
+    // === Summary Output ===
+    Serial.println("[RF] Online Node Summary:");
+    for (uint8_t node_id = 1; node_id <= NUM_NODES; ++node_id)
+    {
+        if (node_id == NODE_ID)
+            continue;
+        if (node_online[node_id])
+        {
+            Serial.print("  - Node ");
+            Serial.print(node_id);
+            Serial.println(" is ONLINE.");
+        }
+    }
+#endif
+
+#ifdef LEAFNODE
+    Serial.println("[RF] Waiting for PING from GATEWAY...");
+
+    while (true)
+    {
+        RFMessage msg;
+        if (rf_receive(msg, 100))
+        {
+            if (strncmp(msg.payload, "PING", 4) == 0 && msg.to_id == NODE_ID)
+            {
+                RFMessage reply;
+                reply.from_id = NODE_ID;
+                reply.to_id = msg.from_id;
+                strncpy(reply.payload, "PONG", sizeof(reply.payload));
+                reply.timestamp_ms = millis();
+
+                rf_stop_listening();
+                rf_send(msg.from_id, reply, false);
+                rf_start_listening();
+
+                Serial.println("[RF] Responded to GATEWAY PING. Ready.");
+                break; // Exit the loop — proceed with setup
+            }
+        }
+    }
+#endif
 }
