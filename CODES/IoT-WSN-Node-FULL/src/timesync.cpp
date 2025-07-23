@@ -63,11 +63,13 @@ bool sync_time_ntp()
 bool rf_time_sync()
 {
 #ifdef GATEWAY
+    // === Step 1: Start synchronization as GATEWAY ===
     Serial.println("[SYNC] Start time synchronization as GATEWAY");
 
     for (uint8_t round = 0; round < SYNC_ROUNDS; ++round)
     {
         uint64_t current_time = Time.get_time();
+        Time.record_sync_time();  // Update last_sync_running_time here
 
         for (uint8_t node_id = 1; node_id <= NUM_NODES; ++node_id)
         {
@@ -95,6 +97,7 @@ bool rf_time_sync()
             Serial.println(current_time);
         }
 
+        // Delay between synchronization rounds
         if (round == 0)
             delay(SYNC_INTERVAL_1);
         else if (round < SYNC_ROUNDS - 1)
@@ -106,14 +109,20 @@ bool rf_time_sync()
 #endif
 
 #ifdef LEAFNODE
+    // === Step 2: Start synchronization as LEAFNODE ===
     Serial.println("[SYNC] Start time synchronization as LEAFNODE");
 
     uint64_t gateway_time[SYNC_ROUNDS] = {0};
     uint64_t local_time[SYNC_ROUNDS] = {0};
-    int64_t time_diff[SYNC_ROUNDS] = {0};
+    int64_t time_diff[SYNC_ROUNDS] = {0};  // Use int64_t for time difference
     uint8_t received = 0;
 
-    // === Step 1: Receive SYNC messages ===
+    // Clear arrays at the start of the synchronization process
+    memset(gateway_time, 0, sizeof(gateway_time));
+    memset(local_time, 0, sizeof(local_time));
+    memset(time_diff, 0, sizeof(time_diff));
+
+    // === Step 3: Receive SYNC messages ===
     while (received < SYNC_ROUNDS)
     {
         RFMessage msg;
@@ -129,7 +138,7 @@ bool rf_time_sync()
 
                 gateway_time[received] = gw_time;
                 local_time[received] = local;
-                time_diff[received] = static_cast<int64_t>(gw_time - local);
+                time_diff[received] = static_cast<int64_t>(gw_time - local);  // Store as int64_t
 
                 Serial.print("[SYNC][LEAF] Round ");
                 Serial.print(received + 1);
@@ -145,9 +154,8 @@ bool rf_time_sync()
         }
     }
 
-    Time.last_sync_running_time = millis();
-
-    // === Step 2: Calculate offset ===
+    // === Step 4: Calculate offset ===
+    Time.record_sync_time();  // Update last_sync_running_time before drift and offset calculations
     int64_t max_diff = time_diff[0];
     int64_t min_diff = time_diff[0];
     int64_t offset_sum = 0;
@@ -164,7 +172,7 @@ bool rf_time_sync()
     int64_t offset_cleaned_sum = offset_sum - max_diff - min_diff;
     int64_t offset_avg = offset_cleaned_sum / (SYNC_ROUNDS - 2);
 
-    // === Step 3: Calculate drift ratio ===
+    // === Step 5: Calculate drift ratio ===
     double drift_sum = 0.0;
     double drift_max = -1e9;
     double drift_min = 1e9;
@@ -193,11 +201,11 @@ bool rf_time_sync()
     double drift_cleaned_sum = drift_sum - drift_max - drift_min;
     double drift_avg = drift_cleaned_sum / (drift_count - 2);
 
-    // === Step 4: Update NodeTime ===
+    // === Step 6: Update NodeTime ===
     Time.drift_ratio = 1.0 + drift_avg;
-    Time.time_offset = gateway_time[0] - static_cast<uint64_t>(Time.drift_ratio * (local_time[0] - Time.last_sync_running_time));
+    Time.time_offset = gateway_time[0] - static_cast<int64_t>(Time.drift_ratio * (local_time[0] - Time.last_sync_running_time));
 
-    // === Step 5: Summary ===
+    // === Step 7: Summary ===
     Serial.println("=== Time Sync Result ===");
     Serial.print("Drift Ratio       : ");
     Serial.println(Time.drift_ratio, 8);

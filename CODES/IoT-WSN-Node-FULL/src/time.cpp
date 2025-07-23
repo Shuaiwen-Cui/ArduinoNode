@@ -97,6 +97,37 @@ uint64_t unix_from_calendar_milliseconds(const CalendarTime &cal)
     return unix_from_calendar_seconds(cal) * 1000ULL + cal.ms;
 }
 
+// Convert YYMMDDHHMMSS string to CalendarTime structure
+CalendarTime YYMMDDHHMMSS2Calendar(const char *datetime12)
+{
+    CalendarTime ct = {0};
+
+    if (strlen(datetime12) != 12) {
+        // Return a zero-initialized CalendarTime on failure
+        return ct;
+    }
+
+    char buf[3] = {0};
+
+    // Extract and convert each part of the datetime string
+    strncpy(buf, datetime12, 2);
+    ct.year = 2000 + atoi(buf);  // YY → 20YY
+    strncpy(buf, datetime12 + 2, 2);
+    ct.month = atoi(buf);
+    strncpy(buf, datetime12 + 4, 2);
+    ct.day = atoi(buf);
+    strncpy(buf, datetime12 + 6, 2);
+    ct.hour = atoi(buf);
+    strncpy(buf, datetime12 + 8, 2);
+    ct.minute = atoi(buf);
+    strncpy(buf, datetime12 + 10, 2);
+    ct.second = atoi(buf);
+
+    ct.ms = 0;  // Milliseconds are set to 0 as per the original function
+
+    return ct;
+}
+
 /* === Major Functions === */
 NodeTime::NodeTime()
 {
@@ -121,14 +152,13 @@ void NodeTime::record_sync_time()
 // }
 
 
-uint64_t NodeTime::get_time()
+int64_t NodeTime::get_time()
 {
     running_time = millis();
-
-    // Use double to preserve precision during multiplication
     double delta = static_cast<double>(running_time - last_sync_running_time);
-    return static_cast<uint64_t>(delta * drift_ratio + static_cast<double>(time_offset));
+    return static_cast<int64_t>(delta * drift_ratio + static_cast<double>(time_offset));
 }
+
 
 CalendarTime NodeTime::get_calendar()
 {

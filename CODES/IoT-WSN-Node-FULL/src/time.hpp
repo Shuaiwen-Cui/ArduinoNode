@@ -21,6 +21,7 @@ CalendarTime calendar_from_unix_seconds(uint64_t unix_seconds);
 CalendarTime calendar_from_unix_milliseconds(uint64_t unix_ms);
 uint64_t unix_from_calendar_seconds(const CalendarTime &cal);
 uint64_t unix_from_calendar_milliseconds(const CalendarTime &cal);
+CalendarTime YYMMDDHHMMSS2Calendar(const char *datetime12);
 
 /*
  * NodeTime - Unified time structure for embedded systems.
@@ -37,7 +38,7 @@ public:
 
     /* === Unified Time === */
     float drift_ratio;                // Clock drift ratio, applied as: adjusted = base * (1 + drift_ratio)
-    uint64_t time_offset;             // Time offset in milliseconds for unified time correction
+    int64_t time_offset;             // Time offset in milliseconds for unified time correction
     uint64_t unified_time;            // Unified network time (in milliseconds)
     CalendarTime calendar_time;       // Human-readable calendar time
 
@@ -49,7 +50,7 @@ public:
     void record_sync_time();
 
     /* === Getters === */
-    uint64_t get_time();                // Get current unified time
+    int64_t get_time();                // Get current unified time
     CalendarTime get_calendar();       // Get calendar time (stub for now, no RTC parsing)
 
     /* === Printout === */
