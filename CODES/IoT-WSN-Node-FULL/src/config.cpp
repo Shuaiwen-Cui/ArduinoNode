@@ -2,8 +2,8 @@
 
 uint64_t sensing_scheduled_start_ms = 0;
 uint64_t sensing_scheduled_end_ms = 0;
-uint32_t sensing_rate_hz = 0;
-uint32_t sensing_duration_s = 0;
+uint32_t sensing_rate_hz = 200;
+uint32_t sensing_duration_s = 30;
 uint16_t parsed_freq = 0;
 uint16_t parsed_duration = 0;
 

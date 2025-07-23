@@ -8,6 +8,7 @@
 #include "mqtt.hpp"
 #include "sdcard.hpp"
 #include "logging.hpp"
+#include "wifi.hpp"
 
 static File data_file;
 static uint32_t last_sample_time = 0;
@@ -58,7 +59,7 @@ bool sensing_prepare()
     data_file.println(" s");
 
     data_file.println("================= Sampling Data =================");
-    data_file.println("time_ms    , ax        , ay        , az");
+    data_file.println("time_ms  , ax      , ay      , az");
 
     Serial.println("[SENSING] Sensing started (streaming mode).");
     return true;
@@ -123,16 +124,20 @@ void sensing_stop()
     }
 #endif
 
-    if (mqtt_client.connected())
+    // Check WiFi connection, reconnect if disconnected
+    if (WiFi.status() != WL_CONNECTED)
     {
-        // Publish the file name to MQTT broker
-        String msg = "Node" + String(NODE_ID) + " completed sensing. File: " + String(filename);
-        mqtt_client.publish(MQTT_TOPIC_PUB, msg.c_str());
+        Serial.println("[MQTT] WiFi disconnected. Reconnecting...");
+        connect_to_wifi(); // Reconnect to WiFi
     }
+
+    mqtt_loop(); // Keep MQTT connection alive
+    // Publish the file name to MQTT broker
+    String msg = "Node" + String(NODE_ID) + " completed sensing. File: " + String(filename);
+    mqtt_client.publish(MQTT_TOPIC_PUB, msg.c_str());
 
     sample_count = 0;
 }
-
 
 void sensing_retrieve_file()
 {
@@ -201,4 +206,3 @@ void sensing_retrieve_file()
     node_status.node_flags.data_retrieval_requested = false;
     node_status.node_flags.data_retrieval_sent = true;
 }
-

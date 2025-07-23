@@ -18,12 +18,6 @@ bool should_run_mqtt_loop()
   return false;
 }
 
-// Callback when subscribed message is received
-void mqtt_callback(char *topic, byte *payload, unsigned int length)
-{
-
-}
-
 // Connect to MQTT broker
 void mqtt_setup()
 {

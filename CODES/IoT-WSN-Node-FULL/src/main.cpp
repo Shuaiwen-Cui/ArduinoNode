@@ -112,13 +112,13 @@ void setup()
 
 
     // simulate sensing triggering
-    delay(3000);
-    node_status.node_flags.sensing_scheduled = true;
-    sensing_scheduled_start_ms = Time.get_time() + 10000;
-    sensing_rate_hz = 200;
-    sensing_duration_s = 10;
-    sensing_scheduled_end_ms = sensing_scheduled_start_ms + sensing_duration_s*1000;
-    Serial.println('sensing scheduled');
+    // delay(3000);
+    // node_status.node_flags.sensing_scheduled = true;
+    // sensing_scheduled_start_ms = Time.get_time() + 10000;
+    // sensing_rate_hz = 200;
+    // sensing_duration_s = 10;
+    // sensing_scheduled_end_ms = sensing_scheduled_start_ms + sensing_duration_s*1000;
+    // Serial.println('sensing scheduled');
 
 }
 

@@ -6,6 +6,7 @@
 #define SYNC_ROUNDS 6
 #define SYNC_INTERVAL_1 10000
 #define SYNC_INTERVAL_N 5000
+#define TIME_SYNC_RESERVED_TIME 60000 // means reserve at least 60 seconds for time sync when issuing a sensing command
 
 /*
  * Time synchronization header

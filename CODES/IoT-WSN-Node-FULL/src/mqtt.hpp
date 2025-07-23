@@ -4,6 +4,7 @@
 #include "nodestate.hpp"
 #include <WiFiS3.h>
 #include <PubSubClient.h>
+#include "mqtt_cmd.hpp"
 
 
 // Create a WiFi client and wrap it in PubSubClient
