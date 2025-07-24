@@ -78,6 +78,8 @@ void rf_handle()
             // Step 1: Extract 12-digit time
             char datetime[13] = {0};
             strncpy(datetime, msg.payload + 2, 12);
+            Serial.print("[DEBUG] Extracted datetime string: ");
+            Serial.println(datetime);
 
             // Step 2: Find first and second underscore after time part
             const char *ptr = msg.payload + 14;
@@ -95,12 +97,25 @@ void rf_handle()
                 return;
             }
 
+            // Debug: print the rest of the string for inspection
+            Serial.print("[DEBUG] String after datetime: ");
+            Serial.println(ptr);
+            Serial.print("[DEBUG] First underscore position offset: ");
+            Serial.println(first_underscore - msg.payload);
+            Serial.print("[DEBUG] Second underscore position offset: ");
+            Serial.println(second_underscore - msg.payload);
+
             // Step 3: Extract substrings for rate and duration
             char rate_buf[6] = {0};
             char dur_buf[6] = {0};
 
             size_t rate_len = second_underscore - (first_underscore + 1);
             size_t dur_len = strlen(second_underscore + 1);
+
+            Serial.print("[DEBUG] rate_len = ");
+            Serial.println(rate_len);
+            Serial.print("[DEBUG] dur_len = ");
+            Serial.println(dur_len);
 
             if (rate_len >= sizeof(rate_buf) || dur_len >= sizeof(dur_buf))
             {
@@ -111,11 +126,21 @@ void rf_handle()
             strncpy(rate_buf, first_underscore + 1, rate_len);
             strncpy(dur_buf, second_underscore + 1, dur_len);
 
+            Serial.print("[DEBUG] Extracted rate string: ");
+            Serial.println(rate_buf);
+            Serial.print("[DEBUG] Extracted duration string: ");
+            Serial.println(dur_buf);
+
             int rate = atoi(rate_buf);
             int dur = atoi(dur_buf);
 
-            CalendarTime SensingSchedule;
-            SensingSchedule = YYMMDDHHMMSS2Calendar(datetime);
+            // Debug: check atoi conversion
+            Serial.print("[DEBUG] Parsed rate: ");
+            Serial.println(rate);
+            Serial.print("[DEBUG] Parsed duration: ");
+            Serial.println(dur);
+
+            CalendarTime SensingSchedule = YYMMDDHHMMSS2Calendar(datetime);
 
             parsed_freq = rate;
             sensing_rate_hz = parsed_freq;
@@ -125,9 +150,9 @@ void rf_handle()
             sensing_scheduled_start_ms = unix_from_calendar_milliseconds(SensingSchedule);
             sensing_scheduled_end_ms = sensing_scheduled_start_ms + dur * 1000;
 
-            node_status.node_flags.sensing_scheduled = true; // very important!
+            node_status.node_flags.sensing_scheduled = true;
 
-            // Debug print
+            // Summary output
             Serial.print("[LEAFNODE] Parsed Time: ");
             Serial.print(SensingSchedule.year);
             Serial.print("-");
@@ -152,12 +177,10 @@ void rf_handle()
 
             Serial.print("[LEAFNODE] Scheduled Sampling Rate: ");
             Serial.print(sensing_rate_hz);
-
             Serial.print(" Hz, Duration: ");
             Serial.print(sensing_duration_s);
             Serial.println(" sec");
         }
-        // === Unknown Command ===
         else
         {
             Serial.println("[RF_COMMUNICATION] Unknown command.");

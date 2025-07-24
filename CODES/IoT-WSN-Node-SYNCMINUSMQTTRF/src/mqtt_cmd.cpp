@@ -71,6 +71,12 @@ void mqtt_callback(char *topic, byte *payload, unsigned int length)
         uint64_t now_unix_ms = Time.get_time();
 
         // Schedule sensing: start after TIME_SYNC_RESERVED_TIME
+        
+        sensing_duration_s = default_sensing_duration_s; // Use default duration
+        parsed_duration = sensing_duration_s; // Set global variable for parsed duration, this is for constructing the command later
+        sensing_rate_hz = default_sensing_rate_hz;       // Use default rate
+        parsed_freq = sensing_rate_hz; // Set global variable for parsed frequency, this is for constructing the command later
+
         sensing_scheduled_start_ms = now_unix_ms + TIME_SYNC_RESERVED_TIME;
         sensing_scheduled_end_ms = sensing_scheduled_start_ms + (sensing_duration_s * 1000);
 
@@ -117,7 +123,9 @@ void mqtt_callback(char *topic, byte *payload, unsigned int length)
                 sensing_scheduled_start_ms = now_unix_ms + (uint64_t)delay_sec * 1000;
                 sensing_scheduled_end_ms = sensing_scheduled_start_ms + (uint64_t)duration * 1000;
                 sensing_rate_hz = freq;
+                parsed_freq = freq;    // Set global variable for parsed frequency, this is for constructing the command later
                 sensing_duration_s = duration;
+                parsed_duration = duration; // Set global variable for parsed duration, this is for constructing the command later
 
                 node_status.node_flags.sensing_requested = true;
                 node_status.node_flags.sensing_scheduled = true;

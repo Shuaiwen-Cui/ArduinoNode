@@ -40,7 +40,7 @@ bool sync_time_ntp()
         uint64_t epoch_ms = epoch * 1000ULL;
 
         Time.last_sync_running_time = now_millis;
-        Time.time_offset = epoch_ms;
+        Time.time_offset = epoch_ms - now_millis;
 
         Serial.print("[COMMUNICATION] <NTP> Synchronized UNIX epoch: ");
         Serial.println(epoch);
@@ -102,6 +102,8 @@ bool rf_time_sync()
     }
 
     Serial.println("[SYNC] GATEWAY time synchronization complete.");
+
+    Time.show_time();
     return true;
 #endif
 
@@ -114,12 +116,7 @@ bool rf_time_sync()
     int64_t time_diff[SYNC_ROUNDS] = {0};
     uint8_t received = 0;
 
-    // === Step 2: Clear arrays before each sync attempt ===
-    memset(gateway_time, 0, sizeof(gateway_time));
-    memset(local_time, 0, sizeof(local_time));
-    memset(time_diff, 0, sizeof(time_diff));
-
-    // === Step 3: Receive SYNC messages ===
+    // === Step 2: Receive SYNC messages ===
     while (received < SYNC_ROUNDS)
     {
         RFMessage msg;
@@ -130,85 +127,31 @@ bool rf_time_sync()
                 uint32_t high = 0, low = 0;
                 sscanf(msg.payload, "SYNC %lu %lu", &high, &low);
                 uint64_t gw_time = ((uint64_t)high << 32) | low;
-
                 uint64_t local = millis();
 
                 gateway_time[received] = gw_time;
                 local_time[received] = local;
                 time_diff[received] = static_cast<int64_t>(gw_time - local);
 
-                // Debug prints for received times and differences
-                Serial.print("[SYNC][LEAF] Round ");
-                Serial.print(received + 1);
-                Serial.print(" | GW = ");
-                Serial.print(gw_time);
-                Serial.print(" | Local = ");
-                Serial.print(local);
-                Serial.print(" | Diff = ");
-                Serial.println(time_diff[received]);
-
-                // Additional printout of array elements after each round
-                Serial.println("Array Elements After This Round:");
-                Serial.print("Gateway Time Array: ");
-                for (uint8_t i = 0; i < SYNC_ROUNDS; i++)
+                // === Output the results for each round (except for the final round) ===
+                if (received < SYNC_ROUNDS - 1)
                 {
-                    Serial.print(gateway_time[i]);
-                    Serial.print(" ");
+                    Serial.print("[SYNC][LEAF] Round ");
+                    Serial.print(received + 1);
+                    Serial.print(" → Gateway Time: ");
+                    Serial.print(gw_time);
+                    Serial.print(" ms, Local Time: ");
+                    Serial.print(local);
+                    Serial.print(" ms, Time Diff: ");
+                    Serial.println(time_diff[received]);
                 }
-                Serial.println();
-
-                Serial.print("Local Time Array: ");
-                for (uint8_t i = 0; i < SYNC_ROUNDS; i++)
-                {
-                    Serial.print(local_time[i]);
-                    Serial.print(" ");
-                }
-                Serial.println();
-
-                Serial.print("Time Diff Array: ");
-                for (uint8_t i = 0; i < SYNC_ROUNDS; i++)
-                {
-                    Serial.print(time_diff[i]);
-                    Serial.print(" ");
-                }
-                Serial.println();
 
                 received++;
             }
         }
     }
 
-    // === Step 4: Calculate offset ===
-    int64_t max_diff = time_diff[0];
-    int64_t min_diff = time_diff[0];
-    int64_t offset_sum = 0;
-
-    for (uint8_t i = 0; i < SYNC_ROUNDS; ++i)
-    {
-        if (time_diff[i] > max_diff)
-            max_diff = time_diff[i];
-        if (time_diff[i] < min_diff)
-            min_diff = time_diff[i];
-        offset_sum += time_diff[i];
-    }
-
-    int64_t offset_cleaned_sum = offset_sum - max_diff - min_diff;
-    int64_t offset_avg = offset_cleaned_sum / (SYNC_ROUNDS - 2);
-
-    // Debug prints for offset calculation
-    Serial.println("=== Offset Calculation ===");
-    Serial.print("Max Diff       : ");
-    Serial.println(max_diff);
-    Serial.print("Min Diff       : ");
-    Serial.println(min_diff);
-    Serial.print("Offset Sum     : ");
-    Serial.println(offset_sum);
-    Serial.print("Cleaned Offset : ");
-    Serial.println(offset_cleaned_sum);
-    Serial.print("Average Offset : ");
-    Serial.println(offset_avg);
-
-    // === Step 5: Calculate drift ratio ===
+    // === Step 3: Calculate drift_ratio ===
     double drift_sum = 0.0;
     double drift_max = -1e9;
     double drift_min = 1e9;
@@ -221,6 +164,7 @@ bool rf_time_sync()
 
         if (delta_t <= 0) continue;  // prevent division by zero or negative time
 
+        // Calculate drift_ratio directly within the loop
         double drift_i = (static_cast<double>(delta_T - delta_t)) / delta_t;
         drift_sum += drift_i;
         drift_count++;
@@ -238,36 +182,51 @@ bool rf_time_sync()
     double drift_cleaned_sum = drift_sum - drift_max - drift_min;
     double drift_avg = drift_cleaned_sum / (drift_count - 2);
 
-    // Debug prints for drift calculation
-    Serial.println("=== Drift Calculation ===");
-    Serial.print("Drift Sum      : ");
-    Serial.println(drift_sum, 8);  // Show drift sum to 8 decimal places
-    Serial.print("Max Drift      : ");
-    Serial.println(drift_max, 8);  // Show max drift to 8 decimal places
-    Serial.print("Min Drift      : ");
-    Serial.println(drift_min, 8);  // Show min drift to 8 decimal places
-    Serial.print("Cleaned Drift  : ");
-    Serial.println(drift_cleaned_sum, 8);  // Show cleaned drift to 8 decimal places
-    Serial.print("Average Drift  : ");
-    Serial.println(drift_avg, 8);  // Show average drift to 8 decimal places
+    // === Step 4: Calculate offset using average of time_diff after removing max and min ===
+    int64_t max_diff = time_diff[0];
+    int64_t min_diff = time_diff[0];
+    int64_t offset_sum = 0;
 
-    // === Step 6: Update NodeTime ===
+    for (uint8_t i = 0; i < SYNC_ROUNDS; ++i)
+    {
+        if (time_diff[i] > max_diff) max_diff = time_diff[i];
+        if (time_diff[i] < min_diff) min_diff = time_diff[i];
+        offset_sum += time_diff[i];
+    }
+
+    // Calculate offset average after removing max and min values
+    int64_t offset_cleaned_sum = offset_sum - max_diff - min_diff;
+    int64_t offset_avg = offset_cleaned_sum / (SYNC_ROUNDS - 2);
+
+    // === Step 5: Update drift_ratio and time_offset ===
     Time.drift_ratio = 1.0 + drift_avg;
-    Time.time_offset = gateway_time[0] - static_cast<uint64_t>(Time.drift_ratio * (local_time[0] - Time.last_sync_running_time));
+    Time.time_offset = offset_avg;  // Directly use offset_avg for time_offset
 
-    // === Step 7: Record sync time and summary ===
-    Time.record_sync_time();  // Record synchronization time after updating drift and offset
+    // === Step 6: Record sync time and summary ===
+    Time.record_sync_time();  // Record synchronization time after updating offset
 
+    // === Output the final round result ===
+    Serial.print("[SYNC][LEAF] Final Round ");
+    Serial.print(SYNC_ROUNDS);
+    Serial.print(" → Gateway Time: ");
+    Serial.print(gateway_time[SYNC_ROUNDS - 1]);
+    Serial.print(" ms, Local Time: ");
+    Serial.print(local_time[SYNC_ROUNDS - 1]);
+    Serial.print(" ms, Time Diff: ");
+    Serial.println(time_diff[SYNC_ROUNDS - 1]);
+
+    // Debug prints for final result
     Serial.println("=== Time Sync Result ===");
     Serial.print("Drift Ratio       : ");
     Serial.println(Time.drift_ratio, 8);  // Show drift ratio to 8 decimal places
-
     Serial.print("Time Offset       : ");
     Serial.println(Time.time_offset);
 
     Serial.print("Last Sync @       : ");
     Serial.println(Time.last_sync_running_time);
     Serial.println("========================");
+
+    Time.show_time();
 
     return true;
 #endif
