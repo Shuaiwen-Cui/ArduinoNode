@@ -147,6 +147,32 @@ bool rf_time_sync()
                 Serial.print(" | Diff = ");
                 Serial.println(time_diff[received]);
 
+                // Additional printout of array elements after each round
+                Serial.println("Array Elements After This Round:");
+                Serial.print("Gateway Time Array: ");
+                for (uint8_t i = 0; i < SYNC_ROUNDS; i++)
+                {
+                    Serial.print(gateway_time[i]);
+                    Serial.print(" ");
+                }
+                Serial.println();
+
+                Serial.print("Local Time Array: ");
+                for (uint8_t i = 0; i < SYNC_ROUNDS; i++)
+                {
+                    Serial.print(local_time[i]);
+                    Serial.print(" ");
+                }
+                Serial.println();
+
+                Serial.print("Time Diff Array: ");
+                for (uint8_t i = 0; i < SYNC_ROUNDS; i++)
+                {
+                    Serial.print(time_diff[i]);
+                    Serial.print(" ");
+                }
+                Serial.println();
+
                 received++;
             }
         }
@@ -245,4 +271,5 @@ bool rf_time_sync()
 
     return true;
 #endif
+
 }
