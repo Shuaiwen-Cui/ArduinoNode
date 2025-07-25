@@ -67,8 +67,8 @@ bool rf_time_sync()
 
     for (uint8_t round = 0; round < SYNC_ROUNDS; ++round)
     {
-        uint64_t current_time = Time.get_time();
-
+        
+        
         for (uint8_t node_id = 1; node_id <= NUM_NODES; ++node_id)
         {
             if (node_id == NODE_ID)
@@ -77,6 +77,8 @@ bool rf_time_sync()
             RFMessage msg;
             msg.from_id = NODE_ID;
             msg.to_id = node_id;
+
+            uint64_t current_time = Time.get_time();
 
             uint32_t high = current_time >> 32;
             uint32_t low = current_time & 0xFFFFFFFF;

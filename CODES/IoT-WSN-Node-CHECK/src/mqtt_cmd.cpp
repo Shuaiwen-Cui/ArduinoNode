@@ -67,6 +67,8 @@ void mqtt_callback(char *topic, byte *payload, unsigned int length)
     {
         Serial.println("[COMMUNICATION] <CMD> CMD_SN received.");
 
+        node_status.node_flags.time_rf_required = true;
+
         // Get current system time in milliseconds
         uint64_t now_unix_ms = Time.get_time();
 
@@ -103,6 +105,8 @@ void mqtt_callback(char *topic, byte *payload, unsigned int length)
     else if (msg_str.startsWith("CMD_SFN_"))
     {
         Serial.println("[COMMUNICATION] <CMD> CMD_SFN received.");
+
+        node_status.node_flags.time_rf_required = true;
 
         int delay_sec, freq, duration;
         int matched = sscanf(message, "CMD_SFN_%d_%dHz_%ds", &delay_sec, &freq, &duration);
@@ -157,6 +161,8 @@ void mqtt_callback(char *topic, byte *payload, unsigned int length)
     }
     else if (msg_str.startsWith("CMD_SENSING_"))
     {
+        node_status.node_flags.time_rf_required = true;
+
         strncpy(cmd_sensing_raw, message, sizeof(cmd_sensing_raw) - 1);
         cmd_sensing_raw[sizeof(cmd_sensing_raw) - 1] = '\0';
         node_status.node_flags.sensing_requested = true;
