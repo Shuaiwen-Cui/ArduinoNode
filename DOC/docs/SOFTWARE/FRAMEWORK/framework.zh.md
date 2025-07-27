@@ -23,7 +23,6 @@
 | - Connect WiFi              |        |                             |
 | - Sync time (NTP)           |        |                             |
 | - Setup MQTT                |        |                             |
-| - RF online check & RTT     |        |                             |
 | - RF time sync              | <====> | - RF time sync              |
 | - Wait for tasks            |        | - Wait for schedule         |
 +-----------------------------+        +-----------------------------+

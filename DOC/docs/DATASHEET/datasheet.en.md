@@ -20,7 +20,7 @@
 | Noise Level       | 0.0004 g/√Hz               |
 
 !!! tip
-    The highest sampling rate tested during development is 200Hz. Higher rates are untested, with a theoretical limit of about 500Hz. The longest sampling duration tested is 5 minutes; longer durations are untested, with the theoretical duration being the SD card capacity divided by the sampling rate.
+    The highest sampling rate tested during development is 250Hz, higher rates are not tested. The longest sampling duration tested is 5 minutes; longer durations are untested, with the theoretical duration being the SD card capacity divided by the sampling rate.
 
 ## Wireless Communication
 - WiFi
