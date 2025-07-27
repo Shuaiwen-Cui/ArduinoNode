@@ -1,6 +1,0 @@
-#pragma once
-
-#include <stdint.h>
-
-extern uint64_t sensing_scheduled_start_ms; // Start time for sensing in milliseconds
-extern uint64_t sensing_scheduled_end_ms;   // End time for sensing in milliseconds, default 10 seconds
