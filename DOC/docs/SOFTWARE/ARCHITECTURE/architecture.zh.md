@@ -15,6 +15,7 @@ sd["sdcard.hpp/.cpp"]
 rgb["rgbled.hpp/.cpp"]
 log["logging.hpp/.cpp"]
 mqtt["mqtt.hpp/.cpp"]
+mqttcmd["mqtt_cmd.hpp/.cpp"]
 sensing["sensing.hpp/.cpp"]
 sync["timesync.hpp/.cpp"]
 wifi["wifi.hpp/.cpp"]
@@ -22,52 +23,57 @@ rf["rf.hpp/.cpp"]
 rf_cmd["rf_cmd.hpp/.cpp"]
 main["main.cpp"]
 
-%% === Module Relationships ===
-config --> mqtt
-config --> sensing
-config --> rf
-config --> rf_cmd
-config --> sync
+%% === Module Relationships (Reversed Arrows) ===
 config --> main
+nodestate --> main
+rgb --> main
+mpu --> main
+sd --> main
+rf --> main
+wifi --> main
+time --> main
+sync --> main
+mqtt --> main
+sensing --> main
+rf_cmd --> main
 
 nodestate --> mqtt
+mqttcmd --> mqtt
+
+config --> mqttcmd
+time --> mqttcmd
+sync --> mqttcmd
+nodestate --> mqttcmd
+rgb --> mqttcmd
+mqtt --> mqttcmd
+
+config --> sensing
 nodestate --> sensing
-nodestate --> rf_cmd
-nodestate --> sync
-nodestate --> main
-
 time --> sensing
-time --> sync
-time --> main
-
-mpu --> sensing
-mpu --> main
-
-sd --> sensing
-sd --> log
-sd --> main
-
-rgb --> mqtt
 rgb --> sensing
-rgb --> rf_cmd
-rgb --> main
-
-log --> sensing
-
+mpu --> sensing
 mqtt --> sensing
-mqtt --> main
+sd --> sensing
+log --> sensing
+wifi --> sensing
 
-sensing --> main
+time --> sync
+rf --> sync
 
-sync --> main
+sd --> log
 
-wifi --> main
+nodestate --> rgb
+
+log --> rf
+time --> rf
 
 rf --> rf_cmd
-rf --> sync
-rf --> main
+nodestate --> rf_cmd
+rgb --> rf_cmd
+config --> rf_cmd
+time --> rf_cmd
 
-rf_cmd --> main
+config --> wifi
 
 
 ```

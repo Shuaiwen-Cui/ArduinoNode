@@ -16,15 +16,12 @@ GATEWAY NODE EXAMPLE
 // #define LEAFNODE        // for sensor node
 
 #define NODE_ID 100      // GATEWAY should be 100
-// #define NODE_ID 1 // for LEAFNODE: 1, 2, 3, 4
+// #define NODE_ID 1 // for LEAFNODE: 1, 2
 // #define NODE_ID 2
-// #define NODE_ID 3
-// #define NODE_ID 4
 
-#define NUM_NODES 4 // Total number of nodes in the network
+#define NUM_NODES 2 // Total number of nodes in the network
 
 /* WiFi Credentials */
-
 #define WIFI_SSID "Shaun's Iphone"
 #define WIFI_PASSWORD "cshw0918"
 
@@ -32,8 +29,6 @@ GATEWAY NODE EXAMPLE
 #define MQTT_CLIENT_ID      "GATEWAY"
 // #define MQTT_CLIENT_ID      "LEAFNODE1"
 // #define MQTT_CLIENT_ID      "LEAFNODE2"
-// #define MQTT_CLIENT_ID      "LEAFNODE3"
-// #define MQTT_CLIENT_ID      "LEAFNODE4"
 
 #define MQTT_BROKER_ADDRESS "8.222.194.160"
 #define MQTT_BROKER_PORT    1883
@@ -47,15 +42,20 @@ extern uint64_t sensing_scheduled_start_ms; // Scheduled sensing start time (Uni
 extern uint64_t sensing_scheduled_end_ms;   // Scheduled sensing end time (Unix ms)
 extern uint32_t sensing_rate_hz;            // Sensing rate in Hz
 extern uint32_t sensing_duration_s;         // Sensing duration in seconds
-
+extern uint32_t default_sensing_rate_hz;   // Default sensing rate in Hz
+extern uint32_t default_sensing_duration_s; // Default sensing duration in seconds
 extern uint16_t parsed_freq;                // Parsed frequency from command
 extern uint16_t parsed_duration;            // Parsed duration from command
+extern float cali_scale_x; // Calibration scale for X-axis
+extern float cali_scale_y; // Calibration scale for Y-axis
+extern float cali_scale_z; // Calibration scale for Z-axis
 
 /* Serial Configurations */
 // #define DATA_PRINTOUT // Enable data printout to Serial
 
 // === Function Declaration ===
 void print_node_config();
+
 
 ```
 
@@ -70,15 +70,12 @@ LEAFNODE EXAMPLE
 #define LEAFNODE        // for sensor node
 
 // #define NODE_ID 100      // GATEWAY should be 100
-#define NODE_ID 1 // for LEAFNODE: 1, 2, 3, 4
+#define NODE_ID 1 // for LEAFNODE: 1, 2
 // #define NODE_ID 2
-// #define NODE_ID 3
-// #define NODE_ID 4
 
-#define NUM_NODES 4 // Total number of nodes in the network
+#define NUM_NODES 2 // Total number of nodes in the network
 
 /* WiFi Credentials */
-
 #define WIFI_SSID "Shaun's Iphone"
 #define WIFI_PASSWORD "cshw0918"
 
@@ -86,8 +83,6 @@ LEAFNODE EXAMPLE
 // #define MQTT_CLIENT_ID      "GATEWAY"
 #define MQTT_CLIENT_ID      "LEAFNODE1"
 // #define MQTT_CLIENT_ID      "LEAFNODE2"
-// #define MQTT_CLIENT_ID      "LEAFNODE3"
-// #define MQTT_CLIENT_ID      "LEAFNODE4"
 
 #define MQTT_BROKER_ADDRESS "8.222.194.160"
 #define MQTT_BROKER_PORT    1883
@@ -101,9 +96,13 @@ extern uint64_t sensing_scheduled_start_ms; // Scheduled sensing start time (Uni
 extern uint64_t sensing_scheduled_end_ms;   // Scheduled sensing end time (Unix ms)
 extern uint32_t sensing_rate_hz;            // Sensing rate in Hz
 extern uint32_t sensing_duration_s;         // Sensing duration in seconds
-
+extern uint32_t default_sensing_rate_hz;   // Default sensing rate in Hz
+extern uint32_t default_sensing_duration_s; // Default sensing duration in seconds
 extern uint16_t parsed_freq;                // Parsed frequency from command
 extern uint16_t parsed_duration;            // Parsed duration from command
+extern float cali_scale_x; // Calibration scale for X-axis
+extern float cali_scale_y; // Calibration scale for Y-axis
+extern float cali_scale_z; // Calibration scale for Z-axis
 
 /* Serial Configurations */
 // #define DATA_PRINTOUT // Enable data printout to Serial
@@ -122,10 +121,16 @@ Apart from the configuration file, there is also a function `print_node_config()
 
 uint64_t sensing_scheduled_start_ms = 0;
 uint64_t sensing_scheduled_end_ms = 0;
-uint32_t sensing_rate_hz = 0;
-uint32_t sensing_duration_s = 0;
+uint32_t default_sensing_rate_hz = 200;
+uint32_t default_sensing_duration_s = 300;
+uint32_t sensing_rate_hz = default_sensing_rate_hz ;
+uint32_t sensing_duration_s = default_sensing_duration_s;
 uint16_t parsed_freq = 0;
 uint16_t parsed_duration = 0;
+
+float cali_scale_x = 1.0f; // Calibration scale for X-axis
+float cali_scale_y = 1.0f; // Calibration scale for Y-axis
+float cali_scale_z = 1.0f; // Calibration scale for Z-axis
 
 void print_node_config()
 {
@@ -168,6 +173,7 @@ void print_node_config()
 
   Serial.println("===============================");
 }
+
 ```
 
 ## Node Modes

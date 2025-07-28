@@ -11,66 +11,62 @@
 #include <Arduino.h>
 
 /*
- * MCUTime - Unified time structure for embedded systems.
+ * CalendarTime - Struct representing human-readable date and time.
+ */
+typedef struct
+{
+    /* === Calendar Fields === */
+    uint16_t year;   // Year (e.g., 2025)
+    uint8_t month;   // Month [1-12]
+    uint8_t day;     // Day [1-31]
+    uint8_t hour;    // Hour [0-23]
+    uint8_t minute;  // Minute [0-59]
+    uint8_t second;  // Second [0-59]
+    int32_t ms;      // Milliseconds [0-999]
+} CalendarTime;
+
+
+CalendarTime calendar_from_unix_seconds(uint64_t unix_seconds);
+CalendarTime calendar_from_unix_milliseconds(uint64_t unix_ms);
+uint64_t unix_from_calendar_seconds(const CalendarTime &cal);
+uint64_t unix_from_calendar_milliseconds(const CalendarTime &cal);
+CalendarTime YYMMDDHHMMSS2Calendar(const char *datetime12);
+
+/*
+ * NodeTime - Unified time structure for embedded systems.
  * Provides both UNIX timestamp and human-readable calendar format.
  */
-class MCUTime
+class NodeTime
 {
 public:
-    /* === UNIX Time Fields === */
-    uint64_t unix_epoch; // Seconds since 1970-01-01 00:00:00 UTC
-    uint64_t unix_ms;    // Milliseconds since 1970-01-01 00:00:00 UTC
-    uint64_t estimated_unix_ms; // Estimated milliseconds since 1970-01-01 00:00:00 UTC
-    uint64_t estimated_unix_epoch; // Estimated seconds since 1970-01-01 00:00:00 UTC
-
-    /* === Calendar Fields === */
-    uint16_t year;  // Year (e.g., 2025)
-    uint8_t month;  // Month [1-12]
-    uint8_t day;    // Day [1-31]
-    uint8_t hour;   // Hour [0-23]
-    uint8_t minute; // Minute [0-59]
-    uint8_t second; // Second [0-59]
-    int32_t ms;     // Milliseconds [0-999]
+    /* === Running Time === */
+    uint64_t running_time;             // Local running time in milliseconds since node startup
 
     /* === Time Tracking === */
-    uint64_t last_update_ms; // Last update time in milliseconds by syncing
-    uint64_t last_update_epoch; // Last update time in seconds since epoch by syncing
-    uint64_t mcu_time_ms; // Current time in milliseconds since MCU start
-    uint64_t mcu_base_ms; // Base time in milliseconds when synced
-    uint64_t delta_ms; // Time since last update in milliseconds
+    uint64_t last_sync_running_time;  // Running time when last sync occurred
+
+    /* === Unified Time === */
+    float drift_ratio;                // Clock drift ratio, applied as: adjusted = base * (1 + drift_ratio)
+    uint64_t time_offset;             // Time offset in milliseconds for unified time correction
+    uint64_t unified_time;            // Unified network time (in milliseconds)
+    CalendarTime calendar_time;       // Human-readable calendar time
 
 public:
     /* === Constructors === */
-    MCUTime(); // Default constructor initializes to 0
+    NodeTime();
 
     /* === Setters === */
-    void set_calendar();  // Set calendar fields based on current Unix time
-    void set_time_ms(uint64_t ms); // Set Unix time by passing milliseconds since Unix epoch
-    void set_time_epoch(uint64_t epoch); // Set Unix time by passing seconds since Unix epoch
-
-    /* === Time Update === */
-    uint64_t estimate_time_ms(); // estimate time ms based on MCU millis and last update
-    uint64_t estimate_time_epoch(); // estimate time epoch based on MCU millis and last update
+    void record_sync_time();
 
     /* === Getters === */
-    uint64_t get_unix_ms() const;
-    uint64_t get_unix_epoch() const;
-    uint64_t get_now_time_ms() const; // Get current time in ms in Unix ms format
-    uint64_t compute_ms_from_calendar() const; // Compute Unix ms from calendar fields
-    String to_string() const; // Return "YYYY-MM-DD HH:MM:SS.mmm"
-    void print() const;       // Print formatted string to Serial
-    bool set_from_string_YYMMDDHHMMSS(const char *datetime12);
+    uint64_t get_time();                // Get current unified time
+    CalendarTime get_calendar();       // Get calendar time (stub for now, no RTC parsing)
 
-
-    /* === Comparison === */
-    int8_t compare_to(const MCUTime &other) const;
+    /* === Printout === */
+    void show_time();
 };
 
-// Add at the bottom of the header
-extern MCUTime Time;  // Global time variable
-extern MCUTime parsed_start_time; // Parsed start time for sensing commands
-extern MCUTime SensingSchedule; // Time synchronization variable
-
+extern NodeTime Time;  // Global instance of NodeTime
 ```
 
 **time.cpp**
@@ -78,66 +74,27 @@ extern MCUTime SensingSchedule; // Time synchronization variable
 ```cpp
 #include "time.hpp"
 
-/* Definition of the operator functions in the MCUTime class */
-MCUTime::MCUTime()
+/* === Helper Functions === */
+CalendarTime calendar_from_unix_seconds(uint64_t unix_seconds)
 {
-    unix_epoch = 0;
-    unix_ms = 0;
-    estimated_unix_ms = 0;
-    estimated_unix_epoch = 0;
-    year = 1970;
-    month = 1;
-    day = 1;
-    hour = 0;
-    minute = 0;
-    second = 0;
-    ms = 0;
-    last_update_ms = 0;
-    last_update_epoch = 0;
-    mcu_time_ms = 0;
-    delta_ms = 0;
-}
+    CalendarTime cal;
+    uint64_t seconds = unix_seconds;
 
-// Helper: check leap year
-static bool is_leap_year(uint16_t year)
-{
-    return ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0);
-}
-
-// Helper: days in each month (non-leap year)
-static const uint8_t days_in_month[] = {
-    31, 28, 31, 30, 31, 30,
-    31, 31, 30, 31, 30, 31};
-
-void MCUTime::set_calendar()
-{
-    // Extract milliseconds
-    ms = unix_ms % 1000;
-
-    // Get total seconds
-    uint64_t seconds = unix_ms / 1000;
-
-    // Keep a backup in the object
-    unix_epoch = seconds;
-
-    // Calculate time-of-day
-    second = seconds % 60;
+    cal.second = seconds % 60;
     seconds /= 60;
-    minute = seconds % 60;
+    cal.minute = seconds % 60;
     seconds /= 60;
-    hour = seconds % 24;
-    seconds /= 24;
+    cal.hour = seconds % 24;
+    seconds /= 24; // Total days since epoch
 
-    // Now calculate date from days since 1970-01-01
-    uint32_t days = (uint32_t)seconds;
-    year = 1970;
-
+    int year = 1970;
     while (true)
     {
-        uint16_t days_in_year = is_leap_year(year) ? 366 : 365;
-        if (days >= days_in_year)
+        bool is_leap = (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0));
+        int days_in_year = is_leap ? 366 : 365;
+        if (seconds >= days_in_year)
         {
-            days -= days_in_year;
+            seconds -= days_in_year;
             year++;
         }
         else
@@ -145,160 +102,287 @@ void MCUTime::set_calendar()
             break;
         }
     }
+    cal.year = year;
 
-    // Now determine the month and day
-    uint8_t month_index = 0;
-    while (true)
+    static const uint8_t days_in_month[12] = {
+        31, 28, 31, 30, 31, 30,
+        31, 31, 30, 31, 30, 31};
+
+    int month = 0;
+    while (month < 12)
     {
-        uint8_t dim = days_in_month[month_index];
-        if (month_index == 1 && is_leap_year(year))
-            dim++; // February in leap year
-        if (days >= dim)
+        int dim = days_in_month[month];
+        if (month == 1 && (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)))
+            dim = 29;
+
+        if (seconds >= dim)
         {
-            days -= dim;
-            month_index++;
+            seconds -= dim;
+            month++;
         }
         else
         {
             break;
         }
     }
+    cal.month = month + 1;
+    cal.day = seconds + 1;
+    cal.ms = 0;
 
-    month = month_index + 1;
-    day = days + 1;
+    return cal;
 }
 
-void MCUTime::set_time_ms(uint64_t ms)
+CalendarTime calendar_from_unix_milliseconds(uint64_t unix_ms)
 {
-    unix_ms = ms;
-    unix_epoch = ms / 1000;
-
-    // Update calendar fields
-    set_calendar();
+    CalendarTime cal = calendar_from_unix_seconds(unix_ms / 1000);
+    cal.ms = unix_ms % 1000;
+    return cal;
 }
 
-// be very careful to use this function
-void MCUTime::set_time_epoch(uint64_t epoch)
-{
-    unix_epoch = epoch;
-    unix_ms = epoch * 1000 + (millis() % 1000); // Convert to ms, keeping current millis for ms part
-
-    // Update calendar fields
-    set_calendar();
-}
-
-uint64_t MCUTime::estimate_time_ms()
-{
-    // Calculate delta since last update
-    mcu_time_ms = millis();
-    delta_ms = mcu_time_ms - mcu_base_ms;
-    estimated_unix_ms = last_update_ms + delta_ms;
-    estimated_unix_epoch = last_update_epoch + (delta_ms / 1000);
-
-    return estimated_unix_ms;
-}
-
-uint64_t MCUTime::estimate_time_epoch()
-{
-    // Calculate delta since last update
-    mcu_time_ms = millis();
-    delta_ms = mcu_time_ms - mcu_base_ms;
-
-    estimated_unix_ms = last_update_ms + delta_ms;
-    estimated_unix_epoch = last_update_epoch + (delta_ms / 1000);
-
-    return estimated_unix_epoch;
-}
-
-uint64_t MCUTime::get_unix_ms() const
-{
-    return unix_ms;
-}
-
-uint64_t MCUTime::get_unix_epoch() const
-{
-    return unix_epoch;
-}
-
-uint64_t MCUTime::get_now_time_ms() const
-{
-    return millis();
-}
-
-uint64_t MCUTime::compute_ms_from_calendar() const
+uint64_t unix_from_calendar_seconds(const CalendarTime &cal)
 {
     uint64_t days = 0;
 
-    for (uint16_t y = 1970; y < year; y++)
+    for (int y = 1970; y < cal.year; ++y)
     {
-        days += is_leap_year(y) ? 366 : 365;
+        bool is_leap = (y % 4 == 0 && (y % 100 != 0 || y % 400 == 0));
+        days += is_leap ? 366 : 365;
     }
 
-    for (uint8_t m = 1; m < month; m++)
+    static const uint8_t days_in_month[12] = {
+        31, 28, 31, 30, 31, 30,
+        31, 31, 30, 31, 30, 31};
+
+    for (int m = 0; m < cal.month - 1; ++m)
     {
-        days += days_in_month[m - 1];
-        if (m == 2 && is_leap_year(year))
-            days++;
+        if (m == 1 && (cal.year % 4 == 0 && (cal.year % 100 != 0 || cal.year % 400 == 0)))
+            days += 29;
+        else
+            days += days_in_month[m];
     }
 
-    days += (day - 1);
+    days += (cal.day - 1);
 
-    uint64_t ret_ms = (days * 86400ULL + hour * 3600 + minute * 60 + second) * 1000;
-    ret_ms += ms;  // Include milliseconds
-
-    return ret_ms;
+    return days * 86400ULL + cal.hour * 3600 + cal.minute * 60 + cal.second;
 }
 
-
-String MCUTime::to_string() const
+uint64_t unix_from_calendar_milliseconds(const CalendarTime &cal)
 {
-    char buffer[30];
-    snprintf(buffer, sizeof(buffer), "%04u-%02u-%02u %02u:%02u:%02u.%03d",
-             year, month, day, hour, minute, second, ms);
-    return String(buffer);
+    return unix_from_calendar_seconds(cal) * 1000ULL + cal.ms;
 }
 
-void MCUTime::print() const
+// Convert YYMMDDHHMMSS string to CalendarTime structure
+CalendarTime YYMMDDHHMMSS2Calendar(const char *datetime12)
 {
-    Serial.println(to_string());
-}
+    CalendarTime ct = {0};
 
-bool MCUTime::set_from_string_YYMMDDHHMMSS(const char *datetime12)
-{
-    if (strlen(datetime12) != 12)
-        return false;
+    if (strlen(datetime12) != 12) {
+        // Return a zero-initialized CalendarTime on failure
+        return ct;
+    }
 
     char buf[3] = {0};
 
-    strncpy(buf, datetime12, 2); year   = 2000 + atoi(buf);  // YY → 20YY
-    strncpy(buf, datetime12 + 2, 2); month  = atoi(buf);
-    strncpy(buf, datetime12 + 4, 2); day    = atoi(buf);
-    strncpy(buf, datetime12 + 6, 2); hour   = atoi(buf);
-    strncpy(buf, datetime12 + 8, 2); minute = atoi(buf);
-    strncpy(buf, datetime12 + 10,2); second = atoi(buf);
+    // Extract and convert each part of the datetime string
+    strncpy(buf, datetime12, 2);
+    ct.year = 2000 + atoi(buf);  // YY → 20YY
+    strncpy(buf, datetime12 + 2, 2);
+    ct.month = atoi(buf);
+    strncpy(buf, datetime12 + 4, 2);
+    ct.day = atoi(buf);
+    strncpy(buf, datetime12 + 6, 2);
+    ct.hour = atoi(buf);
+    strncpy(buf, datetime12 + 8, 2);
+    ct.minute = atoi(buf);
+    strncpy(buf, datetime12 + 10, 2);
+    ct.second = atoi(buf);
 
-    ms = 0;
-    return true;
+    ct.ms = 0;  // Milliseconds are set to 0 as per the original function
+
+    return ct;
 }
 
-int8_t MCUTime::compare_to(const MCUTime &other) const
+/* === Major Functions === */
+NodeTime::NodeTime()
 {
-    if (unix_ms < other.unix_ms)
-        return -1; // this is earlier
-    else if (unix_ms > other.unix_ms)
-        return 1; // this is later
-    else
-        return 0; // they are equal
+    running_time = 0;
+    last_sync_running_time = 0;
+    drift_ratio = 1.0f; // Default drift ratio (no drift)
+    time_offset = 0;    // Default time offset
+    unified_time = 0;
+    calendar_time = {0, 0, 0, 0, 0, 0, 0}; // Initialize calendar time to zero
 }
 
-/* Global time variable */
-MCUTime Time;
+void NodeTime::record_sync_time()
+{
+    last_sync_running_time = millis(); // Record the current running time
+}
 
-/* Command Parsing */
-MCUTime parsed_start_time;
 
-/* Sensing Config */
-MCUTime SensingSchedule;
+
+// uint64_t NodeTime::get_time()
+// {
+//     running_time = millis(); // Get the current running time in milliseconds
+//     unified_time = static_cast<uint64_t>((drift_ratio * (running_time - last_sync_running_time)) + time_offset);
+//     return unified_time;
+// }
+
+// uint64_t NodeTime::get_time()
+// {
+//     running_time = millis();
+
+//     // Use double to preserve precision during multiplication
+//     double delta = static_cast<double>(running_time - last_sync_running_time);
+//     return static_cast<uint64_t>(delta * drift_ratio + static_cast<double>(time_offset));
+// }
+
+// uint64_t NodeTime::get_time()
+// {
+//     running_time = millis();
+
+//     // Use double to preserve precision during multiplication
+//     double delta = static_cast<double>(running_time - last_sync_running_time);
+    
+//     // Include last_sync_running_time in the return value
+//     double adjusted_time = delta * drift_ratio + static_cast<double>(time_offset);
+
+//     // Return the result as uint64_t
+//     return static_cast<uint64_t>(adjusted_time);
+// }
+
+
+uint64_t NodeTime::get_time()
+{
+    running_time = millis();
+
+    // Use double to preserve precision during multiplication
+    double delta = static_cast<double>(running_time - last_sync_running_time);
+    
+    // Include last_sync_running_time in the return value
+    double adjusted_time = static_cast<double>(last_sync_running_time) + delta * drift_ratio + static_cast<double>(time_offset);
+
+    // Return the result as uint64_t
+    return static_cast<uint64_t>(adjusted_time);
+}
+
+CalendarTime NodeTime::get_calendar()
+{
+    uint64_t current_time = get_time(); // Milliseconds since 1970-01-01 00:00:00 UTC
+    uint64_t ms_total = current_time;
+
+    calendar_time.ms = ms_total % 1000;
+    time_t seconds = ms_total / 1000;
+
+    // === Extract time ===
+    calendar_time.second = seconds % 60;
+    seconds /= 60;
+    calendar_time.minute = seconds % 60;
+    seconds /= 60;
+    calendar_time.hour = seconds % 24;
+    seconds /= 24; // Now we have total days since epoch
+
+    // === Extract date ===
+    int year = 1970;
+    while (true)
+    {
+        bool is_leap = (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0));
+        int days_in_year = is_leap ? 366 : 365;
+        if (seconds >= days_in_year)
+        {
+            seconds -= days_in_year;
+            year++;
+        }
+        else
+        {
+            break;
+        }
+    }
+    calendar_time.year = year;
+
+    static const uint8_t days_in_month[12] = {
+        31, 28, 31, 30, 31, 30,
+        31, 31, 30, 31, 30, 31};
+
+    int month = 0;
+    while (month < 12)
+    {
+        int dim = days_in_month[month];
+
+        // Adjust for leap year in February
+        if (month == 1 && (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)))
+            dim = 29;
+
+        if (seconds >= dim)
+        {
+            seconds -= dim;
+            month++;
+        }
+        else
+        {
+            break;
+        }
+    }
+    calendar_time.month = month + 1; // [1-12]
+    calendar_time.day = seconds + 1; // [1-31]
+
+    return calendar_time;
+}
+
+void NodeTime::show_time()
+{
+    // Update current times
+    running_time = millis();
+    uint64_t now = get_time();
+
+    // Use unified function for calendar conversion
+    CalendarTime cal = calendar_from_unix_milliseconds(now);
+
+    Serial.println("=== Node Time Info ===");
+
+    Serial.print("Running Time      : ");
+    Serial.print(running_time);
+    Serial.println(" ms");
+
+    Serial.print("Unified Time      : ");
+    Serial.print(now);
+    Serial.println(" ms");
+
+    Serial.print("Calendar Time     : ");
+    Serial.print(cal.year);
+    Serial.print("-");
+    if (cal.month < 10)
+        Serial.print("0");
+    Serial.print(cal.month);
+    Serial.print("-");
+    if (cal.day < 10)
+        Serial.print("0");
+    Serial.print(cal.day);
+    Serial.print(" ");
+
+    if (cal.hour < 10)
+        Serial.print("0");
+    Serial.print(cal.hour);
+    Serial.print(":");
+    if (cal.minute < 10)
+        Serial.print("0");
+    Serial.print(cal.minute);
+    Serial.print(":");
+    if (cal.second < 10)
+        Serial.print("0");
+    Serial.print(cal.second);
+    Serial.print(".");
+    if (cal.ms < 100)
+        Serial.print("0");
+    if (cal.ms < 10)
+        Serial.print("0");
+    Serial.println(cal.ms);
+
+    Serial.println("======================");
+}
+
+NodeTime Time;
+
+
 
 ```
 
@@ -320,12 +404,8 @@ Unix时间是指自1970年1月1日00:00:00 UTC以来的秒数。它是一种标�
     在实际应用中，通常会将自然记时和Unix时间进行转换，以便在需要人类可读格式时使用自然记时，而在需要高效计算时使用Unix时间。本项目中，我们不需要特别高的精度，但是为了保证功能的可靠性，我们需要使用毫秒级的时间表示。
 
 !!! tip "总结"
-    从时间的表示上我们可以看到，三中方式各有优缺点。自然记时易于人类理解，但计算机处理起来不够高效；Unix时间便于计算和比较，但不易于人类阅读；运行时间精度高，但是它是相对于系统启动时间的，对于无线传感器网络来说，通常需要与其他节点进行同步。为了满足这些需求，我们在time模块中定义了一个统一的时间结构`MCUTime`，它包含了Unix时间、自然记时和运行时间的相关字段，也包含了一些辅助函数来进行时间的转换和计算。
+    从时间的表示上我们可以看到，三中方式各有优缺点。自然记时易于人类理解，但计算机处理起来不够高效；Unix时间便于计算和比较，但不易于人类阅读；运行时间精度高，但是它是相对于系统启动时间的，对于无线传感器网络来说，通常需要与其他节点进行同步。为了满足这些需求，我们在time模块中定义了一个统一的时间结构`NodeTime`，它包含了Unix时间、自然记时和运行时间的相关字段，也包含了一些辅助函数来进行时间的转换和计算。
 
 为了方便计算，我们定义了三个个时间变量：
 
 - `Time`：全局时间变量，用于表示当前系统时间。
-
-- `parsed_start_time`：用于解析命令中的开始时间，方便在命令中指定采样的起始时间。
-
-- `SensingSchedule`：设定采样时间变量，用于记录设定的采样时间。

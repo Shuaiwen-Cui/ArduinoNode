@@ -6,10 +6,16 @@
 #define LEAFNODE        // for sensor node
 
 // #define NODE_ID 100      // GATEWAY should be 100
-// #define NODE_ID 1 // for LEAFNODE: 1, 2
-#define NODE_ID 2
+#define NODE_ID 1 // for LEAFNODE: 1, 2, 3, 4, 5, 6, 7, 8
+// #define NODE_ID 2
+// #define NODE_ID 3
+// #define NODE_ID 4
+// #define NODE_ID 5
+// #define NODE_ID 6
+// #define NODE_ID 7
+// #define NODE_ID 8
 
-#define NUM_NODES 2 // Total number of nodes in the network
+#define NUM_NODES 8 // Total number of nodes in the network
 
 /* WiFi Credentials */
 #define WIFI_SSID "Shaun's Iphone"
@@ -17,8 +23,14 @@
 
 /* MQTT Configurations */
 // #define MQTT_CLIENT_ID      "GATEWAY"
-// #define MQTT_CLIENT_ID      "LEAFNODE1"
-#define MQTT_CLIENT_ID      "LEAFNODE2"
+#define MQTT_CLIENT_ID      "LEAFNODE1"
+// #define MQTT_CLIENT_ID      "LEAFNODE2"
+// #define MQTT_CLIENT_ID      "LEAFNODE3"
+// #define MQTT_CLIENT_ID      "LEAFNODE4"
+// #define MQTT_CLIENT_ID      "LEAFNODE5"
+// #define MQTT_CLIENT_ID      "LEAFNODE6"
+// #define MQTT_CLIENT_ID      "LEAFNODE7"
+// #define MQTT_CLIENT_ID      "LEAFNODE8"
 
 #define MQTT_BROKER_ADDRESS "8.222.194.160"
 #define MQTT_BROKER_PORT    1883

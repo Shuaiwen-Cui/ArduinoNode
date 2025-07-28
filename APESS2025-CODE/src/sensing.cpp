@@ -67,25 +67,35 @@ bool sensing_prepare()
 
 void sensing_sample_once()
 {
+    // Check current time
     uint32_t now_ms = Time.get_time();
+
+    // Check if we should sample
     if (now_ms - last_sample_time >= (1000 / sensing_rate_hz))
     {
+        // if yes, update the last sample time
         last_sample_time += (1000 / sensing_rate_hz);
 
+        // Prepare the variables for reading IMU data
         int16_t ax, ay, az;
+
+        // Read acceleration data from the IMU, to be completed by students, refering to mpu6050.hpp and mpu6050.cpp
         imu_get_acceleration(ax, ay, az);
 
+        // Calculate the elapsed time since the start of sensing
         uint32_t elapsed = now_ms - t_start_ms;
 
+        // Converting raw acceleration data to g's using the scaling factor and calibration factors
         float ax_g = ax * cali_scale_x / 16384.0f;
         float ay_g = ay * cali_scale_y / 16384.0f;
         float az_g = az * cali_scale_z / 16384.0f;
 
+        // print the data to the SD card file
         char line[64];
-
         snprintf(line, sizeof(line), "%8lu,%8.6f,%8.6f,%8.6f", elapsed, ax_g, ay_g, az_g);
         data_file.println(line);
 
+        // Update the number of samples taken
         sample_count++;
     }
 }

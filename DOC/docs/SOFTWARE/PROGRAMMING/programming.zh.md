@@ -27,6 +27,9 @@
 git clone https://github.com/Shuaiwen-Cui/ArduinoNode.git
 ```
 
+!!! note
+    项目中有名为'APESS2025-CODE'的文件夹，即为本项目的代码。同名的压缩包也是本项目代码。两者内容相同。
+
 2. 直接下载本项目的代码压缩包，解压后打开。
 
 ![](github.jpg)

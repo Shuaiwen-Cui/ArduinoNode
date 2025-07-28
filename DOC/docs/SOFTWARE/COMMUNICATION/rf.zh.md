@@ -13,6 +13,7 @@
 #pragma once
 #include <Arduino.h>
 #include <RF24.h>
+#include "config.hpp"
 
 #define RF_CHANNEL 108
 #define RF_PIPE_BASE 0xF0F0F0F000LL
@@ -25,6 +26,7 @@ struct RFMessage
     uint64_t timestamp_ms; 
 };
 
+extern bool node_online[NUM_NODES + 1]; 
 
 bool rf_init();
 bool rf_send(uint8_t to_id, const RFMessage &msg, bool require_ack = false);
@@ -36,6 +38,8 @@ void rf_start_listening();
 void rf_set_rx_address(uint8_t id);
 String rf_format_address(uint16_t node_id);
 
+void rf_check_node_status();  // Gateway and Leaf share this
+// void rf_sync_log_number();    // Gateway only
 
 ```
 
@@ -43,10 +47,12 @@ String rf_format_address(uint16_t node_id);
 
 ```cpp
 #include "rf.hpp"
-#include "config.hpp"
 #include <SPI.h>
+#include "logging.hpp"
 
 RF24 radio(9, 8);
+
+bool node_online[NUM_NODES + 1] = {false}; // Default all to offline
 
 String rf_format_address(uint16_t node_id)
 {
@@ -137,6 +143,100 @@ bool rf_send_then_receive(const RFMessage &msg, uint8_t to_id, unsigned long tim
     return false;
 }
 
+void rf_check_node_status()
+{
+#ifdef GATEWAY
+    delay(2000); // Allow time for radio to stabilize
+    load_log_number();
+    Serial.println("[RF] Checking node status and syncing LOG_NUMBER...");
+
+    const unsigned long timeout_ms = 200;
+
+    for (uint8_t node_id = 1; node_id <= NUM_NODES; ++node_id)
+    {
+        if (node_id == NODE_ID)
+            continue;
+
+        // Prepare LOG message
+        RFMessage msg;
+        msg.from_id = NODE_ID;
+        msg.to_id = node_id;
+        snprintf(msg.payload, sizeof(msg.payload), "LOG %d", log_number);
+        msg.timestamp_ms = millis();
+
+        rf_stop_listening();
+        rf_send(node_id, msg, false);
+        rf_start_listening();
+
+        Serial.print("[GATEWAY] Sent LOG_NUMBER ");
+        Serial.print(log_number);
+        Serial.print(" to Node ");
+        Serial.println(node_id);
+
+        // Wait for PONG reply with confirmation
+        bool online = false;
+        RFMessage reply;
+        if (rf_receive(reply, timeout_ms) &&
+            reply.to_id == NODE_ID &&
+            reply.from_id == node_id &&
+            strncmp(reply.payload, "PONG", 4) == 0)
+        {
+            int confirmed_log = 0;
+            sscanf(reply.payload, "PONG %d", &confirmed_log);
+            Serial.print("  - Node ");
+            Serial.print(node_id);
+            Serial.print(" is ONLINE. Confirmed LOG_NUMBER = ");
+            Serial.println(confirmed_log);
+            online = true;
+        }
+        else
+        {
+            Serial.print("  - Node ");
+            Serial.print(node_id);
+            Serial.println(" is OFFLINE or unresponsive.");
+        }
+
+        node_online[node_id] = online;
+    }
+
+#endif
+
+#ifdef LEAFNODE
+    Serial.println("[LEAFNODE] Waiting for LOG_NUMBER from GATEWAY...");
+
+    while (true)
+    {
+        RFMessage msg;
+        if (rf_receive(msg, 100))
+        {
+            if (strncmp(msg.payload, "LOG", 3) == 0 && msg.to_id == NODE_ID)
+            {
+                int received_log = 0;
+                sscanf(msg.payload, "LOG %d", &received_log);
+                log_number = received_log;
+                save_log_number();
+
+                Serial.print("[LEAFNODE] Received and saved LOG_NUMBER = ");
+                Serial.println(log_number);
+
+                // Respond with PONG and confirmed log number
+                RFMessage reply;
+                reply.from_id = NODE_ID;
+                reply.to_id = msg.from_id;
+                snprintf(reply.payload, sizeof(reply.payload), "PONG %d", log_number);
+                reply.timestamp_ms = millis();
+
+                rf_stop_listening();
+                rf_send(msg.from_id, reply, false);
+                rf_start_listening();
+
+                Serial.println("[LEAFNODE] PONG with LOG_NUMBER sent.");
+                break; // Exit after one successful exchange
+            }
+        }
+    }
+#endif
+}
 
 ```
 

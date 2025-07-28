@@ -12,47 +12,34 @@ The related codes are shown below:
 #include "config.hpp"
 #include "nodestate.hpp"
 
+#define SYNC_ROUNDS 7
+#define SYNC_INTERVAL_1 20000
+#define SYNC_INTERVAL_N 2000
+#define TIME_SYNC_RESERVED_TIME 60000 // means reserve at least 60 seconds for time sync when issuing a sensing command
+
 /*
  * Time synchronization header
  * 
  * Provides:
  * - NTP synchronization function
- * - RF-based online check and RTT estimation
- * - Stores RF latency (RTT/2) and online status for each node
+ * - RF time synchronization function by drift ratio and offset
  */
 
-/* === RF Time Synchronization Configuration === */
-#define RF_PING_PAYLOAD "PING"
-#define RF_PONG_PAYLOAD "PONG"
-#define RF_TIME_SYNC_HEADER "TSYNC"
-#define RF_TIME_ACK_HEADER "TACK"
-#define RF_RESPONSE_WAIT_MS      300   // 300 ms wait per reply
-#define RF_RETRY_PER_CYCLE         5   // Retry 5 times per send
-
-extern int32_t node_rf_latency[NUM_NODES + 1];
-extern bool node_online[NUM_NODES + 1];
-
 bool sync_time_ntp();
-bool sync_check_rf_online();
 bool rf_time_sync();
 ```
 
 **time.cpp**
 
 ```cpp
-#include "timesync.hpp"
-#include "config.hpp"
-#include "time.hpp"
-#include "rf.hpp"
 #include <WiFiUdp.h>
 #include <NTPClient.h>
+#include "time.hpp"
+#include "timesync.hpp"
+#include "rf.hpp"
 
 WiFiUDP ntpUDP;
-// NTPClient timeClient(ntpUDP, "pool.ntp.org", 28800, 60000);
 NTPClient timeClient(ntpUDP, "asia.pool.ntp.org", 28800, 60000);
-
-int32_t node_rf_latency[NUM_NODES + 1] = {0};
-bool node_online[NUM_NODES + 1] = {false};
 
 bool sync_time_ntp()
 {
@@ -82,22 +69,18 @@ bool sync_time_ntp()
             continue;
         }
 
-        // === Valid time received, set local time ===
-        uint16_t current_millis = millis();
+        // === Valid time received ===
+        uint64_t now_millis = millis();
+        uint64_t epoch_ms = epoch * 1000ULL + now_millis % 1000ULL;
 
-        Time.set_time_epoch(epoch);
-        Time.last_update_epoch = epoch;
-        Time.last_update_ms = current_millis % 1000 + (epoch * 1000); // Convert to ms, keeping current millis
-        Time.mcu_base_ms = current_millis;
-        Time.mcu_time_ms = current_millis;
-        Time.delta_ms = 0;
-        Serial.print("[COMMUNICATION] <NTP> Calendar time set to: ");
-        Time.print(); // Print the time to Serial for debugging
+        Time.last_sync_running_time = now_millis;
+        Time.time_offset = epoch_ms - now_millis;
 
         Serial.print("[COMMUNICATION] <NTP> Synchronized UNIX epoch: ");
         Serial.println(epoch);
-        Serial.print("[COMMUNICATION] <NTP> Current time: ");
-        Time.print();
+
+        Serial.println("[COMMUNICATION] <NTP> Local time (Calendar): ");
+        Time.show_time(); // Print calendar and unified time
 
         success = true;
         break;
@@ -111,290 +94,175 @@ bool sync_time_ntp()
     return success;
 }
 
-bool sync_check_rf_online()
-{
-#ifdef GATEWAY
-    Serial.println("[COMMUNICATION] <SYNC> Master checking nodes...");
-
-    for (uint8_t id = 1; id <= NUM_NODES; ++id)
-    {
-        bool success = false;
-        uint32_t rtt = 0;
-
-        for (uint8_t attempt = 0; attempt < 3; ++attempt)
-        {
-            // Construct PING message
-            RFMessage msg;
-            msg.from_id = NODE_ID;
-            msg.to_id = id;
-            strncpy(msg.payload, RF_PING_PAYLOAD, sizeof(msg.payload) - 1);
-            msg.payload[sizeof(msg.payload) - 1] = '\0';
-
-            // Stop listening before sending
-            rf_stop_listening();
-            bool sent = rf_send(id, msg, false); // No ACK requested
-            rf_start_listening();
-
-            // If send failed, retry
-            if (!sent)
-            {
-                Serial.print(" - Node ");
-                Serial.print(id);
-                Serial.println(": SEND FAILED");
-                delay(100);
-                continue;
-            }
-
-            // Record send timestamp immediately after successful transmission
-            uint32_t t_send = millis();
-            Serial.print(" - PING to Node ");
-            Serial.print(id);
-            Serial.print(": sent at ");
-            Serial.print(t_send);
-            Serial.println(" ms");
-
-            // Attempt to receive response within timeout
-            RFMessage response;
-            bool received = rf_receive(response, RF_RESPONSE_WAIT_MS);
-
-            // Record receive timestamp after receive attempt
-            uint32_t t_recv = millis();
-            Serial.print(" - PING to Node ");
-            Serial.print(id);
-            Serial.print(": received at ");
-            Serial.print(t_recv);
-            Serial.println(" ms");
-
-            // Validate response: correct sender, receiver, and payload prefix
-            if (received &&
-                response.from_id == id &&
-                response.to_id == NODE_ID &&
-                strncmp(response.payload, RF_PONG_PAYLOAD, 4) == 0)
-            {
-                rtt = t_recv - t_send;
-                success = true;
-                break;
-            }
-
-            delay(100); // Cooldown between attempts
-        }
-
-        if (success)
-        {
-            node_online[id] = true;
-            node_rf_latency[id] = rtt / 2;
-
-            Serial.print(" - Node ");
-            Serial.print(id);
-            Serial.print(": ONLINE | RTT = ");
-            Serial.print(rtt);
-            Serial.print(" ms | latency ≈ ");
-            Serial.print(node_rf_latency[id]);
-            Serial.println(" ms");
-        }
-        else
-        {
-            node_online[id] = false;
-
-            Serial.print(" - Node ");
-            Serial.print(id);
-            Serial.println(": OFFLINE");
-        }
-
-        delay(200); // Prevent RF congestion
-    }
-
-    // Determine if any node was successfully contacted
-    bool any_online = false;
-    for (uint8_t id = 1; id <= NUM_NODES; ++id)
-    {
-        if (node_online[id])
-        {
-            any_online = true;
-            break;
-        }
-    }
-
-    // Compute the average latency across online nodes, and assign it to the offline nodes
-    int32_t total_latency = 0;
-    int32_t online_count = 0;
-    float average_latency = 0.0f;
-    for (uint8_t id = 1; id <= NUM_NODES; ++id)
-    {
-        if (node_online[id])
-        {
-            total_latency += node_rf_latency[id];
-            online_count++;
-        }
-    }
-
-    if (online_count > 0)
-    {
-        average_latency = static_cast<float>(total_latency) / online_count;
-    }
-    else
-    {
-        average_latency = 0.0f; // No nodes online, set to 0
-    }
-
-    // Assign average latency to offline nodes
-    for (uint8_t id = 1; id <= NUM_NODES; ++id)
-    {
-        if (!node_online[id])
-        {
-            node_rf_latency[id] = static_cast<int32_t>(average_latency);
-        }
-    }
-
-    // Update status flag
-    return any_online;
-
-#else // LEAF NODE
-    Serial.println("[COMMUNICATION] <SYNC> Leaf waiting for PING...");
-
-    while (true)
-    {
-        RFMessage msg;
-        bool received = rf_receive(msg, 500);
-
-        if (!received)
-            continue;
-
-        // Ensure message is intended for this node and is a valid PING
-        if (msg.to_id != NODE_ID || strncmp(msg.payload, RF_PING_PAYLOAD, 4) != 0)
-            continue;
-
-        Serial.print("[COMMUNICATION] <SYNC> Received PING from Node ");
-        Serial.println(msg.from_id);
-
-        // Construct and send PONG response
-        RFMessage response;
-        response.from_id = NODE_ID;
-        response.to_id = msg.from_id;
-        strncpy(response.payload, RF_PONG_PAYLOAD, sizeof(response.payload) - 1);
-        response.payload[sizeof(response.payload) - 1] = '\0';
-
-        rf_stop_listening();
-        rf_send(msg.from_id, response, false); // No ACK
-        rf_start_listening();
-
-        Serial.println("[COMMUNICATION] <SYNC> PONG sent. Leaf sync complete.");
-        break;
-    }
-
-    return true;
-#endif
-}
-
 bool rf_time_sync()
 {
 #ifdef GATEWAY
-    Serial.println("[COMMUNICATION] <SYNC> Starting time sync broadcast to all nodes...");
+    Serial.println("[SYNC] Start time synchronization as GATEWAY");
 
-    for (uint8_t id = 1; id <= NUM_NODES; ++id)
-    {
-
-        RFMessage msg;
-        msg.from_id = NODE_ID;
-        msg.to_id = id;
-        uint64_t adjusted_time = Time.estimate_time_ms() + node_rf_latency[id];
-        uint32_t high = adjusted_time >> 32;
-        uint32_t low = adjusted_time & 0xFFFFFFFF;
-        snprintf(msg.payload, sizeof(msg.payload), "%s %lu %lu", RF_TIME_SYNC_HEADER, high, low);
-
-        Serial.print("[COMMUNICATION] <SYNC> Sending time to Node ");
-        Serial.print(id);
-        Serial.print(": ");
-        Serial.println(msg.payload);
-
-        rf_stop_listening();
-        bool sent = rf_send(id, msg, false);
-        rf_start_listening();
-
-        if (!sent)
+    for (uint8_t round = 0; round < SYNC_ROUNDS; ++round)
+    {   
+        for (uint8_t node_id = 1; node_id <= NUM_NODES; ++node_id)
         {
-            Serial.print("[COMMUNICATION] <SYNC> Failed to send to Node ");
-            Serial.println(id);
-            continue;
+            if (node_id == NODE_ID)
+                continue;
+
+            RFMessage msg;
+            msg.from_id = NODE_ID;
+            msg.to_id = node_id;
+
+            uint64_t current_time = Time.get_time();
+
+            uint32_t high = current_time >> 32;
+            uint32_t low = current_time & 0xFFFFFFFF;
+            snprintf(msg.payload, sizeof(msg.payload), "SYNC %lu %lu", high, low);
+            msg.timestamp_ms = current_time;
+
+            rf_stop_listening();
+            rf_send(node_id, msg, false);
+            rf_start_listening();
+
+            Serial.print("[SYNC][GATEWAY] Round ");
+            Serial.print(round + 1);
+            Serial.print(" → Node ");
+            Serial.print(node_id);
+            Serial.print(" | Time = ");
+            Serial.println(current_time);
         }
 
-        RFMessage ack;
-        bool received = rf_receive(ack, RF_RESPONSE_WAIT_MS);
-
-        if (received &&
-            ack.from_id == id &&
-            ack.to_id == NODE_ID &&
-            strncmp(ack.payload, RF_TIME_ACK_HEADER, strlen(RF_TIME_ACK_HEADER)) == 0)
-        {
-            Serial.print("[COMMUNICATION] <SYNC> Node ");
-            Serial.print(id);
-            Serial.println(" ACK received.");
-        }
-        else
-        {
-            Serial.print("[COMMUNICATION] <SYNC> No ACK from Node ");
-            Serial.println(id);
-        }
-
-        delay(100); // avoid RF congestion
+        if (round == 0)
+            delay(SYNC_INTERVAL_1);
+        else if (round < SYNC_ROUNDS - 1)
+            delay(SYNC_INTERVAL_N);
     }
 
-    node_status.node_flags.time_rf_synced = true;
+    Serial.println("[SYNC] GATEWAY time synchronization complete.");
     return true;
+#endif
 
-#else // LEAF NODE
-    Serial.println("[COMMUNICATION] <SYNC> Leaf waiting for TIME_SYNC...");
+#ifdef LEAFNODE
+    Serial.println("[SYNC] Start time synchronization as LEAFNODE");
 
-    uint64_t adjusted_time = 0;
+    // === Step 1: Initialize arrays for each round ===
+    uint64_t gateway_time[SYNC_ROUNDS] = {0};
+    uint64_t local_time[SYNC_ROUNDS] = {0};
+    int64_t time_diff[SYNC_ROUNDS] = {0};
+    uint8_t received = 0;
 
-    while (true)
+    // === Step 2: Receive SYNC messages ===
+    while (received < SYNC_ROUNDS)
     {
         RFMessage msg;
-        bool received = rf_receive(msg, 1000);
-
-        if (!received)
-            continue;
-
-        if (msg.to_id != NODE_ID || strncmp(msg.payload, RF_TIME_SYNC_HEADER, strlen(RF_TIME_SYNC_HEADER)) != 0)
-            continue;
-
-        Serial.print("[SYNC] Received payload: ");
-        Serial.println(msg.payload);
-
-        uint32_t high = 0, low = 0;
-        int parsed = sscanf(msg.payload + strlen(RF_TIME_SYNC_HEADER) + 1, "%lu %lu", &high, &low);
-        if (parsed != 2)
+        if (rf_receive(msg, 100))
         {
-            Serial.println("[SYNC] Failed to parse adjusted_time from payload.");
-            continue;
+            if (strncmp(msg.payload, "SYNC", 4) == 0 && msg.to_id == NODE_ID)
+            {
+                uint32_t high = 0, low = 0;
+                sscanf(msg.payload, "SYNC %lu %lu", &high, &low);
+                uint64_t gw_time = ((uint64_t)high << 32) | low;
+                uint64_t local = millis();
+
+                gateway_time[received] = gw_time;
+                local_time[received] = local;
+                time_diff[received] = static_cast<int64_t>(gw_time - local);
+
+                // === Output the results for each round (except for the final round) ===
+                if (received < SYNC_ROUNDS - 1)
+                {
+                    Serial.print("[SYNC][LEAF] Round ");
+                    Serial.print(received + 1);
+                    Serial.print(" → Gateway Time: ");
+                    Serial.print(gw_time);
+                    Serial.print(" ms, Local Time: ");
+                    Serial.print(local);
+                    Serial.print(" ms, Time Diff: ");
+                    Serial.println(time_diff[received]);
+                }
+
+                received++;
+            }
         }
-        uint64_t adjusted_time = ((uint64_t)high << 32) | low;
-
-        Time.set_time_ms(adjusted_time);
-        Time.last_update_ms = adjusted_time;
-        Time.last_update_epoch = adjusted_time / 1000;
-        Time.mcu_base_ms = millis();
-        node_status.node_flags.time_rf_synced = true;
-
-        Serial.print("[SYNC] Local time updated to ");
-        Time.print();
-
-        RFMessage ack;
-        ack.from_id = NODE_ID;
-        ack.to_id = msg.from_id;
-        snprintf(ack.payload, sizeof(ack.payload), "%s", RF_TIME_ACK_HEADER);
-
-        rf_stop_listening();
-        rf_send(msg.from_id, ack, false);
-        rf_start_listening();
-
-        Serial.println("[COMMUNICATION] <SYNC> Time sync ACK sent.");
-        break;
     }
+
+    // === Step 3: Calculate drift_ratio ===
+    double drift_sum = 0.0;
+    double drift_max = -1e9;
+    double drift_min = 1e9;
+    uint8_t drift_count = 0;
+
+    for (uint8_t i = 1; i < SYNC_ROUNDS; ++i)
+    {
+        int64_t delta_t = static_cast<int64_t>(local_time[i] - local_time[0]);
+        int64_t delta_T = static_cast<int64_t>(gateway_time[i] - gateway_time[0]);
+
+        if (delta_t <= 0) continue;  // prevent division by zero or negative time
+
+        // Calculate drift_ratio directly within the loop
+        double drift_i = (static_cast<double>(delta_T - delta_t)) / delta_t;
+        drift_sum += drift_i;
+        drift_count++;
+
+        if (drift_i > drift_max) drift_max = drift_i;
+        if (drift_i < drift_min) drift_min = drift_i;
+
+        // Debug prints for drift calculation
+        Serial.print("[SYNC][LEAF] Drift ");
+        Serial.print(i);
+        Serial.print(" = ");
+        Serial.println(drift_i, 8);  // Show drift value to 8 decimal places
+    }
+
+    double drift_cleaned_sum = drift_sum - drift_max - drift_min;
+    double drift_avg = drift_cleaned_sum / (drift_count - 2);
+
+    // === Step 4: Calculate offset using average of time_diff after removing max and min ===
+    int64_t max_diff = time_diff[0];
+    int64_t min_diff = time_diff[0];
+    int64_t offset_sum = 0;
+
+    for (uint8_t i = 0; i < SYNC_ROUNDS; ++i)
+    {
+        if (time_diff[i] > max_diff) max_diff = time_diff[i];
+        if (time_diff[i] < min_diff) min_diff = time_diff[i];
+        offset_sum += time_diff[i];
+    }
+
+    // Calculate offset average after removing max and min values
+    int64_t offset_cleaned_sum = offset_sum - max_diff - min_diff;
+    int64_t offset_avg = offset_cleaned_sum / (SYNC_ROUNDS - 2);
+
+    // === Step 5: Update drift_ratio and time_offset ===
+    Time.drift_ratio = 1.0 + drift_avg;
+    Time.time_offset = offset_avg;  // Directly use offset_avg for time_offset
+
+    // === Step 6: Record sync time and summary ===
+    Time.record_sync_time();  // Record synchronization time after updating offset
+
+    // === Output the final round result ===
+    Serial.print("[SYNC][LEAF] Final Round ");
+    Serial.print(SYNC_ROUNDS);
+    Serial.print(" → Gateway Time: ");
+    Serial.print(gateway_time[SYNC_ROUNDS - 1]);
+    Serial.print(" ms, Local Time: ");
+    Serial.print(local_time[SYNC_ROUNDS - 1]);
+    Serial.print(" ms, Time Diff: ");
+    Serial.println(time_diff[SYNC_ROUNDS - 1]);
+
+    // Debug prints for final result
+    Serial.println("=== Time Sync Result ===");
+    Serial.print("Drift Ratio       : ");
+    Serial.println(Time.drift_ratio, 8);  // Show drift ratio to 8 decimal places
+    Serial.print("Time Offset       : ");
+    Serial.println(Time.time_offset);
+
+    Serial.print("Last Sync @       : ");
+    Serial.println(Time.last_sync_running_time);
+    Serial.println("========================");
 
     return true;
 #endif
+
 }
+
 
 ```
 In this project, time synchronization is divided into two categories:  
@@ -427,75 +295,43 @@ This function is called at device startup or when re-synchronization is needed. 
 
 ---
 
-## 2. Local Device Synchronization – Based on RTT and RF Communication
 
-Because NTP precision is limited and requires network connectivity, we implement a high-precision local synchronization mechanism using RF (radio frequency) communication. The idea is:
+## 2. Local Device Time Synchronization – FTSP (Flooding Time Synchronization Protocol)
 
-- One node (gateway) acts as the time reference
-- Other nodes (leaf nodes) synchronize their clocks through communication with the gateway
-- The process uses RTT (Round Trip Time) to estimate delay
+This project implements a flooding-based time synchronization protocol (FTSP), where the gateway node periodically broadcasts its current time to all leaf nodes. Each leaf node receives the messages and calculates timing offset and clock drift to align its local time accordingly.
 
-The synchronization process includes two steps:
+The core steps of FTSP are as follows:
 
----
+1. **Gateway node broadcasts time information**:  
+   In each synchronization round, the gateway sends a 64-bit timestamp representing its current time to all leaf nodes.
 
-### 1. Checking Node Online Status and RTT Calculation
+2. **Leaf node receives the time message**:  
+   Upon reception, the leaf node continues the following steps.
 
-The gateway sends a `PING` message to each leaf node. Each leaf node responds immediately with a `PONG`. The gateway records:
+3. **Record local receive time**:  
+   The leaf node records the timestamp of message arrival using its local `millis()` clock.
 
-- `t_send`: time when PING was sent
-- `t_recv`: time when PONG was received
+4. **Compute time offset**:  
+   The time difference between the gateway's timestamp and the local receive time is calculated as a candidate offset.
 
-The round-trip time (RTT) is:
+5. **Estimate clock drift**:  
+   Across multiple synchronization rounds, the leaf node estimates the drift ratio between the gateway and its own clock. This drift ratio reflects the rate difference between the two clocks.
 
-\[
-RTT = t_{recv} - t_{send}
-\]
+6. **Update local time model**:  
+   Based on the calculated drift ratio and time offset, the node adjusts its internal time model to maintain synchronization.
 
-Then the RF latency (one-way delay) is estimated as:
-
-\[
-Latency = RTT / 2
-\]
-
-The gateway maintains two arrays:
-
-- `node_rf_latency[]`: stores estimated RF delay for each node
-- `node_online[]`: records whether each node is online (responding)
-
-For nodes that do not respond, the average latency of the responding nodes is assigned as a fallback.
-
----
-
-### 2. Synchronizing Time Based on RTT and Reference Time
-
-After calculating delays, the gateway sends a `TIME_SYNC` message to each leaf node. The message includes:
-
-- The current time of the gateway
-- The calculated RF latency for that node
-
-Upon receiving the message, each leaf node:
-
-1. Extracts the reference time and delay from the message
-2. Computes the adjusted local time as (reference time + delay)
-3. Overwrites its local time with the adjusted value
-4. Sends an `ACK` message back, including the new time for confirmation
-
-This completes synchronization, and the node's time is now aligned with the gateway's time with millisecond-level accuracy.
+7. **Record last sync time**:  
+   The last synchronization timestamp is stored to support accurate continuous time estimation.
 
 ---
 
 ## Summary
 
-| Synchronization Type | Description | Pros | Cons |
-|----------------------|-------------|------|------|
-| NTP Sync             | Uses internet to get UTC time | Universal, no local reference required | Limited precision (seconds), network dependent |
-| RF Local Sync        | Uses RF communication + RTT calculation | High precision (milliseconds), network independent | Requires communication logic and node coordination |
-
-To balance precision and practicality, this project first uses NTP for initial time setup, followed by RF-based synchronization for high-precision alignment among nodes.
+To balance precision and practicality, the system is designed to first initialize the time using NTP and then maintain accurate synchronization between devices using RF-based FTSP.
 
 !!! tip "Note"
-    In practical applications, NTP synchronization is typically used for initial time setting when devices start up, while RF synchronization is used to maintain consistent time across devices. This ensures that the system can maintain high time precision even when the network is unstable or offline.
+    In practical deployments, NTP is typically used for initial time setup during device boot-up.  
+    RF-based synchronization ensures continued time consistency between nodes even in offline or unstable network conditions, achieving higher accuracy and robustness.
 
 
 ## Serial Printout Example

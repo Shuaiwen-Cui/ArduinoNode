@@ -18,12 +18,11 @@ typedef struct {
     int16_t az;
 } SamplePoint;
 
-bool sensing_start();                       // Called once at the beginning of SAMPLING state
+bool sensing_prepare();                     // Called once at the beginning of PREPARING state
 void sensing_sample_once();                 // Called repeatedly during SAMPLING state
 void sensing_stop();                        // Called once at the end of SAMPLING state
 
 void sensing_retrieve_file();               // Retrieve file from SD card
-
 
 ```
 
@@ -40,18 +39,20 @@ void sensing_retrieve_file();               // Retrieve file from SD card
 #include "mqtt.hpp"
 #include "sdcard.hpp"
 #include "logging.hpp"
+#include "wifi.hpp"
 
 static File data_file;
 static uint32_t last_sample_time = 0;
 static uint32_t t_start_ms = 0;
 static uint32_t sample_count = 0;
 static char filename[32];
+static char printbuffer[64];
 
-bool sensing_start()
+bool sensing_prepare()
 {
-    t_start_ms = millis();
-    last_sample_time = t_start_ms;
     sample_count = 0;
+    t_start_ms = sensing_scheduled_start_ms;
+    last_sample_time = t_start_ms;
 
     load_log_number(); // Load current log number from persistent storage
     snprintf(filename, sizeof(filename), "N%03d_%03d.txt", NODE_ID, log_number + 1);
@@ -71,16 +72,25 @@ bool sensing_start()
     data_file.print("Node ID: ");
     data_file.println(NODE_ID);
 #endif
+
+    // === Convert scheduled start time ===
+    CalendarTime cal = calendar_from_unix_milliseconds(sensing_scheduled_start_ms);
+    snprintf(printbuffer, sizeof(printbuffer), "%04d-%02d-%02d %02d:%02d:%02d.%03d",
+             cal.year, cal.month, cal.day, cal.hour, cal.minute, cal.second, cal.ms);
+
     data_file.print("Start Time: ");
-    data_file.println(SensingSchedule.to_string());
+    data_file.println(printbuffer);
+
     data_file.print("Sampling Rate: ");
     data_file.print(sensing_rate_hz);
     data_file.println(" Hz");
+
     data_file.print("Duration: ");
     data_file.print(sensing_duration_s);
     data_file.println(" s");
+
     data_file.println("================= Sampling Data =================");
-    data_file.println("time_ms,ax,ay,az");
+    data_file.println("time_ms  , ax      , ay      , az");
 
     Serial.println("[SENSING] Sensing started (streaming mode).");
     return true;
@@ -88,7 +98,7 @@ bool sensing_start()
 
 void sensing_sample_once()
 {
-    uint32_t now_ms = millis();
+    uint32_t now_ms = Time.get_time();
     if (now_ms - last_sample_time >= (1000 / sensing_rate_hz))
     {
         last_sample_time += (1000 / sensing_rate_hz);
@@ -98,13 +108,13 @@ void sensing_sample_once()
 
         uint32_t elapsed = now_ms - t_start_ms;
 
-        float ax_g = ax / 16384.0f;
-        float ay_g = ay / 16384.0f;
-        float az_g = az / 16384.0f;
+        float ax_g = ax * cali_scale_x / 16384.0f;
+        float ay_g = ay * cali_scale_y / 16384.0f;
+        float az_g = az * cali_scale_z / 16384.0f;
 
         char line[64];
 
-        snprintf(line, sizeof(line), "%8lu,%.6f,%.6f,%.6f", elapsed, ax_g, ay_g, az_g);
+        snprintf(line, sizeof(line), "%8lu,%8.6f,%8.6f,%8.6f", elapsed, ax_g, ay_g, az_g);
         data_file.println(line);
 
         sample_count++;
@@ -145,12 +155,19 @@ void sensing_stop()
     }
 #endif
 
-    if (mqtt_client.connected())
+#ifdef GATEWAY // this part will make the led switch on the gateway node slightly slower than the leafnodes, don't worry about it
+    // Check WiFi connection, reconnect if disconnected
+    if (WiFi.status() != WL_CONNECTED)
     {
-        // Publish the file name to MQTT broker
-        String msg = "Node" + String(NODE_ID) + " completed sensing. File: " + String(filename);
-        mqtt_client.publish(MQTT_TOPIC_PUB, msg.c_str());
+        Serial.println("[MQTT] WiFi disconnected. Reconnecting...");
+        connect_to_wifi(); // Reconnect to WiFi
     }
+
+    mqtt_loop(); // Keep MQTT connection alive
+    // Publish the file name to MQTT broker
+    String msg = "Sensing completed!";
+    mqtt_client.publish(MQTT_TOPIC_PUB, msg.c_str());
+#endif
 
     sample_count = 0;
 }
@@ -224,14 +241,13 @@ void sensing_retrieve_file()
 }
 
 
-
 ```
 
 如上面代码所示，采样过程分为几个阶段：
 
 1. 采样开始时间和结束时间：这一部分是在MQTT命令回调时就已经完成。
 
-2. calling `sensing_start()`：在采样状态开始时调用，打开SD卡文件并写入采样元数据。在这个函数中调用了一个`load_log_number()`函数来加载当前日志编号，并在文件名中使用它。文件名格式为`N001_001.txt`，其中`N001`是节点ID，`001`是日志编号。在SD卡中有个文件记录了当前日志编号，采样完成后会自动增加。
+2. calling `sensing_prepare()`：在采样状态预备状态时调用，打开SD卡文件并写入采样元数据。在这个函数中调用了一个`load_log_number()`函数来加载当前日志编号，并在文件名中使用它。文件名格式为`N001_001.txt`，其中`N001`是节点ID，`001`是日志编号。在SD卡中有个文件记录了当前日志编号，采样完成后会自动增加。
 
 3. calling `sensing_sample_once()`：在采样状态中重复调用，读取传感器数据并写入SD卡文件。每次采样都会检查是否达到了设定的采样频率（`sensing_rate_hz`），如果达到了，就读取传感器数据并写入文件。在主程序的loop中，当当前时间减去上次采样时间大于等于`1000 / sensing_rate_hz`时，就进行一次采样。采样数据包括时间戳和加速度传感器的三个轴向数据（ax, ay, az），并将其写入SD卡文件。
 

@@ -23,6 +23,8 @@ If you already have a project, you can open the project folder in the PlatformIO
 ```bash
 git clone https://github.com/Shuaiwen-Cui/ArduinoNode.git
 ```
+!!! note
+    The project contains a folder named 'APESS2025-CODE', which is the code for this project. A compressed file with the same name also contains the same code. Both have identical content.  
 
 1. Download the project code as a compressed file from GitHub, then unzip it and open the folder.
 
