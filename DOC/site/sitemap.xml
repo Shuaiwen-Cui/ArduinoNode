@@ -8,13 +8,6 @@
         <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/"/>
     </url>
     <url>
-        <loc>https://localhost:8000/APESS2025/apess2025/</loc>
-        <lastmod>2025-09-11</lastmod>
-        <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/APESS2025/apess2025/"/>
-        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/APESS2025/apess2025/"/>
-    </url>
-    <url>
         <loc>https://localhost:8000/DATASHEET/datasheet/</loc>
         <lastmod>2025-09-11</lastmod>
         <changefreq>daily</changefreq>
@@ -125,6 +118,13 @@
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/HARDWARE/TOUCH-SENSOR/touchsensor/"/>
         <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/HARDWARE/TOUCH-SENSOR/touchsensor/"/>
+    </url>
+    <url>
+        <loc>https://localhost:8000/MANUAL/manual/</loc>
+        <lastmod>2025-09-11</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/MANUAL/manual/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/MANUAL/manual/"/>
     </url>
     <url>
         <loc>https://localhost:8000/SOFTWARE/software/</loc>
@@ -260,13 +260,6 @@
         <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/"/>
     </url>
     <url>
-        <loc>https://localhost:8000/zh/APESS2025/apess2025/</loc>
-        <lastmod>2025-09-11</lastmod>
-        <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/APESS2025/apess2025/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/APESS2025/apess2025/"/>
-    </url>
-    <url>
         <loc>https://localhost:8000/zh/DATASHEET/datasheet/</loc>
         <lastmod>2025-09-11</lastmod>
         <changefreq>daily</changefreq>
@@ -377,6 +370,13 @@
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/HARDWARE/TOUCH-SENSOR/touchsensor/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/HARDWARE/TOUCH-SENSOR/touchsensor/"/>
+    </url>
+    <url>
+        <loc>https://localhost:8000/zh/MANUAL/manual/</loc>
+        <lastmod>2025-09-11</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/MANUAL/manual/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/MANUAL/manual/"/>
     </url>
     <url>
         <loc>https://localhost:8000/zh/SOFTWARE/software/</loc>
