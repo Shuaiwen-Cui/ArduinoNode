@@ -152,6 +152,9 @@ plugins:
             LAB TEST: 实验室测试
             FIELD TEST 1: 户外实验 1
             FIELD TEST 2: 户外实验 2
+            MANUAL: 使用手册
+            ASSEMBLY: 硬件组装
+            DEPLOYMENT: 部署与测试
 
 # # Hooks
 # hooks:
@@ -320,7 +323,12 @@ nav:
       - LAB TEST: "DEMO/lab-test.md"
       - FIELD TEST 1: "DEMO/field-test1.md"
       - FIELD TEST 2: "DEMO/field-test2.md"
-    
+  - MANUAL: 
+      - "MANUAL/manual.md"
+      - ASSEMBLY: "MANUAL/ASSEMBLY/assembly.md"
+      - PROGRAMMING: "MANUAL/PROGRAMMING/programming.md"
+      - DEPLOYMENT: "MANUAL/DEPLOYMENT/deployment.md"
+
 # if there are sub nodes under a node, then there should not be a link right after the node. All the stuff should be placed under the node.
 
 # example

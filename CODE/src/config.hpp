@@ -12,10 +12,8 @@
 // #define NODE_ID 4
 // #define NODE_ID 5
 // #define NODE_ID 6
-// #define NODE_ID 7
-// #define NODE_ID 8
 
-#define NUM_NODES 8 // Total number of nodes in the network
+#define NUM_NODES 6 // Total number of nodes in the network
 
 /* WiFi Credentials */
 #define WIFI_SSID "Shaun's Iphone"
@@ -29,8 +27,6 @@
 // #define MQTT_CLIENT_ID      "LEAFNODE4"
 // #define MQTT_CLIENT_ID      "LEAFNODE5"
 // #define MQTT_CLIENT_ID      "LEAFNODE6"
-// #define MQTT_CLIENT_ID      "LEAFNODE7"
-// #define MQTT_CLIENT_ID      "LEAFNODE8"
 
 #define MQTT_BROKER_ADDRESS "8.222.194.160"
 #define MQTT_BROKER_PORT    1883
