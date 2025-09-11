@@ -134,11 +134,11 @@
         <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/MANUAL/ASSEMBLY/assembly/"/>
     </url>
     <url>
-        <loc>https://localhost:8000/MANUAL/DEPLOYMENT/deployment/</loc>
+        <loc>https://localhost:8000/MANUAL/OPERATION/operation/</loc>
         <lastmod>2025-09-11</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/MANUAL/DEPLOYMENT/deployment/"/>
-        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/MANUAL/DEPLOYMENT/deployment/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/MANUAL/OPERATION/operation/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/MANUAL/OPERATION/operation/"/>
     </url>
     <url>
         <loc>https://localhost:8000/MANUAL/PROGRAMMING/programming/</loc>
@@ -407,11 +407,11 @@
         <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/MANUAL/ASSEMBLY/assembly/"/>
     </url>
     <url>
-        <loc>https://localhost:8000/zh/MANUAL/DEPLOYMENT/deployment/</loc>
+        <loc>https://localhost:8000/zh/MANUAL/OPERATION/operation/</loc>
         <lastmod>2025-09-11</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/MANUAL/DEPLOYMENT/deployment/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/MANUAL/DEPLOYMENT/deployment/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://localhost:8000/zh/MANUAL/OPERATION/operation/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://localhost:8000/MANUAL/OPERATION/operation/"/>
     </url>
     <url>
         <loc>https://localhost:8000/zh/MANUAL/PROGRAMMING/programming/</loc>
