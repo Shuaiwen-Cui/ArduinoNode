@@ -37,26 +37,20 @@
 
 ### 1.4 下载项目代码
 
-以下两种方式二选一即可：
-
 <div class="grid cards" markdown>
-
--   :material-file:{ .lg .middle } __Google Drive__
-
-    ---
-
-    [:octicons-arrow-right-24: <a href="https://drive.google.com/file/d/1GV5ttSBR1FWHn3wxK_Axs-CiQGayG9vq/view?usp=sharing" target="_blank"> 下载链接 </a>](#)
 
 -   :material-file:{ .lg .middle } __GitHub__
 
     ---
 
-    [:octicons-arrow-right-24: <a href="https://github.com/Shuaiwen-Cui/APESS2025_ArduinoNode/blob/main/APESS2025-CODE.zip" target="_blank"> 下载链接 </a>](#)
+    [:octicons-arrow-right-24: <a href="https://github.com/Shuaiwen-Cui/ArduinoNode/blob/main/CODE.zip" target="_blank"> 下载链接 </a>](#)
 
 </div>
 
-下载后，将文件解压到您选择的目录中。
+!!! tip
+    直接点击下载按钮即可下载项目代码压缩包。
 
+下载后，将文件解压到您选择的目录中。
 
 ## 2 编程
 
@@ -68,9 +62,10 @@
 
 (3) 选择解压后的项目文件夹打开
 
-### 2.2 TASK 1 - 修改配置文件
 
-这里需要将`src/config.hpp`文件中的以下内容修改为你对应小组的信息。打开`src/config.hpp`文件，找到以下代码段：
+### 2.2 修改配置
+
+这里需要将`src/config.hpp`文件中的以下内容修改为所需对应信息。打开`src/config.hpp`文件，找到以下代码段：
 
 ```cpp
 #pragma once
@@ -81,16 +76,14 @@
 #define LEAFNODE        // for sensor node
 
 // #define NODE_ID 100      // GATEWAY should be 100
-#define NODE_ID 1 // for LEAFNODE: 1, 2, 3, 4, 5, 6, 7, 8
+#define NODE_ID 1 // for LEAFNODE: 1, 2, 3, 4, 5, 6,
 // #define NODE_ID 2
 // #define NODE_ID 3
 // #define NODE_ID 4
 // #define NODE_ID 5
 // #define NODE_ID 6
-// #define NODE_ID 7
-// #define NODE_ID 8
 
-#define NUM_NODES 8 // Total number of nodes in the network
+#define NUM_NODES 6 // Total number of nodes in the network
 
 /* WiFi Credentials */
 #define WIFI_SSID "Shaun's Iphone"
@@ -104,8 +97,6 @@
 // #define MQTT_CLIENT_ID      "LEAFNODE4"
 // #define MQTT_CLIENT_ID      "LEAFNODE5"
 // #define MQTT_CLIENT_ID      "LEAFNODE6"
-// #define MQTT_CLIENT_ID      "LEAFNODE7"
-// #define MQTT_CLIENT_ID      "LEAFNODE8"
 
 #define MQTT_BROKER_ADDRESS "8.222.194.160"
 #define MQTT_BROKER_PORT    1883
@@ -134,60 +125,33 @@ extern float cali_scale_z; // Calibration scale for Z-axis
 void print_node_config();
 ```
 
-请修改两个地方：
+接下来需要依次修改配置文件然后给每个节点烧录，需要先修改以下几处：
 
-1. NODE_ID：将其设置为您的小组编号（1-8），比如您所在的是小组5，则将对应的NODE_ID取消注释，而其他小组的NODE_ID注释掉。
+对于主节点（GATEWAY）：
 
-2. MQTT_CLIENT_ID：将其设置为您的小组编号（1-8），比如您所在的是小组5，则将对应的MQTT_CLIENT_ID取消注释，而其他小组的MQTT_CLIENT_ID注释掉。
+- 请讲`#define GATEWAY`取消注释，并将`#define LEAFNODE`注释掉。
+
+- 将`NODE_ID`设置为100，其他的`NODE_ID`注释掉。
+
+- 将`MQTT_CLIENT_ID`设置为`GATEWAY`，其他的`MQTT_CLIENT_ID`注释掉。
 
 
-### 2.3 TASK 2 - 补全传感部分代码
+对于传感节点（LEAFNODE）：
 
-在`src/sensing.cpp`文件中，您需要补全传感器数据采集的代码。打开该文件，找到以下注释部分：
+- 请将`#define LEAFNODE`取消注释，并将`#define GATEWAY`注释掉。
 
-```cpp
+- 将`NODE_ID`设置为1-6中的一个数字，其他的`NODE_ID`注释掉。
 
-void sensing_sample_once()
-{
-    // Check current time
-    uint32_t now_ms = Time.get_time();
+- 将`MQTT_CLIENT_ID`设置为`LEAFNODE1`-`LEAFNODE6`中的一个，其他的`MQTT_CLIENT_ID`注释掉。
 
-    // Check if we should sample
-    if (now_ms - last_sample_time >= (1000 / sensing_rate_hz))
-    {
-        // if yes, update the last sample time
-        last_sample_time += (1000 / sensing_rate_hz);
+总节点数：
 
-        // Prepare the variables for reading IMU data
-        int16_t ax, ay, az;
+- 请将`NUM_NODES`设置为网络中的总节点数，例如6。
 
-        // <Read acceleration data from the IMU, to be completed by students, refering to mpu6050.hpp and mpu6050.cpp>
-        
 
-        // Calculate the elapsed time since the start of sensing
-        uint32_t elapsed = now_ms - t_start_ms;
+### 2.3 编译和上传代码
 
-        // Converting raw acceleration data to g's using the scaling factor and calibration factors
-        float ax_g = ax * cali_scale_x / 16384.0f;
-        float ay_g = ay * cali_scale_y / 16384.0f;
-        float az_g = az * cali_scale_z / 16384.0f;
-
-        // print the data to the SD card file
-        char line[64];
-        snprintf(line, sizeof(line), "%8lu,%8.6f,%8.6f,%8.6f", elapsed, ax_g, ay_g, az_g);
-        data_file.println(line);
-
-        // Update the number of samples taken
-        sample_count++;
-    }
-}
-```
-
-在显示注释`<Read acceleration data from the IMU, to be completed by students, refering to mpu6050.hpp and mpu6050.cpp>`的地方，您需要调用IMU库中的函数来读取加速度数据。具体的函数可以参考`mpu6050.hpp`和`mpu6050.cpp`文件。该函数是进行传感的关键函数，可以帮助你更好地理解传感器数据的获取过程。
-
-### 2.4 编译和上传代码
-
-请先确保代码已经完成，可以与老师或者技术支持进行确认。然后按照以下步骤编译和上传代码：
+按照以下步骤编译和上传代码：
 
 ![](icons.jpg)
 
@@ -195,7 +159,7 @@ void sensing_sample_once()
 2. 在VSCode底部Platformio的操作图标中，选择“编译”按钮进行代码编译。
 3. 编译完成后，选择“上传”按钮将代码上传到开发板。
 
-### 2.5 查看串口输出
+### 2.4 查看串口输出
 
 您可以通过Platformio自带的串口监视器查看开发板的输出。点击底部的“串口监视器”按钮，选择正确的串口号（通常是COM3或类似名称），设定波特率为115200，然后点击“连接”按钮进行查看。
 

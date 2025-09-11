@@ -154,7 +154,7 @@ plugins:
             FIELD TEST 2: 户外实验 2
             MANUAL: 使用手册
             ASSEMBLY: 硬件组装
-            DEPLOYMENT: 部署与测试
+            OPERATION: 操作指南
 
 # # Hooks
 # hooks:
@@ -327,7 +327,7 @@ nav:
       - "MANUAL/manual.md"
       - ASSEMBLY: "MANUAL/ASSEMBLY/assembly.md"
       - PROGRAMMING: "MANUAL/PROGRAMMING/programming.md"
-      - DEPLOYMENT: "MANUAL/DEPLOYMENT/deployment.md"
+      - OPERATION: "MANUAL/OPERATION/operation.md"
 
 # if there are sub nodes under a node, then there should not be a link right after the node. All the stuff should be placed under the node.
 

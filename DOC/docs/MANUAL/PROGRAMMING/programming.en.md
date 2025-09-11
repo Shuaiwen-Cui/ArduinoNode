@@ -36,23 +36,18 @@
 
 ### 1.4 Download Project Code
 
-Choose one of the following two options:
-
 <div class="grid cards" markdown>
-
--   :material-file:{ .lg .middle } __Google Drive__
-
-    ---
-
-    [:octicons-arrow-right-24: <a href="https://drive.google.com/file/d/1GV5ttSBR1FWHn3wxK_Axs-CiQGayG9vq/view?usp=sharing" target="_blank"> Download Link </a>](#)
 
 -   :material-file:{ .lg .middle } __GitHub__
 
     ---
 
-    [:octicons-arrow-right-24: <a href="https://github.com/Shuaiwen-Cui/APESS2025_ArduinoNode/blob/main/APESS2025-CODE.zip" target="_blank"> Download Link </a>](#)
+    [:octicons-arrow-right-24: <a href="https://github.com/Shuaiwen-Cui/ArduinoNode/blob/main/CODE.zip" target="_blank"> Download Link </a>](#)
 
 </div>
+
+!!! tip
+    Simply click the download button to download the project code zip file.
 
 After downloading, extract the files to your chosen directory.
 
@@ -66,9 +61,9 @@ After downloading, extract the files to your chosen directory.
 
 (3) You should see the project structure in the Explorer panel.
 
-### 2.2 TASK 1 - Modify Configuration File
+### 2.2 Modify Configuration
 
-Open the `src/config.h` file in the project directory. You will see a section like this:
+You need to modify the `src/config.hpp` file to set the appropriate information for your node. Open the `src/config.hpp` file and locate the following code segment:
 
 
 ```cpp
@@ -80,16 +75,14 @@ Open the `src/config.h` file in the project directory. You will see a section li
 #define LEAFNODE        // for sensor node
 
 // #define NODE_ID 100      // GATEWAY should be 100
-#define NODE_ID 1 // for LEAFNODE: 1, 2, 3, 4, 5, 6, 7, 8
+#define NODE_ID 1 // for LEAFNODE: 1, 2, 3, 4, 5, 6,
 // #define NODE_ID 2
 // #define NODE_ID 3
 // #define NODE_ID 4
 // #define NODE_ID 5
 // #define NODE_ID 6
-// #define NODE_ID 7
-// #define NODE_ID 8
 
-#define NUM_NODES 8 // Total number of nodes in the network
+#define NUM_NODES 6 // Total number of nodes in the network
 
 /* WiFi Credentials */
 #define WIFI_SSID "Shaun's Iphone"
@@ -103,8 +96,6 @@ Open the `src/config.h` file in the project directory. You will see a section li
 // #define MQTT_CLIENT_ID      "LEAFNODE4"
 // #define MQTT_CLIENT_ID      "LEAFNODE5"
 // #define MQTT_CLIENT_ID      "LEAFNODE6"
-// #define MQTT_CLIENT_ID      "LEAFNODE7"
-// #define MQTT_CLIENT_ID      "LEAFNODE8"
 
 #define MQTT_BROKER_ADDRESS "8.222.194.160"
 #define MQTT_BROKER_PORT    1883
@@ -132,57 +123,32 @@ extern float cali_scale_z; // Calibration scale for Z-axis
 // === Function Declaration ===
 void print_node_config();
 ```
-You need to modify two parts:
 
-1. `NODE_ID`: Set it to your group number (1-8). For example, if you are in group 5, uncomment the corresponding `NODE_ID` line and comment out the others.
+Now you need to modify the configuration file for each node before uploading the code. Make the following changes:
 
-2. `MQTT_CLIENT_ID`: Set it to your group number (1-8). For example, if you are in group 5, uncomment the corresponding `MQTT_CLIENT_ID` line and comment out the others.
+For the main node (GATEWAY):
 
-### 2.3 TASK 2 - Complete the Sensing Code
-In the `src/sensing.cpp` file, you need to complete the code for sensor data acquisition. Open the file and find the following commented section:
+- Uncomment `#define GATEWAY` and comment out `#define LEAFNODE`.
 
-```cpp
+- Set `NODE_ID` to 100 and comment out other `NODE_ID`s.
 
-void sensing_sample_once()
-{
-    // Check current time
-    uint32_t now_ms = Time.get_time();
+- Set `MQTT_CLIENT_ID` to `GATEWAY` and comment out other `MQTT_CLIENT_ID`s.
 
-    // Check if we should sample
-    if (now_ms - last_sample_time >= (1000 / sensing_rate_hz))
-    {
-        // if yes, update the last sample time
-        last_sample_time += (1000 / sensing_rate_hz);
+For the sensor nodes (LEAFNODE):
 
-        // Prepare the variables for reading IMU data
-        int16_t ax, ay, az;
+- Uncomment `#define LEAFNODE` and comment out `#define GATEWAY`.
 
-        // <Read acceleration data from the IMU, to be completed by students, refering to mpu6050.hpp and mpu6050.cpp>
+- Set `NODE_ID` to one of the numbers from 1 to 6, and comment out other `NODE_ID`s.
 
-        // Calculate the elapsed time since the start of sensing
-        uint32_t elapsed = now_ms - t_start_ms;
+- Set `MQTT_CLIENT_ID` to one of `LEAFNODE1` to `LEAFNODE6`, and comment out other `MQTT_CLIENT_ID`s.
 
-        // Converting raw acceleration data to g's using the scaling factor and calibration factors
-        float ax_g = ax * cali_scale_x / 16384.0f;
-        float ay_g = ay * cali_scale_y / 16384.0f;
-        float az_g = az * cali_scale_z / 16384.0f;
+Total Number of Nodes:
 
-        // print the data to the SD card file
-        char line[64];
-        snprintf(line, sizeof(line), "%8lu,%8.6f,%8.6f,%8.6f", elapsed, ax_g, ay_g, az_g);
-        data_file.println(line);
+- Set `NUM_NODES` to the total number of nodes in the network, e.g., 6.
 
-        // Update the number of samples taken
-        sample_count++;
-    }
-}
-```
+### 2.3 Compile and Upload Code
 
-In the section marked `<Read acceleration data from the IMU, to be completed by students, refering to mpu6050.hpp and mpu6050.cpp>`, you need to call the functions in the IMU library to read the acceleration data. The specific functions can be found in the `mpu6050.hpp` and `mpu6050.cpp` files. This function is key to sensing and can help you better understand the process of acquiring sensor data.
-
-### 2.4 Compile and Upload Code
-
-Make sure that the code is complete and verified, and consult your instructor or technical support if needed. Then follow the steps below to compile and upload the code:
+Follow the steps below to compile and upload the code:
 
 ![](icons.jpg)
 
@@ -190,7 +156,7 @@ Make sure that the code is complete and verified, and consult your instructor or
 2. In the PlatformIO toolbar at the bottom of VSCode, click the "Build" button to compile the code.
 3. Once the compilation is complete, click the "Upload" button to upload the code to the development board.
 
-### 2.5 View Serial Output
+### 2.4 View Serial Output
 
 You can use PlatformIO’s built-in serial monitor to view the output from the development board. Click the "Serial Monitor" button at the bottom, select the correct COM port (usually COM3 or a similar name), set the baud rate to 115200, and then click "Connect" to view the output.
 
