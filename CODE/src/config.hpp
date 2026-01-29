@@ -28,7 +28,7 @@
 // #define MQTT_CLIENT_ID      "LEAFNODE5"
 // #define MQTT_CLIENT_ID      "LEAFNODE6"
 
-#define MQTT_BROKER_ADDRESS "8.222.194.160"
+#define MQTT_BROKER_ADDRESS "8.141.92.6"
 #define MQTT_BROKER_PORT    1883
 #define MQTT_USERNAME       "ArduinoNode"
 #define MQTT_PASSWORD       "Arduino123"

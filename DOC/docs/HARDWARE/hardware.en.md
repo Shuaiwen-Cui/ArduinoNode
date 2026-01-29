@@ -2,19 +2,25 @@
 
 ![](node.jpg)
 
+!!! tip "Note"
+    To fully implement the wireless sensor network functionality, you may need to purchase multiple sets of the following components to build a network of multiple nodes.
+
 Item List:
 
-| Component | Description |
-| --------- | ----------- |
-| Arduino UNO R4 WiFi | Main controller for the node, providing processing power and connectivity. |
-| Sensor Shield | A shield that connects to the Arduino for easy sensor integration. |
-| MPU6050 | An acceleration sensor that measures motion and orientation. |
-| SD Module & Card | Used for data storage, allowing the node to log sensor data. |
-| RGB LED | Provides visual feedback, indicating the status of the node. |
-| NRF24L01 Module & Antenna | Enables local wireless communication between nodes. |
-| BMS & Battery | Provides power to the entire node, making it portable. |
-| Enclosure | Protects internal electronic components and provides a pretty appearance. |
+| Component | Description | Purchase Link |
+| --------- | ----------- | -------- |
+| Arduino UNO R4 WiFi | Main controller for the node, providing processing power and connectivity. | [Link](https://detail.tmall.com/item.htm?abbucket=6&id=738941670744&pisk=g7qjqWtAbvcrLDAunsBrOXpRDVn_15sEDdMTKRK2BmnA1hw4Onut_-o1C7cz0jyqDfi_KWNqgV84V0HKdIHtBxdJwAhz_hy4fzx_KRqVncWmm-miX65FYcw0ncf85cH4c3H-p8K9MxQr212xuQfFYMy5kxmae6r2Ry1idv-tXq3te4hoQFdY6qhJ2bDiBIntMTw-ZbHvXnLxe4HKHxdY6nhJexkKHFKxXQH-KbhtXcFTeb_pFAQji-6bpuBIghs0nbt9XuMRiXefChk7qxGiO-EXXhBihqGLHb1nFCDsRS3_j9t7NlGs7X0Dp6m8KzPxFDs62mgQkSM8E1tIMyy3smrRBEhLuSo-0uCpffz3gugumtIbemG4nmuR2h30pj3g84OykW3Q8y37jMx0h2coVYqNZnh_yPEqocAAGceSBgJpYXNGwF9S-hMSTT6WSFX-nBcboT_W3qHohwW5FIUikYDSYT6WSwgxEx6FFTOA5&rn=09b2554a86723433ab02f6a727718a70&skuId=5100439501404&spm=a1z10.5-b.w4011-25295428345.28.53af5d8c2bipmy) |
+| Sensor Shield | A shield that connects to the Arduino for easy sensor integration. | [Link](https://detail.tmall.com/item.htm?abbucket=6&id=663358716903&pisk=gSEiq3GF3UvffHPJ6Wo1PT7ND-QKCdijOSKxMmhV8XlIXPLOCjz3FWXsDSeqiSVKOlBsMOO0i-2i7Akq7D-ECYJw0fy2nxPKbqatMfhmm-Nlp_IR2Rwscq5RwgnjxJCqVFl20IHeLxmmQlqGbiyscm5Dpn7RqRNPWXPo3xkFKxHv0APq_XlEOxD2QSlZ8Bkjhml4gSuETxMj3Fl2bB8EOYL2bfkwLBkxedlq_SyFKxGEgbZ2bbr4Ak5htVmzcY4uxA0iaJbB0nfnQQhuQ1tD0k4nSb--tn-4xA2dpUhkYilzPWzU7zvwvqnIt8MgGgtsbq4asvocmHog1Rrq-oCpsvaasku0vt_sdPy3m4ZfhFhTRS0uj2vfTviar5lLgKx8GcDSkrmcApGaPyFaYm9JRcU8eogzbGAS94M0ZYVMsgzy8U-J3nMFHk8XlVkIKb3i-vA2pFmSd9XHPmgZdACRK9YXhVkIK7WhKUNj7vMt7&rn=3f9c2948bd3255c25dbbba65f1bf9b72&spm=a1z10.5-b.w4011-25295428345.45.7ca8289cLqsyZo) |
+| MPU6050 | An acceleration sensor that measures motion and orientation. | [Link](https://detail.tmall.com/item.htm?abbucket=2&id=668984438017&ns=1&pisk=gYcEF64oStC1lWgqfjVPgsxrl0VLL7-XTbZ7r40uRkq3A44uacmWJkgkv0lzj4HBJ8tdzwhZ0_1Bvp3la7NkcnOXG23Qw7xb7YvSKMU0ogA7xkqg9zwpfFs6G23L2wSklAAf4LtI3gXuq0VgIzzYZyVu-VYazzsuZk2ljO40j7qoqzbgjz4Px9quqFWguybhququjN48zMVuZ00M7zEg-biir25alJYlsWrsUO8Ypo03b_fVWzwHxVX5w_ea-Jlo8lus5fzULoy9uN_oaquoO5kVqp046jwSsVOP6WgqI54EqIx3sqDZlJle06Z-5Dh4tj-FOPwrvjyithCz5Y0sN72Gz_uscDe4o0JfpVV_k-DbpM54NXuiOPnPo9gLEAGLHXtGTSDxRWMojC5Emglf2PjRYbHFqTy3WPrX7FuAH_audye0YTB8ICUaceaCeTe3BPrX7NBReRxT7oTBi&priceTId=213e367917381891117768651eb7a9&skuId=4988894103512&spm=a21n57.1.item.3.22d0340dlB9gUA&utparam=%7B%22aplus_abtest%22%3A%220c383a5842c5f2f93401778954fef342%22%7D&xxc=taobaoSearch) |
+| SD Module & Card | Used for data storage, allowing the node to log sensor data. | [Link](https://e.tb.cn/h.hLS57vJVErA9VzJ?tk=TVbk4TGT5v9) |
+| RGB LED | Provides visual feedback, indicating the status of the node. | [Link](https://e.tb.cn/h.hLS1rt3BEDluwEL?tk=jOa94TGcqsR) |
+| NRF24L01 Module & Antenna | Enables local wireless communication between nodes. |[Link](https://detail.tmall.com/item.htm?abbucket=6&id=745189429142&pisk=gCQxbx9jIDAXfaL3orZksBOSv2PuKNC2wt5ISdvmfTBRh9hcmKf61NBGFFx_3EbOeO6tSibDoha6etgMmNCZWC11QSJggufVgF8_KJYT-s5q15em-ZnjP01yOjO_qnwumOp3KJ43WoGWW-ehnDLCn0OpOFOXfdT7wCdXGFtXc3NJ1CDXCK61N7py_Ig6CFiWNBAjcFgXC4TWgI361mtXN39y1F91CFG4c-p-Gd0OvjLnPfZPpVg1yIK7xs95COFMGndAMLeQdaUeDp1XeVwEYk-9hB_QEmRpDOK5r1cnS3ffYORChxwv5_ddpBBYjfJAV6bDagytXpI1iMS14R3phMfFYhQ0K0fWlKKeLglTwFBPAHQy7filghOd3E_bExL9yB-GXt2r5KjdNTKhrY0HP6sJygWf-wd9CvvpsmN8wcowcQrvI9WjkqpMKQp3MEnZb3PywpV82cowc_dJKSpxbc-yW&rn=c31858320f9edd93063daaeb5c4b4258&spm=a1z10.5-b.w4011-25295428345.41.17026fa0qlqs4G) |
+| BMS & Battery | Provides power to the entire node, making it portable. | [Link](https://e.tb.cn/h.7qz72UaRefNhfTZ?tk=zKuiU7YtwBU) / 18650 batteries and charger need to be purchased separately |
+| Enclosure | Protects internal electronic components and provides a pretty appearance. | Needs to be designed and 3D printed by yourself |
+| Dupont Wires | Used to connect various electronic components. | Please purchase them accordingly through online or offline channels. |
 
 !!! note
 
     These components together form a fully functional IoT wireless sensor node capable of collecting data, storing information, and communicating wirelessly. Each component plays a crucial role in ensuring the efficient operation and reliability of the node.
+!!! tip
+    For the main controller Arduino UNO R4 WiFi, if the budget allows, you can choose to buy a kit that includes many expansion accessories to enrich the node's functionality. [Kit Link](https://item.taobao.com/item.htm?app=chrome&bxsign=scdBdL4-k1hrJADVg6dG2p10ioVhuXtw9XqGAW9jpvPCTIwpiUzUGSut082ntFvs0CyRhCePP4BHi_F9P3_UK4x07L7DsKVkZPaL9hTYGnaKAySrCXOf5OGPrQfkp4lgMyN&cpp=1&id=800925975219&price=275&shareUniqueId=30525938447&share_crt_v=1&shareurl=true&short_name=h.TIsOodvDqRMIwFc&skuId=5625115542252&sourceType=item&sp_tk=THNqZWVpeldidWw%3D&spm=a2159r.13376460.0.0&suid=D9BAD155-F807-4829-A85F-DB2424DA196E&tbSocialPopKey=shareItem&tk=LsjeeizWbul&un=da9398d2eb10733dd327b29a79c3809c&un_site=0&ut_sk=1.YQ%2BEdxFco9wDAEpcPBtvBZKC_21380790_1739955800795.Copy.1&wxsign=tbwb3RXzC6WBqJHA-32SinGTM42xYf8Xrto66pioW1P546a5RQsWaRnjEsX_HL2He3PyPu-pYdjqjOC8YjFO7PoA7gbAzaId4XY6YvIyKbNXqaLQqUKfOBmOXGvhUqvKjyE)

@@ -65,6 +65,8 @@ After downloading, extract the files to your chosen directory.
 
 You need to modify the `src/config.hpp` file to set the appropriate information for your node. Open the `src/config.hpp` file and locate the following code segment:
 
+!!！warning
+    The following information such as WiFi credentials should be modified according to your actual situation to ensure network connectivity. Additionally, the MQTT broker address and port can be changed to other available servers, and topics can be modified as needed, but ensure consistency between the gateway and leaf nodes.
 
 ```cpp
 #pragma once
@@ -97,7 +99,7 @@ You need to modify the `src/config.hpp` file to set the appropriate information 
 // #define MQTT_CLIENT_ID      "LEAFNODE5"
 // #define MQTT_CLIENT_ID      "LEAFNODE6"
 
-#define MQTT_BROKER_ADDRESS "8.222.194.160"
+#define MQTT_BROKER_ADDRESS "8.141.92.6"
 #define MQTT_BROKER_PORT    1883
 #define MQTT_USERNAME       "ArduinoNode"
 #define MQTT_PASSWORD       "Arduino123"

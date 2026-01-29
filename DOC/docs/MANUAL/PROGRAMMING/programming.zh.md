@@ -67,6 +67,9 @@
 
 这里需要将`src/config.hpp`文件中的以下内容修改为所需对应信息。打开`src/config.hpp`文件，找到以下代码段：
 
+!!！warning
+    以下信息比如wifi账号密码等请根据实际情况修改，以免无法连接网络。另外MQTT服务器也可以填写其他可用的服务器地址和端口号，topic等信息也可以根据需要修改，但需要确保主节点和传感节点配置一致。
+
 ```cpp
 #pragma once
 #include <Arduino.h>
@@ -98,7 +101,7 @@
 // #define MQTT_CLIENT_ID      "LEAFNODE5"
 // #define MQTT_CLIENT_ID      "LEAFNODE6"
 
-#define MQTT_BROKER_ADDRESS "8.222.194.160"
+#define MQTT_BROKER_ADDRESS "8.141.92.6"
 #define MQTT_BROKER_PORT    1883
 #define MQTT_USERNAME       "ArduinoNode"
 #define MQTT_PASSWORD       "Arduino123"
