@@ -1,0 +1,90 @@
+[
+ {
+  "i": 0,
+  "name": "MPU6050 frame short-side rail",
+  "visible": true,
+  "solid": true,
+  "vol_mm3": 40736.4,
+  "min_mm": [
+   -75.6,
+   -33.6,
+   -34.0
+  ],
+  "max_mm": [
+   75.6,
+   33.6,
+   -0.1
+  ],
+  "exported": "E:\\PROJ\\ArduinoNode\\Enclosure\\export\\00_MPU6050_frame_short-side_rail.stl"
+ },
+ {
+  "i": 1,
+  "name": "110x60x3 mm mounting plate with standoffs",
+  "visible": true,
+  "solid": true,
+  "vol_mm3": 15462.6,
+  "min_mm": [
+   -55.0,
+   -30.0,
+   -5.0
+  ],
+  "max_mm": [
+   55.0,
+   30.0,
+   8.0
+  ],
+  "exported": "E:\\PROJ\\ArduinoNode\\Enclosure\\export\\01_110x60x3_mm_mounting_plate_with_standoffs.stl"
+ },
+ {
+  "i": 2,
+  "name": "Arduino placeholder board",
+  "visible": true,
+  "solid": true,
+  "vol_mm3": 145035.5,
+  "min_mm": [
+   -21.29,
+   -26.67,
+   8.0
+  ],
+  "max_mm": [
+   47.29,
+   26.67,
+   48.0
+  ]
+ },
+ {
+  "i": 3,
+  "name": "BMS placeholder board",
+  "visible": true,
+  "solid": true,
+  "vol_mm3": 72598.2,
+  "min_mm": [
+   -19.58,
+   -28.11,
+   -25.0
+  ],
+  "max_mm": [
+   45.58,
+   28.11,
+   -5.0
+  ]
+ },
+ {
+  "i": 4,
+  "name": "shell cover",
+  "visible": true,
+  "solid": true,
+  "vol_mm3": 109498.1,
+  "min_mm": [
+   -58.6,
+   -33.6,
+   -30.0
+  ],
+  "max_mm": [
+   58.6,
+   33.6,
+   55.0
+  ],
+  "exported": "E:\\PROJ\\ArduinoNode\\Enclosure\\export\\04_shell_cover.stl"
+ }
+]
