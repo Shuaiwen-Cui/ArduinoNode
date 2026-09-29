@@ -1,0 +1,253 @@
+ArduinoNode MQTT Command Manual
+================================
+
+用途
+----
+这个手册用于在 MQTT 客户端里给 ArduinoNode 网关发送命令。
+命令不是 JSON, 直接发送纯文本字符串即可。
+
+
+1. MQTT 连接参数
+----------------
+Broker Address : 8.222.194.160
+Broker Port    : 1883
+Username       : ArduinoNode
+Password       : Arduino123
+
+发送命令 Topic:
+  ArduinoNode/server
+
+接收设备反馈 Topic:
+  ArduinoNode/node
+
+建议用法:
+  1) MQTT 客户端连接到 Broker。
+  2) 订阅 ArduinoNode/node, 用来看网关/节点反馈。
+  3) 向 ArduinoNode/server 发布命令。
+  4) Payload 直接填命令字符串, 不要加 JSON 外壳。
+
+
+2. 命令总规则
+-------------
+1) Payload 是纯文本, 例如:
+     CMD_SN
+
+2) 命令大小写敏感, 必须按手册里的大写格式写。
+
+3) 采样频率单位写 Hz, 持续时间单位写 s。
+
+4) 定时采样命令需要预留至少 60 秒做时间同步。
+   如果开始时间太近或已经过去, 命令会被拒绝。
+
+5) 网关收到 MQTT 采样命令后, 会通过 RF 转发给叶子节点。
+   叶子节点实际收到的 RF 命令会被转换成内部格式:
+     S_YYMMDDHHMMSS_<RATE>_<DURATION>
+   平时 MQTT 客户端不需要手动发送这个 S_ 开头的内部命令。
+
+6) 数据文件获取功能代码里有实现, 但现有网页说明提示该功能有限,
+   更稳妥的方法仍然是直接从每个节点的 SD 卡取数据。
+
+
+3. 常用命令速查
+---------------
+
+3.1 默认采样
+
+命令:
+  CMD_SN
+
+作用:
+  使用默认参数安排一次采样。
+
+当前默认参数:
+  采样频率: 200 Hz
+  采样时长: 300 s
+
+开始时间:
+  当前网关时间向下取整到秒后, 再加 60 秒预留时间。
+
+示例 payload:
+  CMD_SN
+
+设备反馈:
+  成功时会向 ArduinoNode/node 发布:
+    CMD_SN: Sensing scheduled using default parameters.
+
+
+3.2 延迟采样: 从现在开始延迟 N 秒后采样
+
+命令格式:
+  CMD_SFN_<delay>_<frequency>Hz_<duration>s
+
+参数:
+  <delay>     : 延迟多少秒后开始采样, 必须 >= 60
+  <frequency> : 采样频率, 整数, 单位 Hz
+  <duration>  : 采样持续时间, 整数, 单位 s
+
+示例:
+  CMD_SFN_120_100Hz_300s
+
+含义:
+  120 秒后开始采样, 采样频率 100 Hz, 持续 300 秒。
+
+更多示例:
+  CMD_SFN_60_200Hz_300s
+  CMD_SFN_180_50Hz_120s
+  CMD_SFN_300_100Hz_600s
+
+错误情况:
+  如果 delay 小于 60 秒, 会被拒绝。
+  如果格式不对, 会被拒绝。
+
+可能的 MQTT 反馈:
+  CMD_SFN: Sensing successfully scheduled.
+  CMD_SFN ignored: delay too short for time sync.
+  CMD_SFN ignored: invalid format.
+
+
+3.3 指定绝对时间采样
+
+命令格式:
+  CMD_SENSING_YYYY-MM-DD_HH:MM:SS_<frequency>Hz_<duration>s
+
+参数:
+  YYYY-MM-DD  : 年-月-日
+  HH:MM:SS    : 时:分:秒
+  <frequency> : 采样频率, 整数, 单位 Hz
+  <duration>  : 采样持续时间, 整数, 单位 s
+
+示例:
+  CMD_SENSING_2026-09-28_14:30:00_100Hz_300s
+
+含义:
+  在 2026-09-28 14:30:00 开始采样, 采样频率 100 Hz, 持续 300 秒。
+
+注意:
+  1) 这个时间必须晚于当前网关时间。
+  2) 这个时间还必须至少比当前时间晚 60 秒。
+  3) 代码按网关当前时间系统解析, 请先确保时间同步正常。
+
+错误情况:
+  开始时间已经过去:
+    Sensing command ignored: start time is in the past!
+
+  开始时间距离当前不足 60 秒:
+    Sensing command ignored: not enough time for time synchronization!
+
+
+3.4 NTP 时间同步
+
+命令:
+  CMD_NTP
+
+作用:
+  请求时间同步。代码会设置 gateway_ntp_required 和 leafnode_ntp_required 标志,
+  并把网关切到 WIFI_COMMUNICATING 状态处理同步。
+
+示例 payload:
+  CMD_NTP
+
+
+3.5 RF 时间同步
+
+命令:
+  CMD_RF_SYNC
+
+作用:
+  请求网关通过 RF 给叶子节点做时间同步。
+
+示例 payload:
+  CMD_RF_SYNC
+
+
+3.6 获取数据文件
+
+命令格式:
+  CMD_RETRIEVAL_<filename>
+
+参数:
+  <filename> : 文件名, 不要带 .txt 扩展名
+
+示例:
+  CMD_RETRIEVAL_20260928_143000
+
+代码实际读取的文件路径:
+  /20260928_143000.txt
+
+注意:
+  当前项目文档提示数据获取功能有限, 实际使用时建议优先从 SD 卡读取。
+
+
+3.7 重启命令
+
+重启网关和所有叶子节点:
+  CMD_REBOOT
+
+只重启网关:
+  CMD_GATEWAY_REBOOT
+
+只重启叶子节点:
+  CMD_LEAFNODE_REBOOT
+
+说明:
+  CMD_REBOOT 会同时设置网关重启标志和叶子节点重启标志。
+  网关会通过 RF 给叶子节点发送 CMD_REBOOT, 然后网关自己进入 BOOT 状态重启。
+
+
+4. MQTT 客户端发送示例
+----------------------
+
+例 1: 直接开始默认采样
+  Topic:
+    ArduinoNode/server
+  Payload:
+    CMD_SN
+
+例 2: 2 分钟后开始, 100 Hz, 采 5 分钟
+  Topic:
+    ArduinoNode/server
+  Payload:
+    CMD_SFN_120_100Hz_300s
+
+例 3: 指定时间开始, 200 Hz, 采 60 秒
+  Topic:
+    ArduinoNode/server
+  Payload:
+    CMD_SENSING_2026-09-28_15:00:00_200Hz_60s
+
+例 4: 请求 RF 时间同步
+  Topic:
+    ArduinoNode/server
+  Payload:
+    CMD_RF_SYNC
+
+例 5: 只重启叶子节点
+  Topic:
+    ArduinoNode/server
+  Payload:
+    CMD_LEAFNODE_REBOOT
+
+
+5. LED 状态参考
+---------------
+BOOT               : White  / 启动或自检
+IDLE               : Green  / 空闲待机
+PREPARING          : Yellow / 采样准备
+SAMPLING           : Purple / 正在采样
+RF_COMMUNICATING   : Cyan   / RF 通信
+WIFI_COMMUNICATING : Blue   / WiFi/MQTT/NTP/数据通信
+ERROR              : Red    / 错误
+Other/Unknown      : Off    / 未定义或关闭
+
+
+6. 代码来源
+-----------
+主要根据以下文件整理:
+  CODE/src/config.hpp
+  CODE/src/config.cpp
+  CODE/src/mqtt.cpp
+  CODE/src/mqtt_cmd.cpp
+  CODE/src/rf_cmd.cpp
+  CODE/src/main.cpp
+  CODE/src/timesync.hpp
+

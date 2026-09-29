@@ -1,0 +1,30 @@
+ArduinoNode MQTT Command Examples
+
+Publish topic: ArduinoNode/server
+Message format: Plain text (not JSON)
+
+1. Start sampling with the default settings
+CMD_SN
+
+2. Start sampling after 120 seconds at 100 Hz for 300 seconds
+CMD_SFN_120_100Hz_300s
+
+3. Start sampling at the specified time at 100 Hz for 300 seconds
+CMD_SENSING_2026-09-28_14:30:00_100Hz_300s
+
+4. Synchronize time using NTP
+CMD_NTP
+
+5. Synchronize the gateway and leaf nodes over RF
+CMD_RF_SYNC
+
+6. Reboot the gateway
+CMD_GATEWAY_REBOOT
+
+7. Reboot the leaf nodes
+CMD_LEAFNODE_REBOOT
+
+8. Reboot the current device
+CMD_REBOOT
+
+Note: The sampling delay must be at least 60 seconds. A specified start time must also be at least 60 seconds later than the current time.

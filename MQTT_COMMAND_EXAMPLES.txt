@@ -1,0 +1,30 @@
+ArduinoNode MQTT 命令示例
+
+发送主题：ArduinoNode/server
+消息类型：纯文本（不是 JSON）
+
+1. 使用默认参数开始采样
+CMD_SN
+
+2. 延迟 120 秒后采样，频率 100Hz，持续 300 秒
+CMD_SFN_120_100Hz_300s
+
+3. 在指定时间开始采样，频率 100Hz，持续 300 秒
+CMD_SENSING_2026-09-28_14:30:00_100Hz_300s
+
+4. NTP 网络校时
+CMD_NTP
+
+5. 网关与叶节点进行 RF 时间同步
+CMD_RF_SYNC
+
+6. 重启网关
+CMD_GATEWAY_REBOOT
+
+7. 重启叶节点
+CMD_LEAFNODE_REBOOT
+
+8. 重启当前设备
+CMD_REBOOT
+
+注意：延迟采样至少设置 60 秒；指定时间也应晚于当前时间至少 60 秒。

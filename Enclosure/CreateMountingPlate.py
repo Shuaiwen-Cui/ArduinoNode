@@ -47,7 +47,7 @@ PARAMS_MM = {
     "switch_slot_from_bms_edge_near": 5.0,
     "switch_slot_from_bms_edge_far": 25.0,
     "switch_slot_height": 10.0,
-    "cable_exit_diameter": 10.0,
+    "cable_exit_diameter": 12.0,
     "cable_exit_x": 14.0,
     "cable_exit_above_arduino_base": 30.0,
     "led_frame_center_x": -29.5,
@@ -55,8 +55,9 @@ PARAMS_MM = {
     "led_recess_length": 34.8,
     "led_recess_height": 26.8,
     "led_recess_depth": 0.8,
-    "antenna_hole_diameter": 10.0,
-    "antenna_above_arduino_base": 35.0,
+    "antenna_hole_diameter": 12.0,
+    "antenna_slot_straight_length": 12.0,
+    "antenna_above_arduino_base": 30.0,
     "antenna_offset_from_arduino_side": 22.0,
     # MPU6050 is 34 x 26 mm. Put the 34 mm side parallel to the base plate's
     # short side, so the locating pocket is 27 mm in X and 35 mm in Y.
@@ -281,6 +282,31 @@ def cut_end_face_holes(component, side, face_x, centers_yz, diameter, depth, nam
     component.features.extrudeFeatures.add(ext_input)
 
 
+def cut_end_face_capsule(component, side, face_x, center_y, center_z,
+                         diameter, straight_length, depth, name):
+    plane = offset_plane(component, component.yZConstructionPlane, face_x, f"{name} plane")
+    sketch = component.sketches.add(plane)
+    sketch.name = f"{name} center sketch"
+    lower_left = sketch.modelToSketchSpace(adsk.core.Point3D.create(
+        mm(face_x), mm(center_y - diameter / 2.0), mm(center_z - straight_length / 2.0)
+    ))
+    upper_right = sketch.modelToSketchSpace(adsk.core.Point3D.create(
+        mm(face_x), mm(center_y + diameter / 2.0), mm(center_z + straight_length / 2.0)
+    ))
+    sketch.sketchCurves.sketchLines.addTwoPointRectangle(lower_left, upper_right)
+    ext_input = component.features.extrudeFeatures.createInput(
+        sketch.profiles.item(0), adsk.fusion.FeatureOperations.CutFeatureOperation
+    )
+    ext_input.setDistanceExtent(False, adsk.core.ValueInput.createByReal(mm(-side * depth)))
+    component.features.extrudeFeatures.add(ext_input)
+    cut_end_face_holes(
+        component, side, face_x,
+        [(center_y, center_z - straight_length / 2.0),
+         (center_y, center_z + straight_length / 2.0)],
+        diameter, depth, f"{name} rounded ends",
+    )
+
+
 def y_wall_plane(component, y, name):
     normal_y = component.xZConstructionPlane.geometry.normal.y
     return offset_plane(component, component.xZConstructionPlane, y / normal_y, name)
@@ -311,6 +337,24 @@ def extrude_y_wall_profile(component, plane, center_x, center_z, length, height,
     if ext.bodies.count and operation == adsk.fusion.FeatureOperations.NewBodyFeatureOperation:
         ext.bodies.item(0).name = name
     return ext
+
+
+def cut_y_wall_capsule(component, plane, center_x, center_z, length, diameter, depth, name, body):
+    straight_length = length - diameter
+    if straight_length <= 0:
+        raise ValueError("Capsule length must exceed its diameter")
+    extrude_y_wall_profile(
+        component, plane, center_x, center_z, straight_length, diameter, depth,
+        f"{name} center", adsk.fusion.FeatureOperations.CutFeatureOperation,
+        participant_bodies=[body],
+    )
+    for side in (-1.0, 1.0):
+        extrude_y_wall_profile(
+            component, plane, center_x + side * straight_length / 2.0, center_z,
+            0.0, 0.0, depth, f"{name} rounded end",
+            adsk.fusion.FeatureOperations.CutFeatureOperation,
+            diameter=diameter, participant_bodies=[body],
+        )
 
 
 def add_led_outer_recess(component, outer_wall_plane, shell_body):
@@ -752,7 +796,7 @@ def run(context):
         switch_x_near = bms_near_edge_x - PARAMS_MM["switch_slot_from_bms_edge_near"]
         switch_x_far = bms_near_edge_x - PARAMS_MM["switch_slot_from_bms_edge_far"]
         switch_center_z = -standoff_height - bms_height / 2.0
-        extrude_y_wall_profile(
+        cut_y_wall_capsule(
             component, outer_side_plane,
             (switch_x_near + switch_x_far) / 2.0,
             switch_center_z,
@@ -760,8 +804,7 @@ def run(context):
             PARAMS_MM["switch_slot_height"],
             shell_wall,
             "BMS switch access slot",
-            adsk.fusion.FeatureOperations.CutFeatureOperation,
-            participant_bodies=[shell_body],
+            shell_body,
         )
 
         arduino_base_z = thickness + standoff_height
@@ -777,18 +820,19 @@ def run(context):
         )
         add_led_outer_recess(component, outer_side_plane, shell_body)
 
-        antenna_y = PARAMS_MM["arduino_width"] / 2.0 - PARAMS_MM["antenna_offset_from_arduino_side"]
-        cut_end_face_holes(
+        antenna_y = PARAMS_MM["antenna_offset_from_arduino_side"] - PARAMS_MM["arduino_width"] / 2.0
+        cut_end_face_capsule(
             component, -1.0, -shell_outer_x,
-            [(antenna_y, arduino_base_z + PARAMS_MM["antenna_above_arduino_base"])],
+            antenna_y, arduino_base_z + PARAMS_MM["antenna_above_arduino_base"],
             PARAMS_MM["antenna_hole_diameter"],
+            PARAMS_MM["antenna_slot_straight_length"],
             shell_wall,
-            "antenna hole on cutout end",
+            "antenna vertical slot on cutout end",
         )
 
         app.activeViewport.fit()
         document = app.activeDocument
-        if document.isSaved and not document.save("Simplify shell-to-base joint and add LED recess"):
+        if document.isSaved and not document.save("Round BMS switch opening into a horizontal capsule slot"):
             raise RuntimeError("Fusion could not save the updated enclosure design")
         ui.messageBox(
             "Created mounting plate assembly mockup:\n"
@@ -807,8 +851,8 @@ def run(context):
             "- shifted semicircle cable notch between Arduino-side standoffs\n"
             "- MPU6050 two-short-edge locating rails on the base plate\n"
             "- four length-direction capsule magnet ears with 4.6 mm holes\n"
-            "- BMS switch slot, 10 mm cable exit, and 34.8 x 26.8 x 0.8 mm exterior LED recess\n"
-            "- 10 mm antenna hole on the cutout end\n"
+            "- 20 x 10 mm capsule BMS switch slot, 12 mm cable exit, and 34.8 x 26.8 x 0.8 mm exterior LED recess\n"
+            "- antenna slot: 12 mm wide, 12 mm straight section, 5 mm top bridge\n"
             "- preliminary 3.8 mm heat-set insert pockets"
         )
 
