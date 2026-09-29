@@ -1,0 +1,47 @@
+[
+  [
+    3,
+    "🎯Hardware: Assemble an IoT wireless sensor\r🎯Software: Configure, compile and upload the code\r🎯Deployment: Deploy sensors for vibration testing",
+    "01  Assemble and check an ArduinoNode wireless sensor\r02  Configure, compile and upload its firmware\r03  Capture and interpret a vibration spectrum"
+  ],
+  [
+    4,
+    "🎯Introduction\r🎯Hands-on\r🎯Lab & Field Test",
+    "I  Introduction: how the node senses and records\rII  Hands-on: assemble, program and check\rIII  Vibration test and data reading\rOutdoor extension, if site and time permit"
+  ],
+  [
+    21,
+    "Contact the helper if any component is missing",
+    "Reference kit (APESS2025). Ask the instructor if a component is missing."
+  ],
+  [
+    42,
+    "Section III — Vibration Test",
+    "Section III — Vibration and data"
+  ],
+  [
+    42,
+    "The following indoor and outdoor layouts come from the earlier APESS2025 course.\nThe instructor will confirm which apparatus and procedure are available for this NTU session.",
+    "The next examples come from the earlier APESS2025 course.\rThe instructor will adapt today’s test to the available NTU apparatus and site."
+  ],
+  [
+    44,
+    "III.1  Indoor Vibration Test (ZS1107)",
+    "III.2  Indoor vibration test (ZS1107 example)"
+  ],
+  [
+    45,
+    "III.2  Outdoor Vibration Test (TBD)",
+    "III.3  Outdoor vibration test (APESS2025 example)"
+  ],
+  [
+    46,
+    "Previous APESS2025 validation",
+    "III.4  Reading vibration spectra"
+  ],
+  [
+    46,
+    "A reference case for reading vibration spectra",
+    "Earlier free-vibration test: compare wireless and reference traces"
+  ]
+]

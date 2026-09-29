@@ -1,0 +1,211 @@
+[
+  {
+    "slide": 1,
+    "text": []
+  },
+  {
+    "slide": 2,
+    "text": [
+      "Communication",
+      "Power System",
+      "Perception",
+      "Main Control",
+      "Interfacing",
+      "Radio Frequency",
+      "WIFI",
+      "Local",
+      "Internet",
+      "MQTT",
+      "RGBLED",
+      "Input",
+      "Output",
+      "MPU6050",
+      "Acceleration",
+      "Battery Management System",
+      "Arduino Uno \rR4 Wifi",
+      "3D Printed Case",
+      "Storage",
+      "TF Card"
+    ]
+  },
+  {
+    "slide": 3,
+    "text": []
+  },
+  {
+    "slide": 4,
+    "text": [
+      "Initialization",
+      "Infinite Loop",
+      "Foreground",
+      "Background",
+      "State \rMachine",
+      "Indicators",
+      "User Input"
+    ]
+  },
+  {
+    "slide": 5,
+    "text": [
+      "(a)",
+      "(b)",
+      "(c)"
+    ]
+  },
+  {
+    "slide": 6,
+    "text": []
+  },
+  {
+    "slide": 7,
+    "text": []
+  },
+  {
+    "slide": 8,
+    "text": [
+      "Stage I - Class",
+      "Stage II - Lab",
+      "Stage III - Field",
+      "(a)",
+      "(b)",
+      "(c)",
+      "(d)",
+      "(e)",
+      "(f)"
+    ]
+  },
+  {
+    "slide": 9,
+    "text": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "WSN"
+    ]
+  },
+  {
+    "slide": 10,
+    "text": []
+  },
+  {
+    "slide": 11,
+    "text": []
+  },
+  {
+    "slide": 12,
+    "text": []
+  },
+  {
+    "slide": 13,
+    "text": [
+      "COMMUNICATION",
+      "POWER SYSTEM",
+      "PERCEPTION",
+      "MAIN CONTROL",
+      "INTERACTION"
+    ]
+  },
+  {
+    "slide": 14,
+    "text": [
+      "Communication",
+      "Power System",
+      "Perception",
+      "Main Control",
+      "Interaction",
+      "Local \rNetwork",
+      "Internet\rConnection",
+      "Battery / Power Outlet",
+      "Power Management System",
+      "BT",
+      "Zigbee",
+      "WIFI",
+      "Cellular",
+      "Micro Controller\rUnit",
+      "Timer/ RTC",
+      "RAM/ROM",
+      "SPI/I2C/UART/ADC/DAC/…",
+      "Large Volume Storage",
+      "Command Input",
+      "Status Monitoring",
+      "Vibration",
+      "Strain",
+      "Camera",
+      "Temperature &Humidity",
+      "…"
+    ]
+  },
+  {
+    "slide": 15,
+    "text": [
+      "COMMUNICATION",
+      "POWER SYSTEM",
+      "PERCEPTION",
+      "MAIN CONTROL",
+      "INTERACTION"
+    ]
+  },
+  {
+    "slide": 16,
+    "text": [
+      "Local \rNetwork",
+      "Internet\rConnection",
+      "Battery / Power Outlet",
+      "Power Management System",
+      "BT",
+      "Zigbee",
+      "WIFI",
+      "Cellular",
+      "Micro Controller\rUnit",
+      "Timer/ RTC",
+      "RAM/ROM",
+      "SPI/I2C/UART/ADC/DAC/…",
+      "Large Volume Storage",
+      "Command Input",
+      "Status Monitoring",
+      "Vibration",
+      "Strain",
+      "Camera",
+      "Temperature &Humidity",
+      "…"
+    ]
+  },
+  {
+    "slide": 17,
+    "text": []
+  },
+  {
+    "slide": 18,
+    "text": []
+  },
+  {
+    "slide": 19,
+    "text": [
+      "Interfacing",
+      "Power"
+    ]
+  },
+  {
+    "slide": 20,
+    "text": [
+      "Control",
+      "Perception",
+      "Communication",
+      "Interfacing"
+    ]
+  },
+  {
+    "slide": 21,
+    "text": [
+      "HARDWARE",
+      "PLATFORM \r      ABSTRACTION",
+      "SYSTEM \r      SERVICES",
+      "APPLICATIONS"
+    ]
+  }
+]

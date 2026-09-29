@@ -1,0 +1,3592 @@
+[
+  {
+    "slide": 1,
+    "shapes": [
+      {
+        "id": 2,
+        "name": "Rectangle 1",
+        "type": 1,
+        "x": 0.0,
+        "y": 0.0,
+        "w": 720.0,
+        "h": 450.0,
+        "text": ""
+      },
+      {
+        "id": 4,
+        "name": "TextBox 3",
+        "type": 17,
+        "x": 43.0,
+        "y": 153.0,
+        "w": 304.0,
+        "h": 66.1,
+        "text": "Design and Implementation of Arduino-based Wireless IoT Sensors"
+      },
+      {
+        "id": 10,
+        "name": "TextBox 9",
+        "type": 17,
+        "x": 43.0,
+        "y": 360.0,
+        "w": 320.0,
+        "h": 66.0,
+        "text": "Yuguang Fu\rNanyang Technological University"
+      },
+      {
+        "id": 5,
+        "name": "TextBox 4",
+        "type": 17,
+        "x": 43.0,
+        "y": 34.0,
+        "w": 290.0,
+        "h": 17.0,
+        "text": "Lab Experiment Course"
+      },
+      {
+        "id": 3,
+        "name": "TextBox 2",
+        "type": 17,
+        "x": 43.0,
+        "y": 82.0,
+        "w": 320.0,
+        "h": 50.9,
+        "text": "ArduinoNode"
+      },
+      {
+        "id": 7,
+        "name": "Picture 6",
+        "type": 13,
+        "x": 385.0,
+        "y": 124.0,
+        "w": 296.0,
+        "h": 222.0,
+        "text": ""
+      },
+      {
+        "id": 6,
+        "name": "TextBox 5",
+        "type": 17,
+        "x": 652.0,
+        "y": 428.0,
+        "w": 32.0,
+        "h": 13.0,
+        "text": "1"
+      }
+    ]
+  },
+  {
+    "slide": 2,
+    "shapes": [
+      {
+        "id": 3,
+        "name": "TextBox 2",
+        "type": 17,
+        "x": 36.0,
+        "y": 24.0,
+        "w": 648.0,
+        "h": 39.0,
+        "text": "Course materials"
+      },
+      {
+        "id": 2,
+        "name": "TextBox 1",
+        "type": 17,
+        "x": 151.0,
+        "y": 342.0,
+        "w": 420.0,
+        "h": 38.8,
+        "text": "https://drive.google.com/file/d/1CTkIzI5p-hHYY3L5tGsbDlZzlYgO4l7S/view?usp=sharing"
+      },
+      {
+        "id": 6,
+        "name": "Picture 5",
+        "type": 13,
+        "x": 250.0,
+        "y": 103.0,
+        "w": 220.0,
+        "h": 220.0,
+        "text": ""
+      },
+      {
+        "id": 4,
+        "name": "TextBox 3",
+        "type": 17,
+        "x": 652.0,
+        "y": 428.0,
+        "w": 32.0,
+        "h": 13.0,
+        "text": "2"
+      }
+    ]
+  },
+  {
+    "slide": 3,
+    "shapes": [
+      {
+        "id": 3,
+        "name": "TextBox 2",
+        "type": 17,
+        "x": 36.0,
+        "y": 24.0,
+        "w": 648.0,
+        "h": 39.0,
+        "text": "Learning objectives"
+      },
+      {
+        "id": 2,
+        "name": "TextBox 1",
+        "type": 17,
+        "x": 36.0,
+        "y": 118.0,
+        "w": 54.0,
+        "h": 42.0,
+        "text": "01"
+      },
+      {
+        "id": 5,
+        "name": "TextBox 4",
+        "type": 17,
+        "x": 111.0,
+        "y": 118.0,
+        "w": 570.0,
+        "h": 33.0,
+        "text": "Assemble and check"
+      },
+      {
+        "id": 6,
+        "name": "TextBox 5",
+        "type": 17,
+        "x": 111.0,
+        "y": 160.0,
+        "w": 570.0,
+        "h": 34.0,
+        "text": "A wireless sensing node and its connections"
+      },
+      {
+        "id": 8,
+        "name": "TextBox 7",
+        "type": 17,
+        "x": 36.0,
+        "y": 221.0,
+        "w": 54.0,
+        "h": 42.0,
+        "text": "02"
+      },
+      {
+        "id": 9,
+        "name": "TextBox 8",
+        "type": 17,
+        "x": 111.0,
+        "y": 221.0,
+        "w": 570.0,
+        "h": 33.0,
+        "text": "Configure and program"
+      },
+      {
+        "id": 10,
+        "name": "TextBox 9",
+        "type": 17,
+        "x": 111.0,
+        "y": 263.0,
+        "w": 570.0,
+        "h": 34.0,
+        "text": "The node identity and acceleration sampling function"
+      },
+      {
+        "id": 11,
+        "name": "TextBox 10",
+        "type": 17,
+        "x": 36.0,
+        "y": 324.0,
+        "w": 54.0,
+        "h": 42.0,
+        "text": "03"
+      },
+      {
+        "id": 12,
+        "name": "TextBox 11",
+        "type": 17,
+        "x": 111.0,
+        "y": 324.0,
+        "w": 570.0,
+        "h": 33.0,
+        "text": "Measure and interpret"
+      },
+      {
+        "id": 13,
+        "name": "TextBox 12",
+        "type": 17,
+        "x": 111.0,
+        "y": 366.0,
+        "w": 570.0,
+        "h": 34.0,
+        "text": "A vibration record and its frequency spectrum"
+      },
+      {
+        "id": 14,
+        "name": "TextBox 13",
+        "type": 17,
+        "x": 652.0,
+        "y": 428.0,
+        "w": 32.0,
+        "h": 13.0,
+        "text": "3"
+      }
+    ]
+  },
+  {
+    "slide": 4,
+    "shapes": [
+      {
+        "id": 3,
+        "name": "TextBox 2",
+        "type": 17,
+        "x": 36.0,
+        "y": 24.0,
+        "w": 648.0,
+        "h": 39.0,
+        "text": "Course activities"
+      },
+      {
+        "id": 4,
+        "name": "TextBox 3",
+        "type": 17,
+        "x": 36.0,
+        "y": 70.0,
+        "w": 648.0,
+        "h": 30.0,
+        "text": "Introduction, hands-on work and vibration measurements"
+      },
+      {
+        "id": 7,
+        "name": "Picture 6",
+        "type": 13,
+        "x": 36.0,
+        "y": 119.1,
+        "w": 204.0,
+        "h": 152.7,
+        "text": ""
+      },
+      {
+        "id": 9,
+        "name": "TextBox 8",
+        "type": 17,
+        "x": 36.0,
+        "y": 290.0,
+        "w": 204.0,
+        "h": 54.0,
+        "text": "I  Understanding the node"
+      },
+      {
+        "id": 10,
+        "name": "TextBox 9",
+        "type": 17,
+        "x": 36.0,
+        "y": 347.0,
+        "w": 204.0,
+        "h": 56.0,
+        "text": "Hardware, software and the sensing chain"
+      },
+      {
+        "id": 12,
+        "name": "Picture 11",
+        "type": 13,
+        "x": 258.2,
+        "y": 119.0,
+        "w": 203.6,
+        "h": 153.0,
+        "text": ""
+      },
+      {
+        "id": 13,
+        "name": "TextBox 12",
+        "type": 17,
+        "x": 258.0,
+        "y": 290.0,
+        "w": 204.0,
+        "h": 54.0,
+        "text": "II  Building and programming"
+      },
+      {
+        "id": 14,
+        "name": "TextBox 13",
+        "type": 17,
+        "x": 258.0,
+        "y": 347.0,
+        "w": 204.0,
+        "h": 56.0,
+        "text": "Assembly, firmware and the first checks"
+      },
+      {
+        "id": 18,
+        "name": "Picture 17",
+        "type": 13,
+        "x": 480.0,
+        "y": 119.0,
+        "w": 204.0,
+        "h": 152.9,
+        "text": ""
+      },
+      {
+        "id": 21,
+        "name": "TextBox 20",
+        "type": 17,
+        "x": 480.0,
+        "y": 290.0,
+        "w": 204.0,
+        "h": 54.0,
+        "text": "III  Testing and interpreting"
+      },
+      {
+        "id": 26,
+        "name": "TextBox 25",
+        "type": 17,
+        "x": 480.0,
+        "y": 347.0,
+        "w": 204.0,
+        "h": 56.0,
+        "text": "Indoor vibration test, with an optional field extension"
+      },
+      {
+        "id": 27,
+        "name": "TextBox 26",
+        "type": 17,
+        "x": 36.0,
+        "y": 420.0,
+        "w": 610.0,
+        "h": 25.0,
+        "text": "Photos: APESS2025, Hong Kong Polytechnic University. NTU activities depend on the available apparatus and site."
+      },
+      {
+        "id": 28,
+        "name": "TextBox 27",
+        "type": 17,
+        "x": 652.0,
+        "y": 428.0,
+        "w": 32.0,
+        "h": 13.0,
+        "text": "4"
+      }
+    ]
+  },
+  {
+    "slide": 5,
+    "shapes": [
+      {
+        "id": 2,
+        "name": "Rectangle 1",
+        "type": 1,
+        "x": 0.0,
+        "y": 0.0,
+        "w": 720.0,
+        "h": 450.0,
+        "text": ""
+      },
+      {
+        "id": 3,
+        "name": "TextBox 2",
+        "type": 17,
+        "x": 54.0,
+        "y": 151.0,
+        "w": 381.4,
+        "h": 49.7,
+        "text": "Section I - Introduction"
+      },
+      {
+        "id": 4,
+        "name": "TextBox 3",
+        "type": 17,
+        "x": 57.0,
+        "y": 229.0,
+        "w": 593.0,
+        "h": 21.8,
+        "text": "The hardware and software behind one wireless node."
+      },
+      {
+        "id": 5,
+        "name": "TextBox 4",
+        "type": 17,
+        "x": 652.0,
+        "y": 428.0,
+        "w": 32.0,
+        "h": 13.0,
+        "text": "5"
+      }
+    ]
+  },
+  {
+    "slide": 6,
+    "shapes": [
+      {
+        "id": 49,
+        "name": "Group 48",
+        "type": 6,
+        "x": 42.2,
+        "y": 104.0,
+        "w": 634.1,
+        "h": 286.0,
+        "text": ""
+      },
+      {
+        "id": 7,
+        "name": "TextBox 6",
+        "type": 17,
+        "x": 36.0,
+        "y": 24.0,
+        "w": 648.0,
+        "h": 39.0,
+        "text": "I.1  The assembled wireless sensor"
+      },
+      {
+        "id": 9,
+        "name": "TextBox 8",
+        "type": 17,
+        "x": 652.0,
+        "y": 428.0,
+        "w": 32.0,
+        "h": 13.0,
+        "text": "6"
+      }
+    ]
+  },
+  {
+    "slide": 7,
+    "shapes": [
+      {
+        "id": 10,
+        "name": "Picture 9",
+        "type": 13,
+        "x": 36.0,
+        "y": 116.5,
+        "w": 319.0,
+        "h": 246.9,
+        "text": ""
+      },
+      {
+        "id": 2,
+        "name": "TextBox 1",
+        "type": 17,
+        "x": 36.0,
+        "y": 24.0,
+        "w": 648.0,
+        "h": 39.0,
+        "text": "I.2  Arduino Uno R4 WiFi"
+      },
+      {
+        "id": 5,
+        "name": "TextBox 4",
+        "type": 17,
+        "x": 652.0,
+        "y": 428.0,
+        "w": 32.0,
+        "h": 13.0,
+        "text": "7"
+      },
+      {
+        "id": 3,
+        "name": "TextBox 2",
+        "type": 17,
+        "x": 390.0,
+        "y": 91.0,
+        "w": 294.0,
+        "h": 26.0,
+        "text": "Microcontroller"
+      },
+      {
+        "id": 4,
+        "name": "TextBox 3",
+        "type": 17,
+        "x": 390.0,
+        "y": 122.0,
+        "w": 294.0,
+        "h": 23.0,
+        "text": "R7FA4M1AB3CFM#AA0"
+      },
+      {
+        "id": 6,
+        "name": "TextBox 5",
+        "type": 17,
+        "x": 390.0,
+        "y": 151.0,
+        "w": 294.0,
+        "h": 119.0,
+        "text": "256 kB flash / 32 kB SRAM\r8 kB data flash (EEPROM)\rReal-time clock and 4× DMAC\r14-bit ADC / up to 12-bit DAC\rOPAMP and CAN bus"
+      },
+      {
+        "id": 7,
+        "name": "TextBox 6",
+        "type": 17,
+        "x": 390.0,
+        "y": 282.0,
+        "w": 294.0,
+        "h": 26.0,
+        "text": "Wi-Fi module"
+      },
+      {
+        "id": 8,
+        "name": "TextBox 7",
+        "type": 17,
+        "x": 390.0,
+        "y": 313.0,
+        "w": 294.0,
+        "h": 23.0,
+        "text": "ESP32-S3-MINI-1-N8"
+      },
+      {
+        "id": 9,
+        "name": "TextBox 8",
+        "type": 17,
+        "x": 390.0,
+        "y": 342.0,
+        "w": 294.0,
+        "h": 84.0,
+        "text": "Wi-Fi 4, 2.4 GHz / Bluetooth 5 LE\r3.3 V operating voltage\r384 kB ROM / 512 kB SRAM\rUp to 150 Mbps"
+      }
+    ]
+  },
+  {
+    "slide": 8,
+    "shapes": [
+      {
+        "id": 9,
+        "name": "Picture 8",
+        "type": 13,
+        "x": 327.5,
+        "y": 91.0,
+        "w": 347.0,
+        "h": 318.0,
+        "text": ""
+      },
+      {
+        "id": 11,
+        "name": "TextBox 10",
+        "type": 17,
+        "x": 36.0,
+        "y": 141.0,
+        "w": 245.0,
+        "h": 161.0,
+        "text": "The sensor shield connects sensors and other components to the Arduino board. Its interfaces make the wiring easier to follow."
+      },
+      {
+        "id": 2,
+        "name": "TextBox 1",
+        "type": 17,
+        "x": 36.0,
+        "y": 24.0,
+        "w": 648.0,
+        "h": 39.0,
+        "text": "I.3  Sensor shield"
+      },
+      {
+        "id": 6,
+        "name": "TextBox 5",
+        "type": 17,
+        "x": 652.0,
+        "y": 428.0,
+        "w": 32.0,
+        "h": 13.0,
+        "text": "8"
+      }
+    ]
+  },
+  {
+    "slide": 9,
+    "shapes": [
+      {
+        "id": 6,
+        "name": "Picture 5",
+        "type": 13,
+        "x": 36.0,
+        "y": 160.5,
+        "w": 104.0,
+        "h": 76.0,
+        "text": ""
+      },
+      {
+        "id": 10,
+        "name": "TextBox 9",
+        "type": 17,
+        "x": 36.0,
+        "y": 106.0,
+        "w": 300.0,
+        "h": 30.0,
+        "text": "MPU6050"
+      },
+      {
+        "id": 13,
+        "name": "Picture 12",
+        "type": 13,
+        "x": 36.0,
+        "y": 320.2,
+        "w": 104.0,
+        "h": 82.6,
+        "text": ""
+      },
+      {
+        "id": 14,
+        "name": "Picture 13",
+        "type": 13,
+        "x": 374.0,
+        "y": 320.3,
+        "w": 104.0,
+        "h": 82.4,
+        "text": ""
+      },
+      {
+        "id": 15,
+        "name": "TextBox 14",
+        "type": 17,
+        "x": 374.0,
+        "y": 106.0,
+        "w": 300.0,
+        "h": 30.0,
+        "text": "nRF24L01 radio"
+      },
+      {
+        "id": 16,
+        "name": "TextBox 15",
+        "type": 17,
+        "x": 36.0,
+        "y": 269.0,
+        "w": 300.0,
+        "h": 30.0,
+        "text": "RGB LED"
+      },
+      {
+        "id": 17,
+        "name": "TextBox 16",
+        "type": 17,
+        "x": 374.0,
+        "y": 269.0,
+        "w": 300.0,
+        "h": 30.0,
+        "text": "SD card module"
+      },
+      {
+        "id": 18,
+        "name": "TextBox 17",
+        "type": 17,
+        "x": 490.0,
+        "y": 144.0,
+        "w": 194.0,
+        "h": 116.0,
+        "text": "Low-power, low-cost 2.4 GHz transceiver\rShort-range wireless communication\r250 kbps / 1 Mbps / 2 Mbps"
+      },
+      {
+        "id": 20,
+        "name": "TextBox 19",
+        "type": 17,
+        "x": 152.0,
+        "y": 144.0,
+        "w": 194.0,
+        "h": 116.0,
+        "text": "IMU with a 3-axis gyroscope and 3-axis accelerometer\rRanges: 2g / 4g / 8g / 16g\rResolution: 16 bit"
+      },
+      {
+        "id": 22,
+        "name": "TextBox 21",
+        "type": 17,
+        "x": 152.0,
+        "y": 307.0,
+        "w": 194.0,
+        "h": 116.0,
+        "text": "Three independent red, green and blue LEDs\rMixing their light produces different colours"
+      },
+      {
+        "id": 24,
+        "name": "TextBox 23",
+        "type": 17,
+        "x": 490.0,
+        "y": 307.0,
+        "w": 194.0,
+        "h": 116.0,
+        "text": "External storage for measured data\rCommunicates with the Arduino via SPI"
+      },
+      {
+        "id": 25,
+        "name": "Picture 24",
+        "type": 13,
+        "x": 374.0,
+        "y": 148.7,
+        "w": 104.0,
+        "h": 99.6,
+        "text": ""
+      },
+      {
+        "id": 2,
+        "name": "TextBox 1",
+        "type": 17,
+        "x": 36.0,
+        "y": 24.0,
+        "w": 648.0,
+        "h": 39.0,
+        "text": "I.4  Sensing, radio, indicators and storage"
+      },
+      {
+        "id": 5,
+        "name": "TextBox 4",
+        "type": 17,
+        "x": 652.0,
+        "y": 428.0,
+        "w": 32.0,
+        "h": 13.0,
+        "text": "9"
+      }
+    ]
+  },
+  {
+    "slide": 10,
+    "shapes": [
+      {
+        "id": 5,
+        "name": "Picture 4",
+        "type": 13,
+        "x": 41.2,
+        "y": 143.0,
+        "w": 78.6,
+        "h": 136.0,
+        "text": ""
+      },
+      {
+        "id": 19,
+        "name": "TextBox 18",
+        "type": 17,
+        "x": 142.0,
+        "y": 146.0,
+        "w": 206.0,
+        "h": 123.0,
+        "text": "Two rechargeable 18650 lithium batteries\rHigh energy density\rOutput: 3.7 V\rCapacity: 3400 mAh"
+      },
+      {
+        "id": 21,
+        "name": "TextBox 20",
+        "type": 17,
+        "x": 36.0,
+        "y": 102.0,
+        "w": 300.0,
+        "h": 30.0,
+        "text": "Lithium batteries"
+      },
+      {
+        "id": 11,
+        "name": "Picture 10",
+        "type": 13,
+        "x": 38.0,
+        "y": 348.3,
+        "w": 88.0,
+        "h": 47.4,
+        "text": ""
+      },
+      {
+        "id": 25,
+        "name": "TextBox 24",
+        "type": 17,
+        "x": 36.0,
+        "y": 300.0,
+        "w": 300.0,
+        "h": 30.0,
+        "text": "Battery holder"
+      },
+      {
+        "id": 26,
+        "name": "TextBox 25",
+        "type": 17,
+        "x": 142.0,
+        "y": 336.0,
+        "w": 206.0,
+        "h": 74.0,
+        "text": "Holds two 18650 batteries and provides the connection interface"
+      },
+      {
+        "id": 23,
+        "name": "Picture 22",
+        "type": 13,
+        "x": 390.0,
+        "y": 143.7,
+        "w": 294.0,
+        "h": 106.5,
+        "text": ""
+      },
+      {
+        "id": 28,
+        "name": "TextBox 27",
+        "type": 17,
+        "x": 390.0,
+        "y": 102.0,
+        "w": 294.0,
+        "h": 30.0,
+        "text": "Enclosure"
+      },
+      {
+        "id": 27,
+        "name": "Picture 26",
+        "type": 13,
+        "x": 478.7,
+        "y": 262.0,
+        "w": 116.5,
+        "h": 149.0,
+        "text": ""
+      },
+      {
+        "id": 2,
+        "name": "TextBox 1",
+        "type": 17,
+        "x": 36.0,
+        "y": 24.0,
+        "w": 648.0,
+        "h": 39.0,
+        "text": "I.5  Power supply and enclosure"
+      },
+      {
+        "id": 6,
+        "name": "TextBox 5",
+        "type": 17,
+        "x": 652.0,
+        "y": 428.0,
+        "w": 32.0,
+        "h": 13.0,
+        "text": "10"
+      }
+    ]
+  },
+  {
+    "slide": 11,
+    "shapes": [
+      {
+        "id": 7,
+        "name": "TextBox 6",
+        "type": 17,
+        "x": 36.0,
+        "y": 105.0,
+        "w": 198.0,
+        "h": 30.0,
+        "text": "Setup + Loop"
+      },
+      {
+        "id": 15,
+        "name": "TextBox 14",
+        "type": 17,
+        "x": 36.0,
+        "y": 147.0,
+        "w": 198.0,
+        "h": 106.0,
+        "text": "Arduino follows an initialization and infinite-loop pattern, common to embedded systems."
+      },
+      {
+        "id": 2,
+        "name": "TextBox 1",
+        "type": 17,
+        "x": 260.0,
+        "y": 105.0,
+        "w": 198.0,
+        "h": 30.0,
+        "text": "State machine"
+      },
+      {
+        "id": 6,
+        "name": "TextBox 5",
+        "type": 17,
+        "x": 484.0,
+        "y": 105.0,
+        "w": 198.0,
+        "h": 30.0,
+        "text": "Front and back end"
+      },
+      {
+        "id": 8,
+        "name": "TextBox 7",
+        "type": 17,
+        "x": 260.0,
+        "y": 147.0,
+        "w": 198.0,
+        "h": 106.0,
+        "text": "Separate the internal logic of each state from the transitions between states."
+      },
+      {
+        "id": 9,
+        "name": "TextBox 8",
+        "type": 17,
+        "x": 484.0,
+        "y": 147.0,
+        "w": 198.0,
+        "h": 106.0,
+        "text": "This architecture supports event-driven programming in the embedded system."
+      },
+      {
+        "id": 13,
+        "name": "Group 12",
+        "type": 6,
+        "x": 78.8,
+        "y": 277.0,
+        "w": 111.3,
+        "h": 128.0,
+        "text": ""
+      },
+      {
+        "id": 14,
+        "name": "Group 13",
+        "type": 6,
+        "x": 268.7,
+        "y": 277.0,
+        "w": 181.6,
+        "h": 128.0,
+        "text": ""
+      },
+      {
+        "id": 17,
+        "name": "Group 16",
+        "type": 6,
+        "x": 493.0,
+        "y": 283.4,
+        "w": 179.0,
+        "h": 115.1,
+        "text": ""
+      },
+      {
+        "id": 11,
+        "name": "TextBox 10",
+        "type": 17,
+        "x": 36.0,
+        "y": 24.0,
+        "w": 648.0,
+        "h": 39.0,
+        "text": "I.6  Development framework"
+      },
+      {
+        "id": 18,
+        "name": "TextBox 17",
+        "type": 17,
+        "x": 652.0,
+        "y": 428.0,
+        "w": 32.0,
+        "h": 13.0,
+        "text": "11"
+      }
+    ]
+  },
+  {
+    "slide": 12,
+    "shapes": [
+      {
+        "id": 11,
+        "name": "Picture 10",
+        "type": 13,
+        "x": 33.1,
+        "y": 25.9,
+        "w": 649.1,
+        "h": 398.2,
+        "text": ""
+      },
+      {
+        "id": 5,
+        "name": "Rounded Rectangle 4",
+        "type": 1,
+        "x": 21.7,
+        "y": 367.5,
+        "w": 177.1,
+        "h": 65.6,
+        "text": ""
+      },
+      {
+        "id": 6,
+        "name": "Rounded Rectangle 5",
+        "type": 1,
+        "x": 110.2,
+        "y": 268.1,
+        "w": 257.0,
+        "h": 65.6,
+        "text": ""
+      },
+      {
+        "id": 7,
+        "name": "Rounded Rectangle 6",
+        "type": 1,
+        "x": 187.6,
+        "y": 198.6,
+        "w": 100.1,
+        "h": 39.4,
+        "text": ""
+      },
+      {
+        "id": 8,
+        "name": "Rounded Rectangle 7",
+        "type": 1,
+        "x": 275.5,
+        "y": 82.6,
+        "w": 100.1,
+        "h": 39.4,
+        "text": ""
+      },
+      {
+        "id": 9,
+        "name": "Rounded Rectangle 8",
+        "type": 1,
+        "x": 275.5,
+        "y": 136.0,
+        "w": 100.1,
+        "h": 39.4,
+        "text": ""
+      },
+      {
+        "id": 10,
+        "name": "Rounded Rectangle 9",
+        "type": 1,
+        "x": 375.6,
+        "y": 77.6,
+        "w": 157.6,
+        "h": 185.7,
+        "text": ""
+      },
+      {
+        "id": 12,
+        "name": "Rounded Rectangle 11",
+        "type": 1,
+        "x": 203.5,
+        "y": 328.3,
+        "w": 74.2,
+        "h": 39.1,
+        "text": ""
+      },
+      {
+        "id": 13,
+        "name": "Rounded Rectangle 12",
+        "type": 1,
+        "x": 544.6,
+        "y": 189.6,
+        "w": 76.5,
+        "h": 55.0,
+        "text": ""
+      },
+      {
+        "id": 14,
+        "name": "Rounded Rectangle 13",
+        "type": 1,
+        "x": 459.0,
+        "y": 31.4,
+        "w": 85.0,
+        "h": 40.9,
+        "text": ""
+      },
+      {
+        "id": 15,
+        "name": "TextBox 14",
+        "type": 17,
+        "x": 28.6,
+        "y": 367.4,
+        "w": 68.9,
+        "h": 29.1,
+        "text": "storage"
+      },
+      {
+        "id": 16,
+        "name": "TextBox 15",
+        "type": 17,
+        "x": 392.9,
+        "y": 123.6,
+        "w": 144.7,
+        "h": 29.1,
+        "text": "Communication"
+      },
+      {
+        "id": 17,
+        "name": "TextBox 16",
+        "type": 17,
+        "x": 195.3,
+        "y": 278.8,
+        "w": 144.7,
+        "h": 29.1,
+        "text": "time"
+      },
+      {
+        "id": 18,
+        "name": "TextBox 17",
+        "type": 17,
+        "x": 158.7,
+        "y": 120.9,
+        "w": 144.7,
+        "h": 29.1,
+        "text": "config & state"
+      },
+      {
+        "id": 19,
+        "name": "TextBox 18",
+        "type": 17,
+        "x": 277.7,
+        "y": 174.4,
+        "w": 144.7,
+        "h": 29.1,
+        "text": "feedback"
+      },
+      {
+        "id": 20,
+        "name": "TextBox 19",
+        "type": 17,
+        "x": 554.9,
+        "y": 115.9,
+        "w": 144.7,
+        "h": 29.1,
+        "text": "sensing"
+      },
+      {
+        "id": 22,
+        "name": "TextBox 21",
+        "type": 17,
+        "x": 36.0,
+        "y": 24.0,
+        "w": 648.0,
+        "h": 39.0,
+        "text": "I.7  Software architecture"
+      },
+      {
+        "id": 23,
+        "name": "TextBox 22",
+        "type": 17,
+        "x": 36.0,
+        "y": 75.0,
+        "w": 176.0,
+        "h": 48.0,
+        "text": "Modular organization\rHierarchical dependencies"
+      },
+      {
+        "id": 24,
+        "name": "TextBox 23",
+        "type": 17,
+        "x": 652.0,
+        "y": 428.0,
+        "w": 32.0,
+        "h": 13.0,
+        "text": "12"
+      }
+    ]
+  },
+  {
+    "slide": 13,
+    "shapes": [
+      {
+        "id": 14,
+        "name": "TextBox 13",
+        "type": 17,
+        "x": 36.0,
+        "y": 75.0,
+        "w": 648.0,
+        "h": 30.0,
+        "text": "Edit the configuration file to set the role and identity of each node."
+      },
+      {
+        "id": 16,
+        "name": "TextBox 15",
+        "type": 17,
+        "x": 52.0,
+        "y": 123.0,
+        "w": 294.0,
+        "h": 30.0,
+        "text": "Gateway node"
+      },
+      {
+        "id": 8,
+        "name": "Picture 7",
+        "type": 13,
+        "x": 70.7,
+        "y": 161.0,
+        "w": 226.5,
+        "h": 229.0,
+        "text": ""
+      },
+      {
+        "id": 20,
+        "name": "TextBox 19",
+        "type": 17,
+        "x": 382.0,
+        "y": 123.0,
+        "w": 294.0,
+        "h": 30.0,
+        "text": "Leaf node"
+      },
+      {
+        "id": 22,
+        "name": "Picture 21",
+        "type": 13,
+        "x": 396.1,
+        "y": 161.0,
+        "w": 235.9,
+        "h": 229.0,
+        "text": ""
+      },
+      {
+        "id": 5,
+        "name": "TextBox 4",
+        "type": 17,
+        "x": 36.0,
+        "y": 407.0,
+        "w": 600.0,
+        "h": 22.0,
+        "text": "Hands-on Task 1 uses this configuration file."
+      },
+      {
+        "id": 2,
+        "name": "TextBox 1",
+        "type": 17,
+        "x": 36.0,
+        "y": 24.0,
+        "w": 648.0,
+        "h": 39.0,
+        "text": "I.8  Gateway and leaf-node configuration"
+      },
+      {
+        "id": 6,
+        "name": "TextBox 5",
+        "type": 17,
+        "x": 652.0,
+        "y": 428.0,
+        "w": 32.0,
+        "h": 13.0,
+        "text": "13"
+      }
+    ]
+  },
+  {
+    "slide": 14,
+    "shapes": [
+      {
+        "id": 12,
+        "name": "TextBox 11",
+        "type": 17,
+        "x": 36.0,
+        "y": 74.0,
+        "w": 648.0,
+        "h": 48.0,
+        "text": "A state machine defines states and transitions to manage complex logic without a real-time operating system."
+      },
+      {
+        "id": 7,
+        "name": "Picture 6",
+        "type": 13,
+        "x": 49.5,
+        "y": 134.0,
+        "w": 283.9,
+        "h": 271.0,
+        "text": ""
+      },
+      {
+        "id": 15,
+        "name": "TextBox 14",
+        "type": 17,
+        "x": 376.0,
+        "y": 370.0,
+        "w": 308.0,
+        "h": 26.0,
+        "text": "State definitions in nodestate.hpp"
+      },
+      {
+        "id": 11,
+        "name": "Picture 10",
+        "type": 13,
+        "x": 375.0,
+        "y": 179.3,
+        "w": 309.0,
+        "h": 164.5,
+        "text": ""
+      },
+      {
+        "id": 2,
+        "name": "TextBox 1",
+        "type": 17,
+        "x": 36.0,
+        "y": 24.0,
+        "w": 648.0,
+        "h": 39.0,
+        "text": "I.9  State machine and indicators"
+      },
+      {
+        "id": 5,
+        "name": "TextBox 4",
+        "type": 17,
+        "x": 652.0,
+        "y": 428.0,
+        "w": 32.0,
+        "h": 13.0,
+        "text": "14"
+      }
+    ]
+  },
+  {
+    "slide": 15,
+    "shapes": [
+      {
+        "id": 2,
+        "name": "TextBox 1",
+        "type": 17,
+        "x": 36.0,
+        "y": 104.0,
+        "w": 300.0,
+        "h": 30.0,
+        "text": "Wi-Fi: Internet connection"
+      },
+      {
+        "id": 5,
+        "name": "TextBox 4",
+        "type": 17,
+        "x": 36.0,
+        "y": 144.0,
+        "w": 302.0,
+        "h": 99.0,
+        "text": "The onboard Wi-Fi module connects the node to the Internet for NTP time synchronization and remote commands through MQTT."
+      },
+      {
+        "id": 7,
+        "name": "TextBox 6",
+        "type": 17,
+        "x": 36.0,
+        "y": 266.0,
+        "w": 302.0,
+        "h": 30.0,
+        "text": "MQTT: remote commands"
+      },
+      {
+        "id": 8,
+        "name": "TextBox 7",
+        "type": 17,
+        "x": 36.0,
+        "y": 306.0,
+        "w": 302.0,
+        "h": 104.0,
+        "text": "Message Queuing Telemetry Transport is a lightweight messaging protocol for low-bandwidth, high-latency or unreliable networks. It is widely used for IoT devices."
+      },
+      {
+        "id": 9,
+        "name": "TextBox 8",
+        "type": 17,
+        "x": 380.0,
+        "y": 104.0,
+        "w": 304.0,
+        "h": 30.0,
+        "text": "RF: local communication"
+      },
+      {
+        "id": 11,
+        "name": "TextBox 10",
+        "type": 17,
+        "x": 380.0,
+        "y": 144.0,
+        "w": 304.0,
+        "h": 231.0,
+        "text": "Radio frequency communication carries information on radio waves. A transmitter modulates the signal and a receiver demodulates it.\r\rApplications include radio, television, mobile "
+      },
+      {
+        "id": 6,
+        "name": "TextBox 5",
+        "type": 17,
+        "x": 36.0,
+        "y": 24.0,
+        "w": 648.0,
+        "h": 39.0,
+        "text": "I.10  Wireless communication"
+      },
+      {
+        "id": 10,
+        "name": "TextBox 9",
+        "type": 17,
+        "x": 652.0,
+        "y": 428.0,
+        "w": 32.0,
+        "h": 13.0,
+        "text": "15"
+      }
+    ]
+  },
+  {
+    "slide": 16,
+    "shapes": [
+      {
+        "id": 5,
+        "name": "TextBox 4",
+        "type": 17,
+        "x": 36.0,
+        "y": 103.0,
+        "w": 302.0,
+        "h": 30.0,
+        "text": "Calendar time"
+      },
+      {
+        "id": 6,
+        "name": "TextBox 5",
+        "type": 17,
+        "x": 36.0,
+        "y": 135.0,
+        "w": 302.0,
+        "h": 89.0,
+        "text": "Human-readable year, month, day, hour, minute and second."
+      },
+      {
+        "id": 10,
+        "name": "TextBox 9",
+        "type": 17,
+        "x": 36.0,
+        "y": 201.0,
+        "w": 302.0,
+        "h": 30.0,
+        "text": "Unix time"
+      },
+      {
+        "id": 11,
+        "name": "TextBox 10",
+        "type": 17,
+        "x": 36.0,
+        "y": 233.0,
+        "w": 302.0,
+        "h": 89.0,
+        "text": "Seconds since 1 January 1970, 00:00:00 UTC. Standard in computer systems and easy to compute and compare, but less readable to people."
+      },
+      {
+        "id": 12,
+        "name": "TextBox 11",
+        "type": 17,
+        "x": 36.0,
+        "y": 320.0,
+        "w": 302.0,
+        "h": 30.0,
+        "text": "Runtime"
+      },
+      {
+        "id": 13,
+        "name": "TextBox 12",
+        "type": 17,
+        "x": 36.0,
+        "y": 352.0,
+        "w": 302.0,
+        "h": 89.0,
+        "text": "Elapsed time since startup, usually in milliseconds. A hardware timer tracks it for system status and performance monitoring."
+      },
+      {
+        "id": 15,
+        "name": "TextBox 14",
+        "type": 17,
+        "x": 382.0,
+        "y": 103.0,
+        "w": 302.0,
+        "h": 30.0,
+        "text": "Global synchronization: NTP"
+      },
+      {
+        "id": 16,
+        "name": "TextBox 15",
+        "type": 17,
+        "x": 382.0,
+        "y": 143.0,
+        "w": 302.0,
+        "h": 87.0,
+        "text": "Network Time Protocol aligns the device clock with an accurate time source on the Internet."
+      },
+      {
+        "id": 17,
+        "name": "TextBox 16",
+        "type": 17,
+        "x": 382.0,
+        "y": 257.0,
+        "w": 302.0,
+        "h": 30.0,
+        "text": "Local synchronization: FTSP"
+      },
+      {
+        "id": 19,
+        "name": "TextBox 18",
+        "type": 17,
+        "x": 382.0,
+        "y": 297.0,
+        "w": 302.0,
+        "h": 116.0,
+        "text": "The flooding-based protocol periodically broadcasts the gateway time to all leaf nodes. Each leaf estimates clock offset and drift, then aligns its local time."
+      },
+      {
+        "id": 7,
+        "name": "TextBox 6",
+        "type": 17,
+        "x": 36.0,
+        "y": 24.0,
+        "w": 648.0,
+        "h": 39.0,
+        "text": "I.11  Time and synchronization"
+      },
+      {
+        "id": 8,
+        "name": "TextBox 7",
+        "type": 17,
+        "x": 652.0,
+        "y": 428.0,
+        "w": 32.0,
+        "h": 13.0,
+        "text": "16"
+      }
+    ]
+  },
+  {
+    "slide": 17,
+    "shapes": [
+      {
+        "id": 14,
+        "name": "TextBox 13",
+        "type": 17,
+        "x": 36.0,
+        "y": 124.0,
+        "w": 307.0,
+        "h": 51.0,
+        "text": "MQTT callbacks let remote commands control the node over the Internet."
+      },
+      {
+        "id": 10,
+        "name": "Group 9",
+        "type": 6,
+        "x": 57.1,
+        "y": 187.0,
+        "w": 264.7,
+        "h": 224.0,
+        "text": ""
+      },
+      {
+        "id": 11,
+        "name": "Picture 10",
+        "type": 13,
+        "x": 409.8,
+        "y": 187.0,
+        "w": 243.3,
+        "h": 224.0,
+        "text": ""
+      },
+      {
+        "id": 6,
+        "name": "TextBox 5",
+        "type": 17,
+        "x": 382.0,
+        "y": 124.0,
+        "w": 302.0,
+        "h": 51.0,
+        "text": "The LED colour indicates the current state of the node."
+      },
+      {
+        "id": 7,
+        "name": "TextBox 6",
+        "type": 17,
+        "x": 36.0,
+        "y": 24.0,
+        "w": 648.0,
+        "h": 39.0,
+        "text": "I.12  Commands and RGB LED feedback"
+      },
+      {
+        "id": 9,
+        "name": "TextBox 8",
+        "type": 17,
+        "x": 36.0,
+        "y": 89.0,
+        "w": 308.0,
+        "h": 26.0,
+        "text": "MQTT commands"
+      },
+      {
+        "id": 13,
+        "name": "TextBox 12",
+        "type": 17,
+        "x": 382.0,
+        "y": 89.0,
+        "w": 302.0,
+        "h": 26.0,
+        "text": "RGB LED feedback"
+      },
+      {
+        "id": 15,
+        "name": "TextBox 14",
+        "type": 17,
+        "x": 652.0,
+        "y": 428.0,
+        "w": 32.0,
+        "h": 13.0,
+        "text": "17"
+      }
+    ]
+  },
+  {
+    "slide": 18,
+    "shapes": [
+      {
+        "id": 14,
+        "name": "TextBox 13",
+        "type": 17,
+        "x": 36.0,
+        "y": 76.0,
+        "w": 648.0,
+        "h": 66.0,
+        "text": "The node samples and stores acceleration together. Without a real-time operating system, the sampling frequency can vary from its target. The highest sampling rate in this project "
+      },
+      {
+        "id": 9,
+        "name": "Group 8",
+        "type": 6,
+        "x": 144.7,
+        "y": 156.0,
+        "w": 431.7,
+        "h": 257.0,
+        "text": "Handson – TASK 2"
+      },
+      {
+        "id": 6,
+        "name": "TextBox 5",
+        "type": 17,
+        "x": 36.0,
+        "y": 24.0,
+        "w": 648.0,
+        "h": 39.0,
+        "text": "I.13  Acceleration sensing, storage and upload"
+      },
+      {
+        "id": 10,
+        "name": "TextBox 9",
+        "type": 17,
+        "x": 652.0,
+        "y": 428.0,
+        "w": 32.0,
+        "h": 13.0,
+        "text": "18"
+      }
+    ]
+  },
+  {
+    "slide": 19,
+    "shapes": [
+      {
+        "id": 2,
+        "name": "Rectangle 1",
+        "type": 1,
+        "x": 0.0,
+        "y": 0.0,
+        "w": 720.0,
+        "h": 450.0,
+        "text": ""
+      },
+      {
+        "id": 3,
+        "name": "TextBox 2",
+        "type": 17,
+        "x": 54.0,
+        "y": 151.0,
+        "w": 354.3,
+        "h": 49.7,
+        "text": "Section II – Hands On"
+      },
+      {
+        "id": 4,
+        "name": "TextBox 3",
+        "type": 17,
+        "x": 57.0,
+        "y": 229.0,
+        "w": 593.0,
+        "h": 21.8,
+        "text": "Assemble, program and verify the node before testing."
+      },
+      {
+        "id": 5,
+        "name": "TextBox 4",
+        "type": 17,
+        "x": 652.0,
+        "y": 428.0,
+        "w": 32.0,
+        "h": 13.0,
+        "text": "19"
+      }
+    ]
+  },
+  {
+    "slide": 20,
+    "shapes": [
+      {
+        "id": 3,
+        "name": "TextBox 2",
+        "type": 17,
+        "x": 55.0,
+        "y": 371.0,
+        "w": 610.0,
+        "h": 43.6,
+        "text": "TIP: This is a team effort — please work together with your teammates to speed up the process."
+      },
+      {
+        "id": 2,
+        "name": "TextBox 1",
+        "type": 17,
+        "x": 55.0,
+        "y": 43.0,
+        "w": 610.0,
+        "h": 35.1,
+        "text": "Hands-on checkpoints"
+      },
+      {
+        "id": 4,
+        "name": "TextBox 3",
+        "type": 17,
+        "x": 55.0,
+        "y": 133.0,
+        "w": 55.0,
+        "h": 26.7,
+        "text": "01"
+      },
+      {
+        "id": 5,
+        "name": "TextBox 4",
+        "type": 17,
+        "x": 121.0,
+        "y": 133.0,
+        "w": 535.0,
+        "h": 24.2,
+        "text": "Inspect the parts and power connections"
+      },
+      {
+        "id": 6,
+        "name": "TextBox 5",
+        "type": 17,
+        "x": 55.0,
+        "y": 200.0,
+        "w": 55.0,
+        "h": 26.7,
+        "text": "02"
+      },
+      {
+        "id": 8,
+        "name": "TextBox 7",
+        "type": 17,
+        "x": 121.0,
+        "y": 200.0,
+        "w": 535.0,
+        "h": 24.2,
+        "text": "Use a unique node ID when uploading firmware"
+      },
+      {
+        "id": 9,
+        "name": "TextBox 8",
+        "type": 17,
+        "x": 55.0,
+        "y": 267.0,
+        "w": 55.0,
+        "h": 26.7,
+        "text": "03"
+      },
+      {
+        "id": 10,
+        "name": "TextBox 9",
+        "type": 17,
+        "x": 121.0,
+        "y": 267.0,
+        "w": 535.0,
+        "h": 24.2,
+        "text": "Check the signal and save one usable record"
+      },
+      {
+        "id": 11,
+        "name": "TextBox 10",
+        "type": 17,
+        "x": 652.0,
+        "y": 428.0,
+        "w": 32.0,
+        "h": 13.0,
+        "text": "20"
+      }
+    ]
+  },
+  {
+    "slide": 21,
+    "shapes": [
+      {
+        "id": 6,
+        "name": "Picture 5",
+        "type": 13,
+        "x": 167.3,
+        "y": 119.0,
+        "w": 385.5,
+        "h": 289.0,
+        "text": ""
+      },
+      {
+        "id": 7,
+        "name": "TextBox 6",
+        "type": 17,
+        "x": 36.0,
+        "y": 75.0,
+        "w": 648.0,
+        "h": 28.0,
+        "text": "Reference kit from APESS2025. Ask the instructor if a component is missing."
+      },
+      {
+        "id": 2,
+        "name": "TextBox 1",
+        "type": 17,
+        "x": 36.0,
+        "y": 24.0,
+        "w": 648.0,
+        "h": 39.0,
+        "text": "II.1  Parts in the kit"
+      },
+      {
+        "id": 5,
+        "name": "TextBox 4",
+        "type": 17,
+        "x": 652.0,
+        "y": 428.0,
+        "w": 32.0,
+        "h": 13.0,
+        "text": "21"
+      }
+    ]
+  },
+  {
+    "slide": 22,
+    "shapes": [
+      {
+        "id": 2,
+        "name": "TextBox 1",
+        "type": 17,
+        "x": 36.0,
+        "y": 73.0,
+        "w": 648.0,
+        "h": 25.0,
+        "text": "Check the orientation before tightening the screws."
+      },
+      {
+        "id": 7,
+        "name": "Group 6",
+        "type": 6,
+        "x": 36.0,
+        "y": 128.0,
+        "w": 286.8,
+        "h": 268.1,
+        "text": ""
+      },
+      {
+        "id": 9,
+        "name": "Group 8",
+        "type": 6,
+        "x": 402.7,
+        "y": 120.0,
+        "w": 260.7,
+        "h": 284.0,
+        "text": "screws from this side"
+      },
+      {
+        "id": 5,
+        "name": "TextBox 4",
+        "type": 17,
+        "x": 36.0,
+        "y": 24.0,
+        "w": 648.0,
+        "h": 39.0,
+        "text": "II.2  Battery holder installation"
+      },
+      {
+        "id": 10,
+        "name": "TextBox 9",
+        "type": 17,
+        "x": 652.0,
+        "y": 428.0,
+        "w": 32.0,
+        "h": 13.0,
+        "text": "22"
+      }
+    ]
+  },
+  {
+    "slide": 23,
+    "shapes": [
+      {
+        "id": 5,
+        "name": "TextBox 4",
+        "type": 17,
+        "x": 36.0,
+        "y": 393.0,
+        "w": 648.0,
+        "h": 26.0,
+        "text": "Check the board orientation before tightening the M3 × 10 screws."
+      },
+      {
+        "id": 17,
+        "name": "Group 16",
+        "type": 6,
+        "x": 382.0,
+        "y": 134.8,
+        "w": 302.0,
+        "h": 226.4,
+        "text": "nuts from this side"
+      },
+      {
+        "id": 16,
+        "name": "Group 15",
+        "type": 6,
+        "x": 36.0,
+        "y": 127.5,
+        "w": 302.0,
+        "h": 241.1,
+        "text": ""
+      },
+      {
+        "id": 15,
+        "name": "TextBox 14",
+        "type": 17,
+        "x": 36.0,
+        "y": 24.0,
+        "w": 648.0,
+        "h": 39.0,
+        "text": "II.3  Main controller installation"
+      },
+      {
+        "id": 18,
+        "name": "TextBox 17",
+        "type": 17,
+        "x": 652.0,
+        "y": 428.0,
+        "w": 32.0,
+        "h": 13.0,
+        "text": "23"
+      }
+    ]
+  },
+  {
+    "slide": 24,
+    "shapes": [
+      {
+        "id": 5,
+        "name": "TextBox 4",
+        "type": 17,
+        "x": 36.0,
+        "y": 157.0,
+        "w": 211.0,
+        "h": 112.0,
+        "text": "Align the pins carefully before seating the shield."
+      },
+      {
+        "id": 2,
+        "name": "Picture 1",
+        "type": 13,
+        "x": 279.6,
+        "y": 105.0,
+        "w": 394.8,
+        "h": 296.0,
+        "text": ""
+      },
+      {
+        "id": 6,
+        "name": "TextBox 5",
+        "type": 17,
+        "x": 36.0,
+        "y": 24.0,
+        "w": 648.0,
+        "h": 39.0,
+        "text": "II.4  Sensor shield installation"
+      },
+      {
+        "id": 7,
+        "name": "TextBox 6",
+        "type": 17,
+        "x": 652.0,
+        "y": 428.0,
+        "w": 32.0,
+        "h": 13.0,
+        "text": "24"
+      }
+    ]
+  },
+  {
+    "slide": 25,
+    "shapes": [
+      {
+        "id": 5,
+        "name": "TextBox 4",
+        "type": 17,
+        "x": 36.0,
+        "y": 414.0,
+        "w": 610.0,
+        "h": 22.0,
+        "text": "Check every connection. The INT pin can remain unconnected."
+      },
+      {
+        "id": 10,
+        "name": "Picture 9",
+        "type": 13,
+        "x": 51.0,
+        "y": 103.0,
+        "w": 252.9,
+        "h": 151.0,
+        "text": ""
+      },
+      {
+        "id": 12,
+        "name": "Picture 11",
+        "type": 13,
+        "x": 391.3,
+        "y": 103.0,
+        "w": 274.4,
+        "h": 291.0,
+        "text": ""
+      },
+      {
+        "id": 20,
+        "name": "Group 19",
+        "type": 6,
+        "x": 44.0,
+        "y": 275.9,
+        "w": 276.0,
+        "h": 117.2,
+        "text": ""
+      },
+      {
+        "id": 19,
+        "name": "TextBox 18",
+        "type": 17,
+        "x": 36.0,
+        "y": 24.0,
+        "w": 648.0,
+        "h": 39.0,
+        "text": "II.5  MPU6050 installation"
+      },
+      {
+        "id": 21,
+        "name": "TextBox 20",
+        "type": 17,
+        "x": 652.0,
+        "y": 428.0,
+        "w": 32.0,
+        "h": 13.0,
+        "text": "25"
+      }
+    ]
+  },
+  {
+    "slide": 26,
+    "shapes": [
+      {
+        "id": 2,
+        "name": "Picture 1",
+        "type": 13,
+        "x": 56.6,
+        "y": 273.0,
+        "w": 250.8,
+        "h": 129.0,
+        "text": ""
+      },
+      {
+        "id": 11,
+        "name": "Picture 10",
+        "type": 13,
+        "x": 82.6,
+        "y": 104.0,
+        "w": 198.7,
+        "h": 149.0,
+        "text": ""
+      },
+      {
+        "id": 5,
+        "name": "TextBox 4",
+        "type": 17,
+        "x": 36.0,
+        "y": 414.0,
+        "w": 610.0,
+        "h": 22.0,
+        "text": "Attach the RF module to the sensor shield as shown."
+      },
+      {
+        "id": 9,
+        "name": "Group 8",
+        "type": 6,
+        "x": 427.5,
+        "y": 104.0,
+        "w": 210.0,
+        "h": 294.0,
+        "text": ""
+      },
+      {
+        "id": 6,
+        "name": "TextBox 5",
+        "type": 17,
+        "x": 36.0,
+        "y": 24.0,
+        "w": 648.0,
+        "h": 39.0,
+        "text": "II.6  Radio module installation"
+      },
+      {
+        "id": 12,
+        "name": "TextBox 11",
+        "type": 17,
+        "x": 652.0,
+        "y": 428.0,
+        "w": 32.0,
+        "h": 13.0,
+        "text": "26"
+      }
+    ]
+  },
+  {
+    "slide": 27,
+    "shapes": [
+      {
+        "id": 5,
+        "name": "TextBox 4",
+        "type": 17,
+        "x": 381.0,
+        "y": 401.0,
+        "w": 303.0,
+        "h": 27.0,
+        "text": "Connect to the pins for digital 7."
+      },
+      {
+        "id": 9,
+        "name": "Picture 8",
+        "type": 13,
+        "x": 421.8,
+        "y": 144.0,
+        "w": 221.4,
+        "h": 247.0,
+        "text": ""
+      },
+      {
+        "id": 12,
+        "name": "Picture 11",
+        "type": 13,
+        "x": 59.7,
+        "y": 105.0,
+        "w": 242.5,
+        "h": 148.0,
+        "text": ""
+      },
+      {
+        "id": 18,
+        "name": "Group 17",
+        "type": 6,
+        "x": 49.2,
+        "y": 272.0,
+        "w": 269.6,
+        "h": 130.0,
+        "text": ""
+      },
+      {
+        "id": 16,
+        "name": "TextBox 15",
+        "type": 17,
+        "x": 381.0,
+        "y": 103.0,
+        "w": 303.0,
+        "h": 40.0,
+        "text": "Use the wires supplied with the RGB LED."
+      },
+      {
+        "id": 17,
+        "name": "TextBox 16",
+        "type": 17,
+        "x": 36.0,
+        "y": 24.0,
+        "w": 648.0,
+        "h": 39.0,
+        "text": "II.7  RGB LED installation"
+      },
+      {
+        "id": 19,
+        "name": "TextBox 18",
+        "type": 17,
+        "x": 652.0,
+        "y": 428.0,
+        "w": 32.0,
+        "h": 13.0,
+        "text": "27"
+      }
+    ]
+  },
+  {
+    "slide": 28,
+    "shapes": [
+      {
+        "id": 8,
+        "name": "TextBox 7",
+        "type": 17,
+        "x": 381.0,
+        "y": 103.0,
+        "w": 303.0,
+        "h": 42.0,
+        "text": "Check the pin connections and insert an SD card."
+      },
+      {
+        "id": 13,
+        "name": "Picture 12",
+        "type": 13,
+        "x": 423.7,
+        "y": 145.0,
+        "w": 217.7,
+        "h": 245.0,
+        "text": ""
+      },
+      {
+        "id": 18,
+        "name": "Group 17",
+        "type": 6,
+        "x": 55.1,
+        "y": 103.0,
+        "w": 260.7,
+        "h": 142.0,
+        "text": ""
+      },
+      {
+        "id": 12,
+        "name": "TextBox 11",
+        "type": 17,
+        "x": 381.0,
+        "y": 401.0,
+        "w": 303.0,
+        "h": 25.0,
+        "text": "The table shows suggested wire colours."
+      },
+      {
+        "id": 19,
+        "name": "Group 18",
+        "type": 6,
+        "x": 55.5,
+        "y": 262.0,
+        "w": 260.0,
+        "h": 147.0,
+        "text": ""
+      },
+      {
+        "id": 17,
+        "name": "TextBox 16",
+        "type": 17,
+        "x": 36.0,
+        "y": 24.0,
+        "w": 648.0,
+        "h": 39.0,
+        "text": "II.8  SD card module installation"
+      },
+      {
+        "id": 20,
+        "name": "TextBox 19",
+        "type": 17,
+        "x": 652.0,
+        "y": 428.0,
+        "w": 32.0,
+        "h": 13.0,
+        "text": "28"
+      }
+    ]
+  },
+  {
+    "slide": 29,
+    "shapes": [
+      {
+        "id": 16,
+        "name": "TextBox 15",
+        "type": 17,
+        "x": 36.0,
+        "y": 77.0,
+        "w": 648.0,
+        "h": 41.0,
+        "text": "Assemble the enclosure after programming. Connect the two mounting boards with standoffs and screws."
+      },
+      {
+        "id": 19,
+        "name": "TextBox 18",
+        "type": 17,
+        "x": 36.0,
+        "y": 402.0,
+        "w": 205.0,
+        "h": 19.0,
+        "text": "Wires: GND and 3.7 V"
+      },
+      {
+        "id": 20,
+        "name": "TextBox 19",
+        "type": 17,
+        "x": 36.0,
+        "y": 367.0,
+        "w": 206.0,
+        "h": 37.0,
+        "text": "The batteries do not sit fully inside."
+      },
+      {
+        "id": 21,
+        "name": "TextBox 20",
+        "type": 17,
+        "x": 480.0,
+        "y": 367.0,
+        "w": 204.0,
+        "h": 37.0,
+        "text": "Power supply through two wires."
+      },
+      {
+        "id": 8,
+        "name": "Group 7",
+        "type": 6,
+        "x": 41.0,
+        "y": 132.0,
+        "w": 630.6,
+        "h": 212.7,
+        "text": ""
+      },
+      {
+        "id": 5,
+        "name": "TextBox 4",
+        "type": 17,
+        "x": 36.0,
+        "y": 24.0,
+        "w": 648.0,
+        "h": 39.0,
+        "text": "II.9  Enclosure assembly"
+      },
+      {
+        "id": 23,
+        "name": "TextBox 22",
+        "type": 17,
+        "x": 652.0,
+        "y": 428.0,
+        "w": 32.0,
+        "h": 13.0,
+        "text": "29"
+      }
+    ]
+  },
+  {
+    "slide": 30,
+    "shapes": [
+      {
+        "id": 5,
+        "name": "Picture 4",
+        "type": 13,
+        "x": 54.0,
+        "y": 99.0,
+        "w": 227.9,
+        "h": 304.0,
+        "text": ""
+      },
+      {
+        "id": 2,
+        "name": "TextBox 1",
+        "type": 17,
+        "x": 36.0,
+        "y": 24.0,
+        "w": 648.0,
+        "h": 39.0,
+        "text": "II.10  Connections before power-up"
+      },
+      {
+        "id": 6,
+        "name": "TextBox 5",
+        "type": 17,
+        "x": 352.0,
+        "y": 112.0,
+        "w": 332.0,
+        "h": 49.0,
+        "text": "Mechanical fixing"
+      },
+      {
+        "id": 8,
+        "name": "TextBox 7",
+        "type": 17,
+        "x": 352.0,
+        "y": 169.0,
+        "w": 332.0,
+        "h": 90.0,
+        "text": "Glue is not required. Secure the components to suit the intended use."
+      },
+      {
+        "id": 9,
+        "name": "TextBox 8",
+        "type": 17,
+        "x": 352.0,
+        "y": 268.0,
+        "w": 332.0,
+        "h": 49.0,
+        "text": "Before connecting the batteries"
+      },
+      {
+        "id": 10,
+        "name": "TextBox 9",
+        "type": 17,
+        "x": 352.0,
+        "y": 325.0,
+        "w": 332.0,
+        "h": 90.0,
+        "text": "Ask a helper to inspect the connections before you power up the node."
+      },
+      {
+        "id": 11,
+        "name": "TextBox 10",
+        "type": 17,
+        "x": 652.0,
+        "y": 428.0,
+        "w": 32.0,
+        "h": 13.0,
+        "text": "30"
+      }
+    ]
+  },
+  {
+    "slide": 31,
+    "shapes": [
+      {
+        "id": 2,
+        "name": "TextBox 1",
+        "type": 17,
+        "x": 36.0,
+        "y": 83.0,
+        "w": 648.0,
+        "h": 46.0,
+        "text": "Install VS Code https://code.visualstudio.com/download"
+      },
+      {
+        "id": 9,
+        "name": "Picture 8",
+        "type": 13,
+        "x": 126.2,
+        "y": 149.0,
+        "w": 467.7,
+        "h": 259.0,
+        "text": ""
+      },
+      {
+        "id": 5,
+        "name": "TextBox 4",
+        "type": 17,
+        "x": 36.0,
+        "y": 24.0,
+        "w": 648.0,
+        "h": 39.0,
+        "text": "II.11  VS Code installation"
+      },
+      {
+        "id": 6,
+        "name": "TextBox 5",
+        "type": 17,
+        "x": 652.0,
+        "y": 428.0,
+        "w": 32.0,
+        "h": 13.0,
+        "text": "31"
+      }
+    ]
+  },
+  {
+    "slide": 32,
+    "shapes": [
+      {
+        "id": 2,
+        "name": "TextBox 1",
+        "type": 17,
+        "x": 36.0,
+        "y": 83.0,
+        "w": 648.0,
+        "h": 46.0,
+        "text": "Install PlatformIO for programming"
+      },
+      {
+        "id": 5,
+        "name": "Picture 4",
+        "type": 13,
+        "x": 65.0,
+        "y": 165.2,
+        "w": 590.0,
+        "h": 226.6,
+        "text": ""
+      },
+      {
+        "id": 6,
+        "name": "TextBox 5",
+        "type": 17,
+        "x": 36.0,
+        "y": 24.0,
+        "w": 648.0,
+        "h": 39.0,
+        "text": "II.12  PlatformIO installation"
+      },
+      {
+        "id": 8,
+        "name": "TextBox 7",
+        "type": 17,
+        "x": 652.0,
+        "y": 428.0,
+        "w": 32.0,
+        "h": 13.0,
+        "text": "32"
+      }
+    ]
+  },
+  {
+    "slide": 33,
+    "shapes": [
+      {
+        "id": 2,
+        "name": "TextBox 1",
+        "type": 17,
+        "x": 36.0,
+        "y": 83.0,
+        "w": 648.0,
+        "h": 46.0,
+        "text": "Install Serial Monitor for serial monitoring"
+      },
+      {
+        "id": 6,
+        "name": "Picture 5",
+        "type": 13,
+        "x": 71.2,
+        "y": 149.0,
+        "w": 577.6,
+        "h": 259.0,
+        "text": ""
+      },
+      {
+        "id": 5,
+        "name": "TextBox 4",
+        "type": 17,
+        "x": 36.0,
+        "y": 24.0,
+        "w": 648.0,
+        "h": 39.0,
+        "text": "II.13  Serial Monitor installation"
+      },
+      {
+        "id": 8,
+        "name": "TextBox 7",
+        "type": 17,
+        "x": 652.0,
+        "y": 428.0,
+        "w": 32.0,
+        "h": 13.0,
+        "text": "33"
+      }
+    ]
+  },
+  {
+    "slide": 34,
+    "shapes": [
+      {
+        "id": 8,
+        "name": "TextBox 7",
+        "type": 17,
+        "x": 36.0,
+        "y": 153.0,
+        "w": 308.0,
+        "h": 30.0,
+        "text": "Project source files"
+      },
+      {
+        "id": 9,
+        "name": "TextBox 8",
+        "type": 17,
+        "x": 36.0,
+        "y": 202.0,
+        "w": 303.0,
+        "h": 66.0,
+        "text": "Download the ArduinoNode project"
+      },
+      {
+        "id": 5,
+        "name": "Picture 4",
+        "type": 13,
+        "x": 410.0,
+        "y": 119.0,
+        "w": 256.0,
+        "h": 256.0,
+        "text": ""
+      },
+      {
+        "id": 2,
+        "name": "TextBox 1",
+        "type": 17,
+        "x": 36.0,
+        "y": 24.0,
+        "w": 648.0,
+        "h": 39.0,
+        "text": "II.14  Source code download"
+      },
+      {
+        "id": 6,
+        "name": "TextBox 5",
+        "type": 17,
+        "x": 652.0,
+        "y": 428.0,
+        "w": 32.0,
+        "h": 13.0,
+        "text": "34"
+      },
+      {
+        "id": 3,
+        "name": "TextBox 2",
+        "type": 17,
+        "x": 36.0,
+        "y": 282.0,
+        "w": 303.0,
+        "h": 80.0,
+        "text": "Scan the QR code or open the link, then extract the project folder."
+      }
+    ]
+  },
+  {
+    "slide": 35,
+    "shapes": [
+      {
+        "id": 8,
+        "name": "TextBox 7",
+        "type": 17,
+        "x": 36.0,
+        "y": 79.0,
+        "w": 648.0,
+        "h": 90.0,
+        "text": "1  Launch VS Code.\r2  Open the folder containing the extracted project.\r3  Open a code file to activate the PlatformIO environment."
+      },
+      {
+        "id": 5,
+        "name": "Group 4",
+        "type": 6,
+        "x": 43.9,
+        "y": 183.0,
+        "w": 290.3,
+        "h": 230.0,
+        "text": ""
+      },
+      {
+        "id": 6,
+        "name": "Group 5",
+        "type": 6,
+        "x": 388.6,
+        "y": 183.0,
+        "w": 284.7,
+        "h": 230.0,
+        "text": ""
+      },
+      {
+        "id": 2,
+        "name": "TextBox 1",
+        "type": 17,
+        "x": 36.0,
+        "y": 24.0,
+        "w": 648.0,
+        "h": 39.0,
+        "text": "II.15  Opening the project"
+      },
+      {
+        "id": 9,
+        "name": "TextBox 8",
+        "type": 17,
+        "x": 652.0,
+        "y": 428.0,
+        "w": 32.0,
+        "h": 13.0,
+        "text": "35"
+      }
+    ]
+  },
+  {
+    "slide": 36,
+    "shapes": [
+      {
+        "id": 2,
+        "name": "TextBox 1",
+        "type": 17,
+        "x": 36.0,
+        "y": 79.0,
+        "w": 648.0,
+        "h": 113.0,
+        "text": "1  Open src/config.hpp.\r2  Set NODE_ID and MQTT_CLIENT_ID to your group number.\rFor example, group 1 uses NODE_ID 1 and MQTT_CLIENT_ID \"LEAFNODE1\". Disable the other definitions by"
+      },
+      {
+        "id": 6,
+        "name": "Picture 5",
+        "type": 13,
+        "x": 52.4,
+        "y": 211.0,
+        "w": 201.3,
+        "h": 197.0,
+        "text": ""
+      },
+      {
+        "id": 10,
+        "name": "Picture 9",
+        "type": 13,
+        "x": 307.6,
+        "y": 211.0,
+        "w": 360.8,
+        "h": 197.0,
+        "text": ""
+      },
+      {
+        "id": 5,
+        "name": "TextBox 4",
+        "type": 17,
+        "x": 36.0,
+        "y": 24.0,
+        "w": 648.0,
+        "h": 39.0,
+        "text": "II.16  Task 1: node configuration"
+      },
+      {
+        "id": 8,
+        "name": "TextBox 7",
+        "type": 17,
+        "x": 652.0,
+        "y": 428.0,
+        "w": 32.0,
+        "h": 13.0,
+        "text": "36"
+      }
+    ]
+  },
+  {
+    "slide": 37,
+    "shapes": [
+      {
+        "id": 9,
+        "name": "Picture 8",
+        "type": 13,
+        "x": 117.5,
+        "y": 351.0,
+        "w": 145.0,
+        "h": 63.0,
+        "text": ""
+      },
+      {
+        "id": 5,
+        "name": "TextBox 4",
+        "type": 17,
+        "x": 36.0,
+        "y": 24.0,
+        "w": 648.0,
+        "h": 39.0,
+        "text": "II.17  Task 2: sampling acceleration"
+      },
+      {
+        "id": 6,
+        "name": "TextBox 5",
+        "type": 17,
+        "x": 36.0,
+        "y": 98.0,
+        "w": 300.0,
+        "h": 27.0,
+        "text": "Function to complete"
+      },
+      {
+        "id": 8,
+        "name": "TextBox 7",
+        "type": 17,
+        "x": 36.0,
+        "y": 142.0,
+        "w": 312.0,
+        "h": 111.0,
+        "text": "Open src/sensing.cpp and locate sensing_sample_once. Complete the section marked in red."
+      },
+      {
+        "id": 10,
+        "name": "TextBox 9",
+        "type": 17,
+        "x": 384.0,
+        "y": 98.0,
+        "w": 300.0,
+        "h": 27.0,
+        "text": "Required operations"
+      },
+      {
+        "id": 11,
+        "name": "TextBox 10",
+        "type": 17,
+        "x": 384.0,
+        "y": 142.0,
+        "w": 300.0,
+        "h": 202.0,
+        "text": "Read ax, ay and az using mpu6050.hpp / mpu6050.cpp.\r\rConvert the raw values to g and apply cali_scale_x, cali_scale_y and cali_scale_z from config.hpp / config.cpp."
+      },
+      {
+        "id": 12,
+        "name": "TextBox 11",
+        "type": 17,
+        "x": 36.0,
+        "y": 282.0,
+        "w": 307.0,
+        "h": 57.0,
+        "text": "Configured range: 2g\rResolution: 16 bit"
+      },
+      {
+        "id": 13,
+        "name": "TextBox 12",
+        "type": 17,
+        "x": 652.0,
+        "y": 428.0,
+        "w": 32.0,
+        "h": 13.0,
+        "text": "37"
+      }
+    ]
+  },
+  {
+    "slide": 38,
+    "shapes": [
+      {
+        "id": 5,
+        "name": "Picture 4",
+        "type": 13,
+        "x": 102.6,
+        "y": 87.0,
+        "w": 514.9,
+        "h": 329.0,
+        "text": ""
+      },
+      {
+        "id": 2,
+        "name": "TextBox 1",
+        "type": 17,
+        "x": 36.0,
+        "y": 24.0,
+        "w": 648.0,
+        "h": 39.0,
+        "text": "II.18  Task 2: the function to complete"
+      },
+      {
+        "id": 6,
+        "name": "TextBox 5",
+        "type": 17,
+        "x": 652.0,
+        "y": 428.0,
+        "w": 32.0,
+        "h": 13.0,
+        "text": "38"
+      }
+    ]
+  },
+  {
+    "slide": 39,
+    "shapes": [
+      {
+        "id": 5,
+        "name": "TextBox 4",
+        "type": 17,
+        "x": 36.0,
+        "y": 24.0,
+        "w": 648.0,
+        "h": 39.0,
+        "text": "II.19  Task 2: reading and scaling"
+      },
+      {
+        "id": 6,
+        "name": "TextBox 5",
+        "type": 17,
+        "x": 36.0,
+        "y": 100.0,
+        "w": 302.0,
+        "h": 30.0,
+        "text": "1  Read the sensor"
+      },
+      {
+        "id": 8,
+        "name": "TextBox 7",
+        "type": 17,
+        "x": 36.0,
+        "y": 152.0,
+        "w": 302.0,
+        "h": 180.0,
+        "text": "ax, ay and az already exist in sensing_sample_once. Look in mpu6050.hpp and mpu6050.cpp for the function that reads the raw MPU6050 data."
+      },
+      {
+        "id": 9,
+        "name": "TextBox 8",
+        "type": 17,
+        "x": 382.0,
+        "y": 100.0,
+        "w": 302.0,
+        "h": 30.0,
+        "text": "2  Convert and calibrate"
+      },
+      {
+        "id": 10,
+        "name": "TextBox 9",
+        "type": 17,
+        "x": 382.0,
+        "y": 152.0,
+        "w": 302.0,
+        "h": 129.0,
+        "text": "The project uses the default 2g range and 16-bit raw values. Convert each axis to g, then apply its calibration scale factor."
+      },
+      {
+        "id": 11,
+        "name": "TextBox 10",
+        "type": 17,
+        "x": 382.0,
+        "y": 302.0,
+        "w": 302.0,
+        "h": 41.0,
+        "text": "a_g = scale_factor × raw / 2¹⁴"
+      },
+      {
+        "id": 12,
+        "name": "TextBox 11",
+        "type": 17,
+        "x": 382.0,
+        "y": 361.0,
+        "w": 302.0,
+        "h": 56.0,
+        "text": "Scale factors are defined in config.hpp / config.cpp."
+      },
+      {
+        "id": 13,
+        "name": "TextBox 12",
+        "type": 17,
+        "x": 652.0,
+        "y": 428.0,
+        "w": 32.0,
+        "h": 13.0,
+        "text": "39"
+      }
+    ]
+  },
+  {
+    "slide": 40,
+    "shapes": [
+      {
+        "id": 6,
+        "name": "Group 5",
+        "type": 6,
+        "x": 49.0,
+        "y": 262.2,
+        "w": 622.0,
+        "h": 152.5,
+        "text": ""
+      },
+      {
+        "id": 2,
+        "name": "TextBox 1",
+        "type": 17,
+        "x": 36.0,
+        "y": 24.0,
+        "w": 648.0,
+        "h": 39.0,
+        "text": "II.20  Building and uploading firmware"
+      },
+      {
+        "id": 5,
+        "name": "TextBox 4",
+        "type": 17,
+        "x": 36.0,
+        "y": 91.0,
+        "w": 648.0,
+        "h": 142.0,
+        "text": "1  Finish Tasks 1 and 2.\r2  Click Build and wait for it to succeed.\r3  Connect the node by USB, click Upload and wait for completion."
+      },
+      {
+        "id": 7,
+        "name": "TextBox 6",
+        "type": 17,
+        "x": 652.0,
+        "y": 428.0,
+        "w": 32.0,
+        "h": 13.0,
+        "text": "40"
+      }
+    ]
+  },
+  {
+    "slide": 41,
+    "shapes": [
+      {
+        "id": 3,
+        "name": "TextBox 2",
+        "type": 17,
+        "x": 36.0,
+        "y": 24.0,
+        "w": 648.0,
+        "h": 39.0,
+        "text": "II.21  First boot and status checks"
+      },
+      {
+        "id": 4,
+        "name": "TextBox 3",
+        "type": 17,
+        "x": 36.0,
+        "y": 102.0,
+        "w": 300.0,
+        "h": 30.0,
+        "text": "Serial connection"
+      },
+      {
+        "id": 5,
+        "name": "TextBox 4",
+        "type": 17,
+        "x": 36.0,
+        "y": 149.0,
+        "w": 290.0,
+        "h": 195.0,
+        "text": "Open Serial Monitor at 115200 baud.\r\rOnce the serial connection is established, press Reset to reboot and check the output."
+      },
+      {
+        "id": 6,
+        "name": "TextBox 5",
+        "type": 17,
+        "x": 380.0,
+        "y": 102.0,
+        "w": 304.0,
+        "h": 30.0,
+        "text": "RGB LED status"
+      },
+      {
+        "id": 7,
+        "name": "TextBox 6",
+        "type": 17,
+        "x": 380.0,
+        "y": 151.0,
+        "w": 139.0,
+        "h": 30.0,
+        "text": "White, persistent"
+      },
+      {
+        "id": 8,
+        "name": "TextBox 7",
+        "type": 17,
+        "x": 527.0,
+        "y": 151.0,
+        "w": 162.0,
+        "h": 30.0,
+        "text": "Booting error"
+      },
+      {
+        "id": 9,
+        "name": "TextBox 8",
+        "type": 17,
+        "x": 380.0,
+        "y": 188.0,
+        "w": 139.0,
+        "h": 30.0,
+        "text": "Red"
+      },
+      {
+        "id": 10,
+        "name": "TextBox 9",
+        "type": 17,
+        "x": 527.0,
+        "y": 188.0,
+        "w": 162.0,
+        "h": 30.0,
+        "text": "Error"
+      },
+      {
+        "id": 11,
+        "name": "TextBox 10",
+        "type": 17,
+        "x": 380.0,
+        "y": 225.0,
+        "w": 139.0,
+        "h": 30.0,
+        "text": "Light blue"
+      },
+      {
+        "id": 12,
+        "name": "TextBox 11",
+        "type": 17,
+        "x": 527.0,
+        "y": 225.0,
+        "w": 162.0,
+        "h": 30.0,
+        "text": "RF communication"
+      },
+      {
+        "id": 13,
+        "name": "TextBox 12",
+        "type": 17,
+        "x": 380.0,
+        "y": 262.0,
+        "w": 139.0,
+        "h": 30.0,
+        "text": "Blue"
+      },
+      {
+        "id": 14,
+        "name": "TextBox 13",
+        "type": 17,
+        "x": 527.0,
+        "y": 262.0,
+        "w": 162.0,
+        "h": 30.0,
+        "text": "Wi-Fi communication"
+      },
+      {
+        "id": 15,
+        "name": "TextBox 14",
+        "type": 17,
+        "x": 380.0,
+        "y": 299.0,
+        "w": 139.0,
+        "h": 30.0,
+        "text": "Green"
+      },
+      {
+        "id": 16,
+        "name": "TextBox 15",
+        "type": 17,
+        "x": 527.0,
+        "y": 299.0,
+        "w": 162.0,
+        "h": 30.0,
+        "text": "Idle / ready"
+      },
+      {
+        "id": 17,
+        "name": "TextBox 16",
+        "type": 17,
+        "x": 380.0,
+        "y": 336.0,
+        "w": 139.0,
+        "h": 30.0,
+        "text": "Yellow"
+      },
+      {
+        "id": 18,
+        "name": "TextBox 17",
+        "type": 17,
+        "x": 527.0,
+        "y": 336.0,
+        "w": 162.0,
+        "h": 30.0,
+        "text": "Preparing to sense"
+      },
+      {
+        "id": 19,
+        "name": "TextBox 18",
+        "type": 17,
+        "x": 380.0,
+        "y": 373.0,
+        "w": 139.0,
+        "h": 30.0,
+        "text": "Purple"
+      },
+      {
+        "id": 20,
+        "name": "TextBox 19",
+        "type": 17,
+        "x": 527.0,
+        "y": 373.0,
+        "w": 162.0,
+        "h": 30.0,
+        "text": "Sensing"
+      },
+      {
+        "id": 21,
+        "name": "TextBox 20",
+        "type": 17,
+        "x": 652.0,
+        "y": 428.0,
+        "w": 32.0,
+        "h": 13.0,
+        "text": "41"
+      }
+    ]
+  },
+  {
+    "slide": 42,
+    "shapes": [
+      {
+        "id": 5,
+        "name": "Picture 4",
+        "type": 13,
+        "x": 47.8,
+        "y": 87.0,
+        "w": 624.5,
+        "h": 163.0,
+        "text": ""
+      },
+      {
+        "id": 6,
+        "name": "Group 5",
+        "type": 6,
+        "x": 110.0,
+        "y": 274.0,
+        "w": 496.4,
+        "h": 148.8,
+        "text": ""
+      },
+      {
+        "id": 2,
+        "name": "TextBox 1",
+        "type": 17,
+        "x": 36.0,
+        "y": 24.0,
+        "w": 648.0,
+        "h": 39.0,
+        "text": "II.22  Task 2: suggested answer"
+      },
+      {
+        "id": 8,
+        "name": "TextBox 7",
+        "type": 17,
+        "x": 652.0,
+        "y": 428.0,
+        "w": 32.0,
+        "h": 13.0,
+        "text": "42"
+      }
+    ]
+  },
+  {
+    "slide": 43,
+    "shapes": [
+      {
+        "id": 3,
+        "name": "Rectangle 2",
+        "type": 1,
+        "x": 0.0,
+        "y": 0.0,
+        "w": 720.0,
+        "h": 450.0,
+        "text": ""
+      },
+      {
+        "id": 4,
+        "name": "TextBox 3",
+        "type": 17,
+        "x": 53.0,
+        "y": 145.0,
+        "w": 610.0,
+        "h": 42.4,
+        "text": "Section III — Vibration and data"
+      },
+      {
+        "id": 5,
+        "name": "TextBox 4",
+        "type": 17,
+        "x": 56.0,
+        "y": 225.0,
+        "w": 608.0,
+        "h": 41.2,
+        "text": "The next examples come from the earlier APESS2025 course.\rThe instructor will adapt today’s test to the available NTU apparatus and site."
+      },
+      {
+        "id": 6,
+        "name": "TextBox 5",
+        "type": 17,
+        "x": 652.0,
+        "y": 428.0,
+        "w": 32.0,
+        "h": 13.0,
+        "text": "43"
+      }
+    ]
+  },
+  {
+    "slide": 44,
+    "shapes": [
+      {
+        "id": 5,
+        "name": "TextBox 4",
+        "type": 17,
+        "x": 276.0,
+        "y": 119.0,
+        "w": 408.0,
+        "h": 176.0,
+        "text": "1  Mount the wireless sensor on the beam.\r2  Record acceleration at 100 Hz for 30 s.\r3  Plot the time history and PSD, then calibrate the scaling factor for each axis."
+      },
+      {
+        "id": 16,
+        "name": "Group 15",
+        "type": 6,
+        "x": 66.3,
+        "y": 111.0,
+        "w": 135.5,
+        "h": 300.2,
+        "text": ""
+      },
+      {
+        "id": 29,
+        "name": "TextBox 28",
+        "type": 17,
+        "x": 276.0,
+        "y": 325.0,
+        "w": 408.0,
+        "h": 91.0,
+        "text": "Excite the beam gently with a hammer at the end. Keep the response within the ArduinoNode 2g range.\rCollect 2–3 sets."
+      },
+      {
+        "id": 2,
+        "name": "TextBox 1",
+        "type": 17,
+        "x": 36.0,
+        "y": 24.0,
+        "w": 648.0,
+        "h": 39.0,
+        "text": "III.1  Indoor vibration test"
+      },
+      {
+        "id": 4,
+        "name": "TextBox 3",
+        "type": 17,
+        "x": 36.0,
+        "y": 70.0,
+        "w": 648.0,
+        "h": 26.0,
+        "text": "APESS2025 example in ZS1107: cantilever beam"
+      },
+      {
+        "id": 6,
+        "name": "TextBox 5",
+        "type": 17,
+        "x": 652.0,
+        "y": 428.0,
+        "w": 32.0,
+        "h": 13.0,
+        "text": "44"
+      }
+    ]
+  },
+  {
+    "slide": 45,
+    "shapes": [
+      {
+        "id": 5,
+        "name": "TextBox 4",
+        "type": 17,
+        "x": 303.0,
+        "y": 119.0,
+        "w": 381.0,
+        "h": 158.0,
+        "text": "1  Deploy the wireless sensors on the footbridge and record vibration acceleration.\r\r2  Use the signals to identify modal parameters."
+      },
+      {
+        "id": 2,
+        "name": "Group 1",
+        "type": 6,
+        "x": 48.5,
+        "y": 108.0,
+        "w": 194.6,
+        "h": 306.6,
+        "text": ""
+      },
+      {
+        "id": 30,
+        "name": "TextBox 29",
+        "type": 17,
+        "x": 303.0,
+        "y": 313.0,
+        "w": 381.0,
+        "h": 102.0,
+        "text": "Earlier test conditions: jumping near midspan and ambient excitation, with 3 sets for each.\rThe instructor will select suitable activities for the available NTU site."
+      },
+      {
+        "id": 7,
+        "name": "TextBox 6",
+        "type": 17,
+        "x": 36.0,
+        "y": 24.0,
+        "w": 648.0,
+        "h": 39.0,
+        "text": "III.2  Outdoor vibration test"
+      },
+      {
+        "id": 8,
+        "name": "TextBox 7",
+        "type": 17,
+        "x": 36.0,
+        "y": 70.0,
+        "w": 648.0,
+        "h": 26.0,
+        "text": "Earlier APESS2025 footbridge experiment; optional NTU extension"
+      },
+      {
+        "id": 10,
+        "name": "TextBox 9",
+        "type": 17,
+        "x": 652.0,
+        "y": 428.0,
+        "w": 32.0,
+        "h": 13.0,
+        "text": "45"
+      }
+    ]
+  },
+  {
+    "slide": 46,
+    "shapes": [
+      {
+        "id": 4,
+        "name": "TextBox 3",
+        "type": 17,
+        "x": 36.0,
+        "y": 70.0,
+        "w": 648.0,
+        "h": 26.0,
+        "text": "APESS2025 footbridge example"
+      },
+      {
+        "id": 6,
+        "name": "Picture 5",
+        "type": 13,
+        "x": 36.5,
+        "y": 117.0,
+        "w": 262.1,
+        "h": 104.0,
+        "text": ""
+      },
+      {
+        "id": 7,
+        "name": "TextBox 6",
+        "type": 17,
+        "x": 340.0,
+        "y": 116.0,
+        "w": 344.0,
+        "h": 108.0,
+        "text": "Eight student groups each operated one node. Measurements along the span let the class compare responses at different positions."
+      },
+      {
+        "id": 8,
+        "name": "TextBox 7",
+        "type": 17,
+        "x": 66.0,
+        "y": 245.0,
+        "w": 586.0,
+        "h": 25.0,
+        "text": "Bridge layout and monitoring points"
+      },
+      {
+        "id": 10,
+        "name": "Picture 9",
+        "type": 13,
+        "x": 171.9,
+        "y": 278.0,
+        "w": 374.2,
+        "h": 139.0,
+        "text": ""
+      },
+      {
+        "id": 5,
+        "name": "TextBox 4",
+        "type": 17,
+        "x": 36.0,
+        "y": 24.0,
+        "w": 648.0,
+        "h": 39.0,
+        "text": "III.3  Reading a sensor layout"
+      },
+      {
+        "id": 9,
+        "name": "TextBox 8",
+        "type": 17,
+        "x": 652.0,
+        "y": 428.0,
+        "w": 32.0,
+        "h": 13.0,
+        "text": "46"
+      }
+    ]
+  },
+  {
+    "slide": 47,
+    "shapes": [
+      {
+        "id": 4,
+        "name": "TextBox 3",
+        "type": 17,
+        "x": 36.0,
+        "y": 70.0,
+        "w": 648.0,
+        "h": 26.0,
+        "text": "Earlier free-vibration test: wireless and reference measurements"
+      },
+      {
+        "id": 6,
+        "name": "Picture 5",
+        "type": 13,
+        "x": 55.3,
+        "y": 110.0,
+        "w": 313.4,
+        "h": 297.0,
+        "text": ""
+      },
+      {
+        "id": 7,
+        "name": "TextBox 6",
+        "type": 17,
+        "x": 423.0,
+        "y": 113.0,
+        "w": 261.0,
+        "h": 30.0,
+        "text": "Reading exercise"
+      },
+      {
+        "id": 8,
+        "name": "TextBox 7",
+        "type": 17,
+        "x": 423.0,
+        "y": 159.0,
+        "w": 261.0,
+        "h": 228.0,
+        "text": "Find peaks that recur across sensors.\r\rCompare the wireless and reference traces.\r\rConsider how noise, calibration or mounting could explain differences."
+      },
+      {
+        "id": 9,
+        "name": "TextBox 8",
+        "type": 17,
+        "x": 36.0,
+        "y": 421.0,
+        "w": 610.0,
+        "h": 17.0,
+        "text": "Earlier APESS2025 validation data. Today’s NTU test may use a different setup."
+      },
+      {
+        "id": 5,
+        "name": "TextBox 4",
+        "type": 17,
+        "x": 36.0,
+        "y": 24.0,
+        "w": 648.0,
+        "h": 39.0,
+        "text": "III.4  Reading vibration spectra"
+      },
+      {
+        "id": 10,
+        "name": "TextBox 9",
+        "type": 17,
+        "x": 652.0,
+        "y": 428.0,
+        "w": 32.0,
+        "h": 13.0,
+        "text": "47"
+      }
+    ]
+  },
+  {
+    "slide": 48,
+    "shapes": [
+      {
+        "id": 4,
+        "name": "TextBox 3",
+        "type": 17,
+        "x": 125.9,
+        "y": 169.9,
+        "w": 468.1,
+        "h": 77.6,
+        "text": "Thank you for your attention\rQ&A"
+      },
+      {
+        "id": 10,
+        "name": "TextBox 9",
+        "type": 17,
+        "x": 180.0,
+        "y": 261.7,
+        "w": 360.0,
+        "h": 50.9,
+        "text": "Yuguang Fu\rNanyang Technological University"
+      },
+      {
+        "id": 5,
+        "name": "TextBox 4",
+        "type": 17,
+        "x": 40.0,
+        "y": 24.0,
+        "w": 640.0,
+        "h": 17.0,
+        "text": "Lab Experiment Course"
+      },
+      {
+        "id": 3,
+        "name": "TextBox 2",
+        "type": 17,
+        "x": 652.0,
+        "y": 428.0,
+        "w": 32.0,
+        "h": 13.0,
+        "text": "48"
+      }
+    ]
+  }
+]
